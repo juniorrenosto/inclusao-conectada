@@ -27,11 +27,11 @@
 
 <style>
 :root {
-  /* CORES MODO CLARO (Fundo mais neutro para conforto visual) */
+  /* CORES MODO CLARO PADRÃO */
   --primary: #0b57d0;
   --primary-hover: #0842a0;
   --primary-light: #e8f0fe;
-  --surface: #f0f2f5; /* Fundo off-white (estilo Facebook/WhatsApp Web) */
+  --surface: #f0f2f5; 
   --card-bg: #ffffff;
   --border: #dadce0;
   --text: #1f1f1f;
@@ -43,41 +43,40 @@
   --sidebar-w: 240px;
 }
 
-/* MODO ESCURO AUTOMÁTICO (Segue o sistema do celular) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surface: #121212;
-    --card-bg: #1e1e1e;
-    --border: #333333;
-    --text: #e8eaed;
-    --text-sub: #9aa0a6;
-    --primary: #8ab4f8; /* Azul mais claro para destacar no fundo escuro */
-    --primary-hover: #aecbfa;
-    --primary-light: rgba(138, 180, 248, 0.15);
-    --success-light: rgba(15, 157, 88, 0.15);
-    --danger-light: rgba(217, 48, 37, 0.15);
-  }
-  .form-input, .student-bar select { background: #202124 !important; color: #e8eaed !important; border-color: #5f6368 !important; }
-  .app-bottombar { background: #1e1e1e !important; border-top-color: #333333 !important; }
-  .loading-card { background: #1e1e1e !important; }
-  .passo-item { background-color: #202124 !important; }
-  .cartao-guia { background-color: rgba(138, 180, 248, 0.1) !important; border-left-color: var(--primary) !important; }
-  .passo-item code { background-color: #303134 !important; color: #f28b82 !important; }
-  .sec-sinais { background: rgba(74, 144, 226, 0.1) !important; }
-  .sec-acalma { background: rgba(245, 166, 35, 0.1) !important; }
-  .sec-evitar { background: rgba(217, 83, 79, 0.1) !important; }
-  .sec-interesses { background: rgba(92, 184, 92, 0.1) !important; }
-  .card-desk-box { background: #202124 !important; border-color: #333 !important; }
-  .card-desk-text { color: #e8eaed !important; }
+/* CLASSE DE MODO ESCURO CONTROLADA PELO UTILIZADOR */
+body.dark-theme {
+  --surface: #121212;
+  --card-bg: #1e1e1e;
+  --border: #333333;
+  --text: #e8eaed;
+  --text-sub: #9aa0a6;
+  --primary: #8ab4f8; 
+  --primary-hover: #aecbfa;
+  --primary-light: rgba(138, 180, 248, 0.15);
+  --success-light: rgba(15, 157, 88, 0.15);
+  --danger-light: rgba(217, 48, 37, 0.15);
 }
 
+body.dark-theme .form-input, body.dark-theme .student-bar select { background: #202124 !important; color: #e8eaed !important; border-color: #5f6368 !important; }
+body.dark-theme .app-bottombar { background: #1e1e1e !important; border-top-color: #333333 !important; }
+body.dark-theme .loading-card { background: #1e1e1e !important; }
+body.dark-theme .passo-item { background-color: #202124 !important; }
+body.dark-theme .cartao-guia { background-color: rgba(138, 180, 248, 0.1) !important; border-left-color: var(--primary) !important; }
+body.dark-theme .passo-item code { background-color: #303134 !important; color: #f28b82 !important; }
+body.dark-theme .sec-sinais { background: rgba(74, 144, 226, 0.1) !important; }
+body.dark-theme .sec-acalma { background: rgba(245, 166, 35, 0.1) !important; }
+body.dark-theme .sec-evitar { background: rgba(217, 83, 79, 0.1) !important; }
+body.dark-theme .sec-interesses { background: rgba(92, 184, 92, 0.1) !important; }
+body.dark-theme .card-desk-box { background: #202124 !important; border-color: #333 !important; }
+body.dark-theme .card-desk-text { color: #e8eaed !important; }
+
 * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-body { margin: 0; background: var(--surface); color: var(--text); overflow: hidden; height: 100vh; }
+body { margin: 0; background: var(--surface); color: var(--text); overflow: hidden; height: 100vh; transition: background 0.3s, color 0.3s; }
 
 .app-container { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
 
 /* SIDEBAR */
-.app-sidebar { display: none; width: var(--sidebar-w); background: var(--card-bg); border-right: 1px solid var(--border); flex-direction: column; padding: 20px 12px; z-index: 10; }
+.app-sidebar { display: none; width: var(--sidebar-w); background: var(--card-bg); border-right: 1px solid var(--border); flex-direction: column; padding: 20px 12px; z-index: 10; transition: background 0.3s, border-color 0.3s; }
 .brand-header { padding: 0 12px 20px 12px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
 .brand-title { margin: 0; color: var(--primary); font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
 .brand-subtitle { font-size: 11px; color: var(--text-sub); }
@@ -88,11 +87,11 @@ body { margin: 0; background: var(--surface); color: var(--text); overflow: hidd
 .sidebar-icon { font-size: 18px; width: 24px; text-align: center; }
 
 /* ÁREA PRINCIPAL */
-.main-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; position: relative; background: var(--surface); }
-.app-topbar { background: var(--card-bg); padding: 12px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+.main-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; position: relative; background: var(--surface); transition: background 0.3s; }
+.app-topbar { background: var(--card-bg); padding: 12px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; transition: background 0.3s, border-color 0.3s; }
 .badge-user { font-size: 12px; background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 16px; font-weight: 600; }
 
-.student-bar { background: var(--card-bg); padding: 10px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.student-bar { background: var(--card-bg); padding: 10px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; transition: background 0.3s, border-color 0.3s; }
 .student-bar label { font-size: 13px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; gap: 6px; }
 .student-bar select { max-width: 400px; flex: 1; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-size: 14px; font-weight: 600; color: var(--text); outline: none; }
 .student-bar select:focus { border-color: var(--primary); }
@@ -104,11 +103,11 @@ body { margin: 0; background: var(--surface); color: var(--text); overflow: hidd
 .tab-panel.active { display: block; animation: fadeIn 0.2s ease-in-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: background 0.3s, border-color 0.3s; }
 
 .form-group { margin-bottom: 16px; }
 .form-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #fff; outline: none; transition: border-color 0.2s; }
+.form-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #fff; outline: none; transition: border-color 0.2s, background 0.3s, color 0.3s; }
 .form-input:focus { border-color: var(--primary); }
 textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 
@@ -129,7 +128,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 .btn-whats { background: #25d366; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: none; }
 .btn-doc { background: #0f9d58; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
 
-.doc-status-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 12px; color: var(--text-sub); display: flex; justify-content: space-between; align-items: center; }
+.doc-status-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 12px; color: var(--text-sub); display: flex; justify-content: space-between; align-items: center; transition: background 0.3s; }
 .doc-status-box a { color: var(--primary); font-weight: 700; text-decoration: none; }
 
 .card-desk-box { background: #faf6ee; border: 1px solid #e8dec8; border-radius: 16px; padding: 20px; margin-top: 16px; text-align: center; }
@@ -152,7 +151,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 .spinner { font-size: 28px; animation: spin 1.5s infinite linear; margin-bottom: 12px; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.app-bottombar { display: flex; width: 100%; height: 64px; border-top: 1px solid var(--border); background: #ffffff; position: absolute; bottom: 0; left: 0; z-index: 100; }
+.app-bottombar { display: flex; width: 100%; height: 64px; border-top: 1px solid var(--border); background: #ffffff; position: absolute; bottom: 0; left: 0; z-index: 100; transition: background 0.3s, border-color 0.3s; }
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 11px; }
 .nav-item.active { color: var(--primary); font-weight: 700; }
 .nav-icon { font-size: 18px; padding: 3px 14px; border-radius: 14px; }
@@ -194,12 +193,11 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
   <!-- ÁREA PRINCIPAL -->
   <div class="main-wrapper">
     
-    <!-- NOVO CABEÇALHO EM 3 NÍVEIS -->
+    <!-- CABEÇALHO EM 3 NÍVEIS -->
     <header class="app-topbar">
       <div>
         <h3 style="margin:0; font-size: 16px; color: var(--primary);">Inclusão Conectada</h3>
         <span style="font-size: 11px; color: var(--text-sub); display: block;">Sala de Recursos Multifuncionais - AEE</span>
-        <!-- Linha da escola que aparece automaticamente após cadastro -->
         <span id="badge-escola" style="font-size: 12px; font-weight: 700; color: var(--text); display: none; margin-top: 3px;"></span>
       </div>
       <div id="badge-usuario" class="badge-user">Conectando...</div>
@@ -322,14 +320,24 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
             <div id="msg-sync" class="msg-card" style="margin-top:12px;"></div>
             
             <button class="btn btn-secondary" style="margin-top:10px;" onclick="destravarEdicaoPerfil()">✏️ Editar Dados / Pasta</button>
-            <button class="btn" style="background:var(--danger); margin-top:20px;" onclick="sairEApagarTudo()">🗑️ Sair e Apagar Todos os Dados</button>
+            
+            <!-- CAIXA DE SELEÇÃO DE TEMA (MODO ESCURO/CLARO) -->
+            <div class="form-group" style="margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px;">
+              <label class="form-label">🎨 Aparência do Aplicativo</label>
+              <select id="sel-tema" class="form-input" onchange="mudarTema(this.value)">
+                <option value="auto">Automático (Segue o Celular)</option>
+                <option value="light">Modo Claro</option>
+                <option value="dark">Modo Escuro</option>
+              </select>
+            </div>
 
-            <!-- NOVO BOTÃO DE HELP DESK -->
+            <!-- BOTÕES DE DESTRUIÇÃO E SUPORTE -->
             <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
             <p style="font-size: 13px; color: var(--text-sub); text-align: center; margin-bottom: 12px;">Precisa de assistência com o sistema?</p>
-            <button class="btn btn-whats" style="width: 100%; justify-content: center;" onclick="abrirHelpDesk()">
+            <button class="btn btn-whats" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="abrirHelpDesk()">
               💬 Help Desk - Falar com o Suporte
             </button>
+            <button class="btn" style="background:var(--danger);" onclick="sairEApagarTudo()">🗑️ Sair e Apagar Todos os Dados</button>
           </div>
 
           <!-- ECRÃ DE CADASTRO -->
@@ -387,7 +395,6 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
               <div id="msg-ajustes" class="msg-card" style="margin-top:12px;"></div>
             </div>
             
-            <!-- HELP DESK NA TELA DE LOGIN TAMBÉM -->
             <button class="btn btn-whats" style="width: 100%; justify-content: center; margin-bottom: 20px;" onclick="abrirHelpDesk()">
               💬 Dificuldade para conectar? Fale com o Suporte
             </button>
@@ -416,6 +423,38 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuW
 var cacheAlunos = {};
 var alunoAtivoId = null;
 var dadosProfessorCache = {};
+
+// FUNÇÕES DE GESTÃO DO MODO ESCURO
+function inicializarTema() {
+  const temaSalvo = localStorage.getItem('inclusao_tema') || 'auto';
+  if(document.getElementById('sel-tema')) {
+    document.getElementById('sel-tema').value = temaSalvo;
+  }
+  aplicarTemaCSS(temaSalvo);
+}
+
+function aplicarTemaCSS(tema) {
+  const prefereEscuro = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (tema === 'dark' || (tema === 'auto' && prefereEscuro)) {
+    document.body.classList.add('dark-theme');
+  } else {
+    document.body.classList.remove('dark-theme');
+  }
+}
+
+function mudarTema(novoTema) {
+  localStorage.setItem('inclusao_tema', novoTema);
+  aplicarTemaCSS(novoTema);
+}
+
+// Escuta mudanças no sistema do telemóvel (caso esteja em Automático e o ecrã mude)
+if(window.matchMedia) {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    const temaAtual = localStorage.getItem('inclusao_tema') || 'auto';
+    if(temaAtual === 'auto') aplicarTemaCSS('auto');
+  });
+}
+
 
 async function chamarAPI(action, payload = {}) {
   try {
@@ -472,6 +511,7 @@ function limparResultadosEmTela() {
 }
 
 window.onload = function() {
+  inicializarTema(); // Carrega a preferência de cor assim que abre a app
   carregarDadosPerfil();
   carregarListaAlunos();
 };
@@ -510,7 +550,6 @@ async function carregarDadosPerfil() {
       document.getElementById('lbl-prof-escola').innerText = u.escola || "Não informada";
       document.getElementById('lbl-prof-pasta').innerText = u.pastaRaiz ? ("Configurada (" + u.pastaRaiz.substring(0,8) + "...)") : "Pendente";
 
-      // ATUALIZA O NOME DA ESCOLA NO CABEÇALHO (NOVA FUNÇÃO)
       if (u.escola) {
         document.getElementById('badge-escola').innerText = u.escola;
         document.getElementById('badge-escola').style.display = 'block';
@@ -665,9 +704,8 @@ function compartilharWhatsApp(idTexto) {
   window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(txt), '_blank');
 }
 
-// FUNÇÃO PARA O BOTÃO DO HELP DESK
 function abrirHelpDesk() {
-  const numero = "5551984031031"; // Seu número configurado
+  const numero = "5551984031031"; 
   const mensagem = "Olá! Preciso de ajuda com o aplicativo Inclusão Conectada.";
   window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`, '_blank');
 }
