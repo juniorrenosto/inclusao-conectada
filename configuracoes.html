@@ -27,6 +27,9 @@
       margin-top: 0;
       border-bottom: 2px solid #f0f0f0;
       padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     /* Estilos do Guia Passo a Passo */
@@ -42,6 +45,9 @@
       color: #0b57d0;
       margin-top: 0;
       font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .passo-item {
@@ -55,13 +61,24 @@
     .passo-item h4 {
       margin-top: 0;
       color: #202124;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .passo-item ol {
+    .passo-item ul {
       margin-bottom: 0;
-      padding-left: 20px;
+      padding-left: 0;
+      list-style: none;
       color: #3c4043;
-      line-height: 1.5;
+      line-height: 1.6;
+    }
+    
+    .passo-item ul li {
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
     }
 
     .passo-item code {
@@ -79,13 +96,15 @@
     }
 
     label {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       margin-bottom: 8px;
       font-weight: 600;
       color: #3c4043;
     }
 
-    input[type="text"], input[type="url"] {
+    input[type="text"], input[type="password"] {
       width: 100%;
       padding: 12px;
       border: 1px solid #ccc;
@@ -94,7 +113,7 @@
       font-size: 14px;
     }
     
-    input[type="text"]:focus, input[type="url"]:focus {
+    input[type="text"]:focus, input[type="password"]:focus {
       border-color: #0b57d0;
       outline: none;
       box-shadow: 0 0 0 2px rgba(11, 87, 208, 0.2);
@@ -109,6 +128,10 @@
       font-weight: bold;
       width: 100%;
       transition: background-color 0.2s, transform 0.1s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
     }
     
     button:active {
@@ -159,51 +182,52 @@
     <!-- GUIA DE CONFIGURAÇÃO (Oculto após o cadastro) -->
     <div id="guia-configuracao" class="cartao-guia">
       <h3 class="titulo-guia">🛠️ Passo a Passo: Como Conectar o seu Sistema</h3>
-      <p>Para que o Inclusão Conectada funcione, precisamos ligá-lo ao seu Google Drive e ao sistema de automação. Siga os passos abaixo:</p>
+      <p>Para que a Inteligência Artificial e a gestão de alunos funcionem, precisamos ligar as chaves de acesso. Siga os passos abaixo:</p>
 
       <div class="passo-item">
-        <h4>🔗 Passo 1: URL da API (Google Apps Script)</h4>
-        <ol>
-          <li>Aceda ao seu painel do <a href="https://script.google.com/" target="_blank">Google Apps Script</a>.</li>
-          <li>Abra o projeto do sistema.</li>
-          <li>No canto superior direito, clique no botão azul <strong>Implantar</strong> e depois em <strong>Nova implantação</strong>.</li>
-          <li>Em "Quem tem acesso", escolha <strong>Qualquer pessoa</strong>.</li>
-          <li>Clique em <strong>Implantar</strong> (autorize os acessos da conta Google, se for pedido).</li>
-          <li>Copie o link gerado em <strong>URL do app da Web</strong> e cole no campo "Chave da API" abaixo.</li>
-        </ol>
+        <h4>🧠 Passo 1: Chave da API (Inteligência Artificial)</h4>
+        <ul>
+          <li><span>🌐</span> <span><strong>Acesse</strong> o painel da sua IA (ex: <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>).</span></li>
+          <li><span>🔑</span> <span><strong>Faça login</strong> com a sua conta Google.</span></li>
+          <li><span>👆</span> <span><strong>Clique</strong> no menu lateral em <strong>"Get API key"</strong>.</span></li>
+          <li><span>➕</span> <span><strong>Clique</strong> no botão azul <strong>"Create API key"</strong>.</span></li>
+          <li><span>📋</span> <span><strong>Copie</strong> o código secreto gerado (Chave da API) e <strong>Cole</strong> no 1º campo abaixo.</span></li>
+        </ul>
       </div>
 
       <div class="passo-item">
         <h4>📁 Passo 2: ID da Pasta do Google Drive</h4>
-        <ol>
-          <li>Abra o seu <a href="https://drive.google.com/" target="_blank">Google Drive</a> e crie uma nova pasta chamada <em>"Inclusão Conectada - Alunos"</em>.</li>
-          <li>Abra essa pasta com um duplo clique.</li>
-          <li>Olhe para a barra de endereços do seu navegador superior. O link será algo como:<br>
+        <ul>
+          <li><span>☁️</span> <span><strong>Abra</strong> o seu <a href="https://drive.google.com/" target="_blank">Google Drive</a>.</span></li>
+          <li><span>➕</span> <span><strong>Crie</strong> uma nova pasta chamada <em>"Inclusão Conectada"</em>.</span></li>
+          <li><span>🖱️</span> <span><strong>Abra</strong> essa pasta com um duplo clique.</span></li>
+          <li><span>👁️</span> <span><strong>Olhe</strong> para a barra de endereços (URL) no topo do seu navegador. O link será parecido com este:<br>
             <code>drive.google.com/drive/folders/<strong>1a2B3c4D5e6F7g8H9i0J</strong></code>
-          </li>
-          <li>Copie <strong>apenas a mistura de letras e números</strong> que está no final do link.</li>
-          <li>Cole esse código no campo "ID da Pasta do Drive" abaixo.</li>
-        </ol>
+          </span></li>
+          <li><span>✂️</span> <span><strong>Copie</strong> apenas a mistura de letras e números do final.</span></li>
+          <li><span>📋</span> <span><strong>Cole</strong> esse código no 2º campo abaixo.</span></li>
+        </ul>
       </div>
     </div>
     <!-- FIM DO GUIA -->
 
     <!-- CAMPOS DE CADASTRO -->
     <div class="form-group">
-      <label for="input-api">🔗 Chave da API (URL do Google Apps Script):</label>
-      <input type="url" id="input-api" placeholder="Ex: https://script.google.com/macros/s/SEU_CODIGO/exec">
+      <label for="input-api">🧠 Chave da API (Inteligência Artificial):</label>
+      <!-- Usei type="password" para esconder a chave da IA enquanto digita -->
+      <input type="password" id="input-api" placeholder="Cole aqui a sua Chave Secreta da API">
     </div>
     
     <div class="form-group">
       <label for="input-pasta">📁 ID da Pasta do Google Drive:</label>
-      <input type="text" id="input-pasta" placeholder="Ex: 1a2B3c4D5e6F7g8H9i0J">
+      <input type="text" id="input-pasta" placeholder="Cole aqui o ID da pasta do Drive">
     </div>
 
     <button class="btn-salvar" onclick="salvarConfiguracoes()">💾 Guardar e Conectar</button>
 
     <!-- ZONA DE PERIGO (Oculta até o sistema estar conectado) -->
     <div id="area-perigo" style="display: none;">
-      <h3 style="color: #d93025; margin-top: 0;">⚠️ Zona de Perigo</h3>
+      <h3 style="color: #d93025; margin-top: 0; display: flex; align-items: center; gap: 8px;">⚠️ Zona de Perigo</h3>
       <p style="color: #5f6368; font-size: 14px; margin-bottom: 20px;">
         Estas ações irão desconectar o aplicativo deste dispositivo. Fique tranquilo: os dados dos alunos nas planilhas e no Google Drive <strong>não serão apagados</strong>.
       </p>
@@ -223,8 +247,10 @@
   <script>
     // 1. Verifica se já existem dados e controla o que aparece no ecrã
     function carregarEVerificar() {
-      const chaveApiGuardada = localStorage.getItem('inclusao_api_url');
+      // Usando chaves genéricas de armazenamento
+      const chaveApiGuardada = localStorage.getItem('inclusao_api_key'); 
       const idPastaGuardado = localStorage.getItem('inclusao_drive_id');
+      
       const guia = document.getElementById('guia-configuracao');
       const areaPerigo = document.getElementById('area-perigo');
       
@@ -255,7 +281,7 @@
         return;
       }
 
-      localStorage.setItem('inclusao_api_url', apiInput);
+      localStorage.setItem('inclusao_api_key', apiInput);
       localStorage.setItem('inclusao_drive_id', pastaInput);
       
       alert('✅ Sistema conectado com sucesso!');
@@ -264,9 +290,9 @@
 
     // 3. Função para Deslogar (Apaga apenas as chaves)
     function deslogarSistema() {
-      const confirmar = confirm("Tem a certeza que deseja sair?\nTerá de inserir a Chave da API novamente para aceder aos dados dos alunos.");
+      const confirmar = confirm("Tem a certeza que deseja sair?\nTerá de inserir as Chaves novamente para usar o sistema.");
       if (confirmar) {
-        localStorage.removeItem('inclusao_api_url');
+        localStorage.removeItem('inclusao_api_key');
         localStorage.removeItem('inclusao_drive_id');
         document.getElementById('input-api').value = '';
         document.getElementById('input-pasta').value = '';
