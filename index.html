@@ -5,7 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Inclusão Conectada</title>
 
-<!-- METATAGS DE APLICATIVO NATIVO (PWA / MOBILE / DESKTOP) -->
+<!-- CONEXÃO DO MANIFEST E SERVICE WORKER (PWA / PLAY STORE) -->
+<link rel="manifest" href="./manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW falhou:', err));
+    });
+  }
+</script>
+
+<!-- METATAGS DE APLICATIVO NATIVO (MOBILE / TABLET / DESKTOP) -->
 <meta name="theme-color" content="#0b57d0">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -471,14 +481,12 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 </div>
 
 <script>
-// ENDPOINT DA API APPS SCRIPT
 const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuWu0SZyD6BEUdEb3IV73dHK-A6_qNppzDs0ZhB5xXage_k/exec";
 
 var cacheAlunos = {};
 var alunoAtivoId = null;
 var dadosProfessorCache = {};
 
-// Função ponte assíncrona para comunicar com o Apps Script via HTTP POST
 async function chamarAPI(action, payload = {}) {
   try {
     const corpo = JSON.stringify({ action: action, ...payload });
