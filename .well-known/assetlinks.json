@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.juniorrenosto.twa",
+        "sha256_cert_fingerprints": ["C9:F0:20:91:B9:D3:C8:F6:93:47:14:53:53:91:D3:FE:B3:4C:E0:A3:6E:66:E3:27:CB:71:83:7A:7D:9B:79:EC"]
+      }
+    }]
