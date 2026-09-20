@@ -506,7 +506,12 @@ async function salvarPerfil() {
     pastaRaiz: document.getElementById('txt-pasta-raiz').value,
     chave: document.getElementById('prof-chave').value
   };
-  if (!d.nome.trim()) return alert("Digite seu nome.");
+  
+  // VALIDAÇÕES DE SEGURANÇA (Obriga a preencher tudo)
+  if (!d.nome.trim()) return alert("⚠️ Por favor, digite o seu Nome Completo.");
+  if (!d.escola.trim()) return alert("⚠️ Por favor, digite o nome da Unidade Escolar.");
+  if (!d.pastaRaiz.trim()) return alert("⚠️ Por favor, cole o ID ou Link da Pasta do Drive (Passo 2).");
+  if (!d.chave.trim()) return alert("⚠️ Por favor, cole a sua Chave de IA (Passo 1).");
 
   load("Salvando Ajustes...");
   const res = await chamarAPI("salvarCadastroProfessor", { dados: d });
