@@ -25,6 +25,9 @@
 
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABlBMVEUAC3f///8A1s4OAAAAAXRSTlMAQObYZgAAAFBJREFUeNrtzTERAAAIAzCS/s0+Bg9uIAVa8pIuLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy9fdT8BbwB9WdYFbwAAAABJRU5ErkJggg==">
 
+<!-- ÍCONES PROFISSIONAIS (GOOGLE MATERIAL SYMBOLS) -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
 <style>
 :root {
   /* CORES MODO CLARO PADRÃO */
@@ -59,7 +62,7 @@ body.dark-theme {
 
 body.dark-theme .form-input, body.dark-theme .student-bar select { background: #202124 !important; color: #e8eaed !important; border-color: #5f6368 !important; }
 body.dark-theme .app-bottombar { background: #1e1e1e !important; border-top-color: #333333 !important; }
-body.dark-theme .loading-card { background: #1e1e1e !important; }
+body.dark-theme .loading-card, body.dark-theme .modal-box { background: #1e1e1e !important; }
 body.dark-theme .passo-item { background-color: #202124 !important; }
 body.dark-theme .cartao-guia { background-color: rgba(138, 180, 248, 0.1) !important; border-left-color: var(--primary) !important; }
 body.dark-theme .passo-item code { background-color: #303134 !important; color: #f28b82 !important; }
@@ -73,6 +76,9 @@ body.dark-theme .card-desk-text { color: #e8eaed !important; }
 * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; background: var(--surface); color: var(--text); overflow: hidden; height: 100vh; transition: background 0.3s, color 0.3s; }
 
+/* CONFIGURAÇÃO DOS ÍCONES MATERIAL */
+.material-symbols-outlined { font-size: 24px; vertical-align: middle; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
 .app-container { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
 
 /* SIDEBAR */
@@ -84,7 +90,7 @@ body { margin: 0; background: var(--surface); color: var(--text); overflow: hidd
 .sidebar-btn { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 24px; border: none; background: transparent; color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-align: left; }
 .sidebar-btn:hover { background: var(--primary-light); }
 .sidebar-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 700; }
-.sidebar-icon { font-size: 18px; width: 24px; text-align: center; }
+.sidebar-icon { font-size: 22px; width: 24px; text-align: center; }
 
 /* ÁREA PRINCIPAL */
 .main-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; position: relative; background: var(--surface); transition: background 0.3s; }
@@ -111,7 +117,7 @@ body { margin: 0; background: var(--surface); color: var(--text); overflow: hidd
 .form-input:focus { border-color: var(--primary); }
 textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 
-/* CSS do Guia Passo a Passo Integrado */
+/* GUIAS E MENSAGENS */
 .cartao-guia { background-color: #e8f0fe; border-left: 5px solid var(--primary); padding: 16px; margin-bottom: 24px; border-radius: 8px; }
 .titulo-guia { color: var(--primary); margin: 0 0 8px 0; font-size: 16px; display: flex; align-items: center; gap: 8px; }
 .passo-item { background-color: #ffffff; padding: 12px; margin-top: 12px; border-radius: 6px; border: 1px solid var(--border); }
@@ -151,10 +157,23 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 .spinner { font-size: 28px; animation: spin 1.5s infinite linear; margin-bottom: 12px; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+/* SISTEMA DE CAIXAS CUSTOMIZADAS (MODAIS) */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+.modal-box { background: var(--card-bg); width: 90%; max-width: 380px; border-radius: 16px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.25); text-align: center; animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-title { color: var(--primary); font-size: 18px; font-weight: 700; margin: 0 0 12px 0; }
+.modal-text { color: var(--text); font-size: 15px; line-height: 1.5; margin-bottom: 24px; white-space: pre-wrap; }
+.modal-buttons { display: flex; gap: 12px; justify-content: center; }
+.modal-btn { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 14px; }
+.modal-btn-primary { background: var(--primary); color: #fff; }
+.modal-btn-primary:hover { background: var(--primary-hover); }
+.modal-btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+.modal-btn-danger { background: var(--danger); color: #fff; }
+
 .app-bottombar { display: flex; width: 100%; height: 64px; border-top: 1px solid var(--border); background: #ffffff; position: absolute; bottom: 0; left: 0; z-index: 100; transition: background 0.3s, border-color 0.3s; }
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 11px; }
 .nav-item.active { color: var(--primary); font-weight: 700; }
-.nav-icon { font-size: 18px; padding: 3px 14px; border-radius: 14px; }
+.nav-icon { font-size: 22px; padding: 4px 16px; border-radius: 16px; }
 .nav-item.active .nav-icon { background: var(--primary-light); }
 
 @media (min-width: 768px) {
@@ -166,6 +185,15 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 </head>
 <body>
 
+<!-- SISTEMA MODAL HTML -->
+<div id="custom-modal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 id="modal-title" class="modal-title">Aviso</h3>
+    <p id="modal-text" class="modal-text">Mensagem</p>
+    <div id="modal-actions" class="modal-buttons"></div>
+  </div>
+</div>
+
 <div id="loading-overlay">
   <div class="loading-card">
     <div class="spinner">⏳</div>
@@ -175,18 +203,18 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 
 <div class="app-container">
 
-  <!-- BARRA LATERAL (Desktop) -->
+  <!-- BARRA LATERAL (Desktop) COM NOVOS ÍCONES -->
   <aside class="app-sidebar">
     <div class="brand-header">
-      <h3 class="brand-title">🧩 Inclusão</h3>
+      <h3 class="brand-title"><span class="material-symbols-outlined">extension</span> Inclusão</h3>
       <span class="brand-subtitle">Conectada • Esteio/RS</span>
     </div>
     <nav class="sidebar-nav">
-      <button class="sidebar-btn active" onclick="trocarAba('aba-dua', this)"><span class="sidebar-icon">🎨</span> DUA</button>
-      <button class="sidebar-btn" onclick="trocarAba('aba-acolher', this)"><span class="sidebar-icon">💌</span> Acolher</button>
-      <button class="sidebar-btn" onclick="trocarAba('aba-diario', this)"><span class="sidebar-icon">⏱️</span> Diário de Bordo</button>
-      <button class="sidebar-btn" onclick="trocarAba('aba-estudo', this)"><span class="sidebar-icon">📑</span> Estudo de Caso</button>
-      <button class="sidebar-btn" onclick="trocarAba('aba-ajustes', this)"><span class="sidebar-icon">⚙️</span> Ajustes & Pasta</button>
+      <button class="sidebar-btn active" onclick="trocarAba('aba-dua', this)"><span class="sidebar-icon material-symbols-outlined">extension</span> DUA</button>
+      <button class="sidebar-btn" onclick="trocarAba('aba-acolher', this)"><span class="sidebar-icon material-symbols-outlined">volunteer_activism</span> Acolher</button>
+      <button class="sidebar-btn" onclick="trocarAba('aba-diario', this)"><span class="sidebar-icon material-symbols-outlined">history_edu</span> Diário de Bordo</button>
+      <button class="sidebar-btn" onclick="trocarAba('aba-estudo', this)"><span class="sidebar-icon material-symbols-outlined">psychology</span> Estudo de Caso</button>
+      <button class="sidebar-btn" onclick="trocarAba('aba-ajustes', this)"><span class="sidebar-icon material-symbols-outlined">manage_accounts</span> Ajustes & Pasta</button>
     </nav>
   </aside>
 
@@ -204,7 +232,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
     </header>
 
     <div class="student-bar">
-      <label>👤 Estudante:</label>
+      <label><span class="material-symbols-outlined" style="font-size:18px;">person</span> Estudante:</label>
       <select id="sel-global-aluno" onchange="aoTrocarAlunoGlobal(this.value)">
         <option value="">Carregando lista...</option>
       </select>
@@ -221,7 +249,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
               <label class="form-label">Plano de Aula Proposto</label>
               <textarea id="txt-plano-aula" class="form-input" placeholder="Cole o plano da aula regular para adaptarmos com os 3 princípios do DUA..."></textarea>
             </div>
-            <button class="btn" onclick="gerarDUA()">🎨 Adaptar com DUA</button>
+            <button class="btn" onclick="gerarDUA()"><span class="material-symbols-outlined">extension</span> Adaptar com DUA</button>
           </div>
           <div id="msg-dua" class="msg-card"></div>
           <div id="res-dua" class="card" style="display:none; white-space:pre-wrap; line-height: 1.6; font-size: 14px;"></div>
@@ -234,8 +262,8 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 
           <div class="card">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
-              <button class="btn" style="background:var(--success);" onclick="gerarCartaoAction()">📇 Gerar Cartão</button>
-              <button class="btn" onclick="gerarCartaAction()">💌 Carta à Regente</button>
+              <button class="btn" style="background:var(--success);" onclick="gerarCartaoAction()"><span class="material-symbols-outlined">contact_page</span> Gerar Cartão</button>
+              <button class="btn" onclick="gerarCartaAction()"><span class="material-symbols-outlined">mail</span> Carta à Regente</button>
             </div>
             <div class="form-group">
               <label class="form-label">Nome do(a) Professor(a) Regente (opcional)</label>
@@ -257,19 +285,19 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
               <div style="font-size:12px; color:var(--text-sub); margin-top:12px;"><span id="cartao-apoio-status">Sem profissional de apoio na escola</span><br><i>Com carinho, Família e Equipe AEE</i></div>
             </div>
             <div style="margin-top:16px; display: flex; gap: 8px;">
-              <a id="link-doc-cartao-btn" class="btn-doc" target="_blank">📄 Abrir Docs no Drive</a>
-              <a id="btn-whats-cartao" class="btn-whats" target="_blank">💬 Enviar WhatsApp</a>
+              <a id="link-doc-cartao-btn" class="btn-doc" target="_blank"><span class="material-symbols-outlined" style="font-size:18px;">description</span> Abrir Docs</a>
+              <a id="btn-whats-cartao" class="btn-whats" target="_blank"><span class="material-symbols-outlined" style="font-size:18px;">send</span> Enviar WhatsApp</a>
             </div>
           </div>
 
           <div id="res-carta" style="display:none; margin-top:16px;">
             <div class="card">
-              <h3 style="margin:0 0 12px 0; color:var(--text); font-size:16px;">💌 Carta à Regente</h3>
+              <h3 style="margin:0 0 12px 0; color:var(--text); font-size:16px;"><span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle;">mail</span> Carta à Regente</h3>
               <div id="txt-carta" style="font-size:14px; white-space:pre-wrap; line-height:1.6;"></div>
             </div>
             <div style="margin-top:12px; display: flex; gap: 8px;">
-              <a id="link-doc-carta-btn" class="btn-doc" target="_blank">📄 Abrir Carta no Docs</a>
-              <button class="btn-whats" onclick="compartilharWhatsApp('txt-carta')">💬 Enviar WhatsApp</button>
+              <a id="link-doc-carta-btn" class="btn-doc" target="_blank"><span class="material-symbols-outlined" style="font-size:18px;">description</span> Abrir Docs</a>
+              <button class="btn-whats" onclick="compartilharWhatsApp('txt-carta')"><span class="material-symbols-outlined" style="font-size:18px;">send</span> Enviar WhatsApp</button>
             </div>
           </div>
         </div>
@@ -290,7 +318,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
               <label class="form-label">Relato do Atendimento</label>
               <textarea id="txt-obs" class="form-input" placeholder="Descreva os fatos ocorridos no atendimento de hoje..."></textarea>
             </div>
-            <button class="btn" onclick="salvarDiario()">⏱️ Gravar no Diário de Bordo</button>
+            <button class="btn" onclick="salvarDiario()"><span class="material-symbols-outlined">history_edu</span> Gravar no Diário de Bordo</button>
           </div>
           <div id="msg-diario" class="msg-card"></div>
         </div>
@@ -299,7 +327,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
         <div id="aba-estudo" class="tab-panel">
           <div id="status-box-estudo" class="doc-status-box"><span>ℹ️ Estudo de Caso: Não gerado</span></div>
           <div class="card">
-            <button class="btn" onclick="gerarEstudo()">📑 Gerar Estudo de Caso (10 Tópicos SRM)</button>
+            <button class="btn" onclick="gerarEstudo()"><span class="material-symbols-outlined">psychology</span> Gerar Estudo de Caso</button>
           </div>
           <div id="msg-estudo" class="msg-card"></div>
           <div id="res-estudo" class="card" style="display:none; font-size:14px; line-height: 1.6; white-space:pre-wrap;"></div>
@@ -316,10 +344,10 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
             <div style="margin-bottom:10px;"><b>Escola:</b> <span id="lbl-prof-escola">-</span></div>
             <div style="margin-bottom:14px;"><b>Pasta Raiz:</b> <span id="lbl-prof-pasta" style="font-family:monospace; color:var(--primary);">-</span></div>
             
-            <button class="btn" style="background:var(--success);" onclick="sincronizarPasta()">🔄 Sincronizar Alunos da Pasta</button>
+            <button class="btn" style="background:var(--success);" onclick="sincronizarPasta()"><span class="material-symbols-outlined">sync</span> Sincronizar Alunos da Pasta</button>
             <div id="msg-sync" class="msg-card" style="margin-top:12px;"></div>
             
-            <button class="btn btn-secondary" style="margin-top:10px;" onclick="destravarEdicaoPerfil()">✏️ Editar Dados / Pasta</button>
+            <button class="btn btn-secondary" style="margin-top:10px;" onclick="destravarEdicaoPerfil()"><span class="material-symbols-outlined">edit</span> Editar Dados / Pasta</button>
             
             <!-- CAIXA DE SELEÇÃO DE TEMA (MODO ESCURO/CLARO) -->
             <div class="form-group" style="margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px;">
@@ -335,19 +363,19 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
             <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
             <p style="font-size: 13px; color: var(--text-sub); text-align: center; margin-bottom: 12px;">Precisa de assistência com o sistema?</p>
             <button class="btn btn-whats" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="abrirHelpDesk()">
-              💬 Help Desk - Falar com o Suporte
+              <span class="material-symbols-outlined">support_agent</span> Help Desk - Falar com o Suporte
             </button>
-            <button class="btn" style="background:var(--danger);" onclick="sairEApagarTudo()">🗑️ Sair e Apagar Todos os Dados</button>
+            <button class="btn" style="background:var(--danger);" onclick="sairEApagarTudo()"><span class="material-symbols-outlined">delete_forever</span> Sair e Apagar Todos os Dados</button>
           </div>
 
           <!-- ECRÃ DE CADASTRO -->
           <div id="box-perfil-formulario" style="display:none;">
             <div class="cartao-guia">
-              <h3 class="titulo-guia">🛠️ Como Conectar o seu Sistema</h3>
+              <h3 class="titulo-guia"><span class="material-symbols-outlined">build</span> Como Conectar o seu Sistema</h3>
               <p style="font-size: 13px; color: var(--text-sub); margin-top: 0; margin-bottom: 8px;">Siga os passos abaixo antes de salvar o seu perfil:</p>
 
               <div class="passo-item">
-                <h4>🧠 Passo 1: Chave da IA (Google AI Studio)</h4>
+                <h4><span class="material-symbols-outlined" style="font-size:18px;">key</span> Passo 1: Chave da IA (Google AI Studio)</h4>
                 <ul>
                   <li><span>1.</span> <span>Acesse o <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.</span></li>
                   <li><span>2.</span> <span>Faça login e clique em <strong>"Get API key"</strong> no menu.</span></li>
@@ -357,7 +385,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
               </div>
 
               <div class="passo-item">
-                <h4>📁 Passo 2: ID da Pasta (Google Drive)</h4>
+                <h4><span class="material-symbols-outlined" style="font-size:18px;">folder</span> Passo 2: ID da Pasta (Google Drive)</h4>
                 <ul>
                   <li><span>1.</span> <span>Crie uma pasta para os alunos no <a href="https://drive.google.com/" target="_blank">Google Drive</a>.</span></li>
                   <li><span>2.</span> <span>Abra essa pasta e olhe o link no topo do navegador.</span></li>
@@ -391,12 +419,12 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
                 <label class="form-label">Chave de IA (Gemini API Key)</label>
                 <input type="password" id="prof-chave" class="form-input" placeholder="AIzaSy...">
               </div>
-              <button class="btn" onclick="salvarPerfil()">Salvar Perfil & Configurações</button>
+              <button class="btn" onclick="salvarPerfil()"><span class="material-symbols-outlined">save</span> Salvar Perfil & Configurações</button>
               <div id="msg-ajustes" class="msg-card" style="margin-top:12px;"></div>
             </div>
             
             <button class="btn btn-whats" style="width: 100%; justify-content: center; margin-bottom: 20px;" onclick="abrirHelpDesk()">
-              💬 Dificuldade para conectar? Fale com o Suporte
+              <span class="material-symbols-outlined">support_agent</span> Dificuldade para conectar? Fale com o Suporte
             </button>
             
           </div>
@@ -405,13 +433,13 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
       </div>
     </main>
 
-    <!-- BARRA INFERIOR (Mobile) -->
+    <!-- BARRA INFERIOR (Mobile) COM NOVOS ÍCONES -->
     <nav class="app-bottombar">
-      <button class="nav-item active" onclick="trocarAba('aba-dua', this)"><div class="nav-icon">🎨</div><div>DUA</div></button>
-      <button class="nav-item" onclick="trocarAba('aba-acolher', this)"><div class="nav-icon">💌</div><div>Acolher</div></button>
-      <button class="nav-item" onclick="trocarAba('aba-diario', this)"><div class="nav-icon">⏱️</div><div>Diário</div></button>
-      <button class="nav-item" onclick="trocarAba('aba-estudo', this)"><div class="nav-icon">📑</div><div>Estudo</div></button>
-      <button class="nav-item" onclick="trocarAba('aba-ajustes', this)"><div class="nav-icon">⚙️</div><div>Ajustes</div></button>
+      <button class="nav-item active" onclick="trocarAba('aba-dua', this)"><div class="nav-icon material-symbols-outlined">extension</div><div>DUA</div></button>
+      <button class="nav-item" onclick="trocarAba('aba-acolher', this)"><div class="nav-icon material-symbols-outlined">volunteer_activism</div><div>Acolher</div></button>
+      <button class="nav-item" onclick="trocarAba('aba-diario', this)"><div class="nav-icon material-symbols-outlined">history_edu</div><div>Diário</div></button>
+      <button class="nav-item" onclick="trocarAba('aba-estudo', this)"><div class="nav-icon material-symbols-outlined">psychology</div><div>Estudo</div></button>
+      <button class="nav-item" onclick="trocarAba('aba-ajustes', this)"><div class="nav-icon material-symbols-outlined">manage_accounts</div><div>Ajustes</div></button>
     </nav>
 
   </div>
@@ -423,6 +451,35 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuW
 var cacheAlunos = {};
 var alunoAtivoId = null;
 var dadosProfessorCache = {};
+
+// -------- SISTEMA DE MODAIS (SUBSTITUTO DOS ALERTS E CONFIRMS) --------
+function fecharModal() {
+  document.getElementById('custom-modal').style.display = 'none';
+}
+
+function mostrarAlerta(mensagem, titulo = "Inclusão Conectada") {
+  document.getElementById('modal-title').innerText = titulo;
+  document.getElementById('modal-text').innerText = mensagem;
+  const actions = document.getElementById('modal-actions');
+  actions.innerHTML = '<button class="modal-btn modal-btn-primary" onclick="fecharModal()">Entendi</button>';
+  document.getElementById('custom-modal').style.display = 'flex';
+}
+
+function mostrarConfirmacao(mensagem, callbackSim, titulo = "Atenção") {
+  document.getElementById('modal-title').innerText = titulo;
+  document.getElementById('modal-text').innerText = mensagem;
+  const actions = document.getElementById('modal-actions');
+  actions.innerHTML = `
+    <button class="modal-btn modal-btn-secondary" onclick="fecharModal()">Cancelar</button>
+    <button class="modal-btn modal-btn-danger" id="btn-modal-sim">Sim, quero sair</button>
+  `;
+  document.getElementById('btn-modal-sim').onclick = () => { 
+    fecharModal(); 
+    callbackSim(); 
+  };
+  document.getElementById('custom-modal').style.display = 'flex';
+}
+// ---------------------------------------------------------------------
 
 // FUNÇÕES DE GESTÃO DO MODO ESCURO
 function inicializarTema() {
@@ -447,14 +504,12 @@ function mudarTema(novoTema) {
   aplicarTemaCSS(novoTema);
 }
 
-// Escuta mudanças no sistema do telemóvel (caso esteja em Automático e o ecrã mude)
 if(window.matchMedia) {
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
     const temaAtual = localStorage.getItem('inclusao_tema') || 'auto';
     if(temaAtual === 'auto') aplicarTemaCSS('auto');
   });
 }
-
 
 async function chamarAPI(action, payload = {}) {
   try {
@@ -511,7 +566,7 @@ function limparResultadosEmTela() {
 }
 
 window.onload = function() {
-  inicializarTema(); // Carrega a preferência de cor assim que abre a app
+  inicializarTema(); 
   carregarDadosPerfil();
   carregarListaAlunos();
 };
@@ -586,10 +641,10 @@ async function salvarPerfil() {
     chave: document.getElementById('prof-chave').value
   };
   
-  if (!d.nome.trim()) return alert("⚠️ Por favor, digite o seu Nome Completo.");
-  if (!d.escola.trim()) return alert("⚠️ Por favor, digite o nome da Unidade Escolar.");
-  if (!d.pastaRaiz.trim()) return alert("⚠️ Por favor, cole o ID ou Link da Pasta do Drive (Passo 2).");
-  if (!d.chave.trim()) return alert("⚠️ Por favor, cole a sua Chave de IA (Passo 1).");
+  if (!d.nome.trim()) { mostrarAlerta("Por favor, digite o seu Nome Completo.", "Falta informação"); return; }
+  if (!d.escola.trim()) { mostrarAlerta("Por favor, digite o nome da Unidade Escolar.", "Falta informação"); return; }
+  if (!d.pastaRaiz.trim()) { mostrarAlerta("Por favor, cole o ID ou Link da Pasta do Drive (Passo 2).", "Falta informação"); return; }
+  if (!d.chave.trim()) { mostrarAlerta("Por favor, cole a sua Chave de IA (Passo 1).", "Falta informação"); return; }
 
   load("Salvando Ajustes...");
   const res = await chamarAPI("salvarCadastroProfessor", { dados: d });
@@ -600,7 +655,8 @@ async function salvarPerfil() {
 
 async function sincronizarPasta() {
   var link = document.getElementById('txt-pasta-raiz').value;
-  if (!link.trim()) return alert("Cole o link da pasta antes de sincronizar.");
+  if (!link.trim()) { mostrarAlerta("Cole o link da pasta antes de sincronizar.", "Sincronização"); return; }
+  
   load("Sincronizando Alunos...");
   const res = await chamarAPI("sincronizarPasta", { linkPasta: link });
   unload();
@@ -635,7 +691,7 @@ async function carregarStatusDocumentos() {
 }
 
 async function gerarDUA() {
-  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante na barra superior antes de adaptar.", "Selecione um Aluno"); return; }
   load("Aplicando DUA...");
   const res = await chamarAPI("adaptarPlanoDUA", { idAluno: alunoAtivoId, idPasta: cacheAlunos[alunoAtivoId].idPasta, plano: document.getElementById('txt-plano-aula').value });
   unload();
@@ -644,7 +700,7 @@ async function gerarDUA() {
 }
 
 async function gerarCartaoAction() {
-  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante antes de continuar.", "Selecione um Aluno"); return; }
   var a = cacheAlunos[alunoAtivoId];
   load("Gerando Cartão de Apoio...");
   document.getElementById('res-carta').style.display = 'none'; document.getElementById('res-cartao').style.display = 'none';
@@ -666,7 +722,7 @@ async function gerarCartaoAction() {
 }
 
 async function gerarCartaAction() {
-  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante antes de continuar.", "Selecione um Aluno"); return; }
   var a = cacheAlunos[alunoAtivoId];
   load("Redigindo Carta à Regente...");
   document.getElementById('res-cartao').style.display = 'none'; document.getElementById('res-carta').style.display = 'none';
@@ -682,7 +738,7 @@ async function gerarCartaAction() {
 }
 
 async function gerarEstudo() {
-  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante antes de continuar.", "Selecione um Aluno"); return; }
   load("Gerando Estudo de Caso...");
   const res = await chamarAPI("gerarEstudo", { idAluno: alunoAtivoId, nomeAluno: cacheAlunos[alunoAtivoId].nome, idPasta: cacheAlunos[alunoAtivoId].idPasta });
   unload();
@@ -691,7 +747,7 @@ async function gerarEstudo() {
 }
 
 async function salvarDiario() {
-  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante antes de gravar no diário.", "Selecione um Aluno"); return; }
   load("Gravando no Diário...");
   const res = await chamarAPI("salvarDiario", { dados: { idAluno: alunoAtivoId, nomeAluno: cacheAlunos[alunoAtivoId].nome, idPasta: cacheAlunos[alunoAtivoId].idPasta, categoria: document.getElementById('sel-categoria').value, observacao: document.getElementById('txt-obs').value } });
   unload();
@@ -710,15 +766,21 @@ function abrirHelpDesk() {
   window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`, '_blank');
 }
 
-async function sairEApagarTudo() {
-  const confirmacao = confirm("ATENÇÃO: Tem a certeza que deseja sair?\n\nIsto irá limpar completamente a memória e o cache do aplicativo neste aparelho.");
-  if (confirmacao) {
-    localStorage.clear(); sessionStorage.clear();
-    if ('caches' in window) { try { const ns = await caches.keys(); for (let n of ns) await caches.delete(n); } catch (e) {} }
-    if ('serviceWorker' in navigator) { try { const rs = await navigator.serviceWorker.getRegistrations(); for(let r of rs) await r.unregister(); } catch (e) {} }
-    alert("Memória apagada com sucesso! O ecrã vai recarregar.");
-    window.location.reload(true);
-  }
+function sairEApagarTudo() {
+  mostrarConfirmacao(
+    "Tem a certeza que deseja sair e desconectar?\n\nIsto irá limpar completamente a memória e o cache do aplicativo neste aparelho. Todos os dados não salvos na nuvem serão perdidos.", 
+    async () => {
+      load("Limpando Memória...");
+      localStorage.clear(); sessionStorage.clear();
+      if ('caches' in window) { try { const ns = await caches.keys(); for (let n of ns) await caches.delete(n); } catch (e) {} }
+      if ('serviceWorker' in navigator) { try { const rs = await navigator.serviceWorker.getRegistrations(); for(let r of rs) await r.unregister(); } catch (e) {} }
+      
+      unload();
+      mostrarAlerta("Memória do aplicativo apagada com sucesso! O ecrã vai recarregar automaticamente.", "Limpeza Concluída");
+      setTimeout(() => { window.location.reload(true); }, 2500);
+    }, 
+    "Sair e Apagar Tudo"
+  );
 }
 </script>
 </body>
