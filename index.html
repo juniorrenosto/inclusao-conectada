@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Inclusão Conectada</title>
+
+<!-- METATAGS DE APLICATIVO NATIVO (PWA / MOBILE / DESKTOP) -->
+<meta name="theme-color" content="#0b57d0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Inclusão Conectada">
+<meta name="application-name" content="Inclusão Conectada">
+
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABlBMVEUAC3f///8A1s4OAAAAAXRSTlMAQObYZgAAAFBJREFUeNrtzTERAAAIAzCS/s0+Bg9uIAVa8pIuLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy9fdT8BbwB9WdYFbwAAAABJRU5ErkJggg==">
+
+<style>
+:root {
+  --primary: #0b57d0;
+  --primary-hover: #0842a0;
+  --primary-light: #e8f0fe;
+  --surface: #f8fafd;
+  --card-bg: #ffffff;
+  --border: #dadce0;
+  --text: #1f1f1f;
+  --text-sub: #5f6368;
+  --success: #0f9d58;
+  --success-light: #e6f4ea;
+  --danger: #d93025;
+  --danger-light: #fce8e6;
+  --sidebar-w: 240px;
+}
+
+* { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--surface); color: var(--text); overflow: hidden; height: 100vh; }
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* SIDEBAR (Desktop e Tablet Paisagem) */
+.app-sidebar {
+  display: none;
+  width: var(--sidebar-w);
+  background: var(--card-bg);
+  border-right: 1px solid var(--border);
+  flex-direction: column;
+  padding: 20px 12px;
+  z-index: 10;
+}
+
+.brand-header {
+  padding: 0 12px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.brand-title { margin: 0; color: var(--primary); font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.brand-subtitle { font-size: 11px; color: var(--text-sub); }
+
+.sidebar-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.sidebar-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: left;
+}
+.sidebar-btn:hover { background: #f1f3f4; }
+.sidebar-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+.sidebar-icon { font-size: 18px; width: 24px; text-align: center; }
+
+/* ÁREA PRINCIPAL */
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  background: var(--surface);
+}
+
+.app-topbar {
+  background: var(--card-bg);
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.badge-user {
+  font-size: 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 600;
+}
+
+.student-bar {
+  background: var(--card-bg);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.student-bar label { font-size: 13px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; gap: 6px; }
+.student-bar select {
+  max-width: 400px;
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  outline: none;
+}
+.student-bar select:focus { border-color: var(--primary); }
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.content-inner {
+  width: 100%;
+  max-width: 900px;
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--primary); }
+textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
+
+.btn {
+  width: 100%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.btn:hover { background: var(--primary-hover); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-secondary { background: #f1f3f4; color: #3c4043; border: 1px solid var(--border); }
+.btn-secondary:hover { background: #e8eaed; }
+.btn-whats { background: #25d366; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.btn-doc { background: #0f9d58; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+
+.doc-status-box {
+  background: #f1f3f4;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: var(--text-sub);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.doc-status-box a { color: var(--primary); font-weight: 700; text-decoration: none; }
+
+.card-desk-box { background: #faf6ee; border: 1px solid #e8dec8; border-radius: 16px; padding: 20px; margin-top: 16px; text-align: center; }
+.pill-header { display: inline-block; background: #388e3c; color: white; font-size: 11px; font-weight: 800; padding: 4px 14px; border-radius: 20px; margin-bottom: 8px; }
+.card-desk-meta { font-size: 12px; color: #555; margin-bottom: 16px; font-weight: 600; }
+.card-desk-sec { border-radius: 12px; padding: 12px 16px; margin-bottom: 12px; text-align: center; }
+.pill-badge { display: inline-block; color: white; font-size: 11px; padding: 4px 12px; border-radius: 12px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
+.sec-sinais { background: #eaf2fd; } .sec-sinais .pill-badge { background: #4a90e2; }
+.sec-acalma { background: #fef8eb; } .sec-acalma .pill-badge { background: #f5a623; }
+.sec-evitar { background: #fdeeee; } .sec-evitar .pill-badge { background: #d9534f; }
+.sec-interesses { background: #eef7ee; } .sec-interesses .pill-badge { background: #5cb85c; }
+.card-desk-text { font-size: 14px; line-height: 1.5; color: #2c3e50; }
+
+.msg-card { padding: 12px 16px; border-radius: 8px; font-size: 13px; display: none; margin-bottom: 16px; }
+.msg-sucesso { background: var(--success-light); color: var(--success); border: 1px solid #ceead6; }
+.msg-erro { background: var(--danger-light); color: var(--danger); border: 1px solid #fad2cf; }
+
+#loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 999; }
+.loading-card { background: white; padding: 24px 36px; border-radius: 16px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.spinner { font-size: 28px; animation: spin 1.5s infinite linear; margin-bottom: 12px; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.app-bottombar {
+  display: flex;
+  width: 100%;
+  height: 64px;
+  border-top: 1px solid var(--border);
+  background: #ffffff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+}
+.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 11px; }
+.nav-item.active { color: var(--primary); font-weight: 700; }
+.nav-icon { font-size: 18px; padding: 3px 14px; border-radius: 14px; }
+.nav-item.active .nav-icon { background: #c2e7ff; }
+
+@media (min-width: 768px) {
+  .app-sidebar { display: flex; }
+  .app-bottombar { display: none; }
+  .app-content { padding-bottom: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="loading-card">
+    <div class="spinner">⏳</div>
+    <h3 style="margin:0; color:var(--primary); font-size: 15px;" id="load-title">Carregando...</h3>
+  </div>
+</div>
+
+<div class="app-container">
+
+  <!-- BARRA LATERAL (Desktop & Tablet Paisagem) -->
+  <aside class="app-sidebar">
+    <div class="brand-header">
+      <h3 class="brand-title">🧩 Inclusão</h3>
+      <span class="brand-subtitle">Conectada • Esteio/RS</span>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-btn active" onclick="trocarAba('aba-dua', this)"><span class="sidebar-icon">🎨</span> DUA</button>
+      <button class="sidebar-btn" onclick="trocarAba('aba-acolher', this)"><span class="sidebar-icon">💌</span> Acolher</button>
+      <button class="sidebar-btn" onclick="trocarAba('aba-diario', this)"><span class="sidebar-icon">⏱️</span> Diário de Bordo</button>
+      <button class="sidebar-btn" onclick="trocarAba('aba-estudo', this)"><span class="sidebar-icon">📑</span> Estudo de Caso</button>
+      <button class="sidebar-btn" onclick="trocarAba('aba-ajustes', this)"><span class="sidebar-icon">⚙️</span> Ajustes & Pasta</button>
+    </nav>
+  </aside>
+
+  <!-- ÁREA PRINCIPAL -->
+  <div class="main-wrapper">
+    
+    <header class="app-topbar">
+      <div>
+        <h3 style="margin:0; font-size: 16px; color: var(--primary);">Inclusão Conectada</h3>
+        <span style="font-size: 11px; color: var(--text-sub);">Sala de Recursos Multifuncionais / AEE</span>
+      </div>
+      <div id="badge-usuario" class="badge-user">Conectando...</div>
+    </header>
+
+    <div class="student-bar">
+      <label>👤 Estudante:</label>
+      <select id="sel-global-aluno" onchange="aoTrocarAlunoGlobal(this.value)">
+        <option value="">Carregando lista...</option>
+      </select>
+    </div>
+
+    <main class="app-content">
+      <div class="content-inner">
+
+        <!-- ABA DUA -->
+        <div id="aba-dua" class="tab-panel active">
+          <div id="status-box-dua" class="doc-status-box"><span>ℹ️ Nenhuma adaptação registrada</span></div>
+          <div class="card">
+            <div class="form-group">
+              <label class="form-label">Plano de Aula Proposto</label>
+              <textarea id="txt-plano-aula" class="form-input" placeholder="Cole o plano da aula regular para adaptarmos com os 3 princípios do DUA..."></textarea>
+            </div>
+            <button class="btn" onclick="gerarDUA()">🎨 Adaptar com DUA</button>
+          </div>
+          <div id="msg-dua" class="msg-card"></div>
+          <div id="res-dua" class="card" style="display:none; white-space:pre-wrap; line-height: 1.6; font-size: 14px;"></div>
+        </div>
+
+        <!-- ABA ACOLHER -->
+        <div id="aba-acolher" class="tab-panel">
+          <div id="status-box-cartao" class="doc-status-box"><span>ℹ️ Cartão de apoio: Não gerado</span></div>
+          <div id="status-box-carta" class="doc-status-box"><span>ℹ️ Carta à regente: Não gerada</span></div>
+
+          <div class="card">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+              <button class="btn" style="background:var(--success);" onclick="gerarCartaoAction()">📇 Gerar Cartão</button>
+              <button class="btn" onclick="gerarCartaAction()">💌 Carta à Regente</button>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nome do(a) Professor(a) Regente (opcional)</label>
+              <input type="text" id="txt-nome-regente" class="form-input" placeholder="Ex: Profa. Juliana">
+            </div>
+          </div>
+          <div id="msg-acolhimento" class="msg-card"></div>
+
+          <!-- Card Visual -->
+          <div id="res-cartao" style="display:none;">
+            <div class="card-desk-box">
+              <div class="pill-header">ACOLHER & CONECTAR</div>
+              <h3 style="margin:4px 0 2px 0; color:#2b3b4c; font-size:18px;">Cartão de Apoio ao Aluno</h3>
+              <div id="lbl-cartao-meta" class="card-desk-meta">Aluno: - • Escola: -</div>
+
+              <div class="card-desk-sec sec-sinais">
+                <div class="pill-badge">Primeiros Sinais</div>
+                <div id="cartao-sinais" class="card-desk-text">-</div>
+              </div>
+              <div class="card-desk-sec sec-acalma">
+                <div class="pill-badge">O que Acalma</div>
+                <div id="cartao-acalma" class="card-desk-text">-</div>
+              </div>
+              <div class="card-desk-sec sec-evitar">
+                <div class="pill-badge">O que Evitar</div>
+                <div id="cartao-evitar" class="card-desk-text">-</div>
+              </div>
+              <div class="card-desk-sec sec-interesses">
+                <div class="pill-badge">Interesses Favoritos</div>
+                <div id="cartao-interesses" class="card-desk-text">-</div>
+              </div>
+              <div style="font-size:12px; color:#555; margin-top:12px;">
+                <span id="cartao-apoio-status">Sem profissional de apoio na escola</span><br>
+                <i>Com carinho, Família e Equipe AEE</i>
+              </div>
+            </div>
+            <div style="margin-top:16px; display: flex; gap: 8px;">
+              <a id="link-doc-cartao-btn" class="btn-doc" target="_blank">📄 Abrir Docs no Drive</a>
+              <a id="btn-whats-cartao" class="btn-whats" target="_blank">💬 Enviar WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- Carta Visual -->
+          <div id="res-carta" style="display:none; margin-top:16px;">
+            <div class="card">
+              <h3 style="margin:0 0 12px 0; color:var(--text); font-size:16px;">💌 Carta à Regente</h3>
+              <div id="txt-carta" style="font-size:14px; white-space:pre-wrap; line-height:1.6;"></div>
+            </div>
+            <div style="margin-top:12px; display: flex; gap: 8px;">
+              <a id="link-doc-carta-btn" class="btn-doc" target="_blank">📄 Abrir Carta no Docs</a>
+              <button class="btn-whats" style="border:none;" onclick="compartilharWhatsApp('txt-carta')">💬 Enviar WhatsApp</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA DIÁRIO -->
+        <div id="aba-diario" class="tab-panel">
+          <div class="card">
+            <div class="form-group">
+              <label class="form-label">Categoria do Registro</label>
+              <select id="sel-categoria" class="form-input">
+                <option>Avanço de Aprendizagem</option>
+                <option>Recusa de Atividade</option>
+                <option>Desregulação Sensorial/Emocional</option>
+                <option>Mediação / Intervenção SRM</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Relato do Atendimento</label>
+              <textarea id="txt-obs" class="form-input" placeholder="Descreva os fatos ocorridos no atendimento de hoje..."></textarea>
+            </div>
+            <button class="btn" onclick="salvarDiario()">⏱️ Gravar no Diário de Bordo</button>
+          </div>
+          <div id="msg-diario" class="msg-card"></div>
+        </div>
+
+        <!-- ABA ESTUDO -->
+        <div id="aba-estudo" class="tab-panel">
+          <div id="status-box-estudo" class="doc-status-box"><span>ℹ️ Estudo de Caso: Não gerado</span></div>
+          <div class="card">
+            <button class="btn" onclick="gerarEstudo()">📑 Gerar Estudo de Caso (10 Tópicos SRM)</button>
+          </div>
+          <div id="msg-estudo" class="msg-card"></div>
+          <div id="res-estudo" class="card" style="display:none; font-size:14px; line-height: 1.6; white-space:pre-wrap;"></div>
+        </div>
+
+        <!-- ABA AJUSTES -->
+        <div id="aba-ajustes" class="tab-panel">
+          <div id="box-perfil-bloqueado" class="card" style="display:none;">
+            <div style="display:inline-block; background:var(--success-light); color:var(--success); font-size:12px; font-weight:700; padding:4px 12px; border-radius:16px; margin-bottom:14px;">✅ Perfil Cadastrado</div>
+            <div style="margin-bottom:10px;"><b>Professor(a):</b> <span id="lbl-prof-nome">-</span></div>
+            <div style="margin-bottom:10px;"><b>Função:</b> <span id="lbl-prof-perfil">-</span></div>
+            <div style="margin-bottom:10px;"><b>Escola:</b> <span id="lbl-prof-escola">-</span></div>
+            <div style="margin-bottom:14px;"><b>Pasta Raiz:</b> <span id="lbl-prof-pasta" style="font-family:monospace; color:var(--primary);">-</span></div>
+            
+            <button class="btn" style="background:var(--success);" onclick="sincronizarPasta()">🔄 Sincronizar Alunos da Pasta</button>
+            <div id="msg-sync" class="msg-card" style="margin-top:12px;"></div>
+            <button class="btn btn-secondary" style="margin-top:10px;" onclick="destravarEdicaoPerfil()">✏️ Editar Dados / Pasta</button>
+          </div>
+
+          <div id="box-perfil-formulario" class="card" style="display:none;">
+            <div class="form-group">
+              <label class="form-label">Nome Completo</label>
+              <input type="text" id="prof-nome" class="form-input" placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Função Principal</label>
+              <select id="prof-perfil" class="form-input">
+                <option value="AEE">Professor(a) de AEE / SRM</option>
+                <option value="Regente">Professor(a) de Sala Comum (Regente)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Unidade Escolar</label>
+              <input type="text" id="prof-escola" class="form-input" placeholder="Nome da escola municipal">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Link ou ID da Pasta Raiz no Google Drive</label>
+              <input type="text" id="txt-pasta-raiz" class="form-input" placeholder="Cole o link ou ID da pasta onde estão os alunos">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Chave de IA (Gemini API Key)</label>
+              <input type="password" id="prof-chave" class="form-input" placeholder="AIzaSy...">
+            </div>
+            <button class="btn" onclick="salvarPerfil()">Salvar Perfil & Configurações</button>
+            <div id="msg-ajustes" class="msg-card" style="margin-top:12px;"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- BARRA INFERIOR (Mobile) -->
+    <nav class="app-bottombar">
+      <button class="nav-item active" onclick="trocarAba('aba-dua', this)"><div class="nav-icon">🎨</div><div>DUA</div></button>
+      <button class="nav-item" onclick="trocarAba('aba-acolher', this)"><div class="nav-icon">💌</div><div>Acolher</div></button>
+      <button class="nav-item" onclick="trocarAba('aba-diario', this)"><div class="nav-icon">⏱️</div><div>Diário</div></button>
+      <button class="nav-item" onclick="trocarAba('aba-estudo', this)"><div class="nav-icon">📑</div><div>Estudo</div></button>
+      <button class="nav-item" onclick="trocarAba('aba-ajustes', this)"><div class="nav-icon">⚙️</div><div>Ajustes</div></button>
+    </nav>
+
+  </div>
+</div>
+
+<script>
+// ENDPOINT DA API APPS SCRIPT
+const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuWu0SZyD6BEUdEb3IV73dHK-A6_qNppzDs0ZhB5xXage_k/exec";
+
+var cacheAlunos = {};
+var alunoAtivoId = null;
+var dadosProfessorCache = {};
+
+// Função ponte assíncrona para comunicar com o Apps Script via HTTP POST
+async function chamarAPI(action, payload = {}) {
+  try {
+    const corpo = JSON.stringify({ action: action, ...payload });
+    const resposta = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: corpo
+    });
+    return await resposta.json();
+  } catch (erro) {
+    console.error("Erro na chamada à API:", erro);
+    return { sucesso: false, mensagem: "Erro de comunicação com o servidor: " + erro.message };
+  }
+}
+
+function trocarAba(idAba, el) {
+  var abas = document.querySelectorAll('.tab-panel');
+  for (var i = 0; i < abas.length; i++) abas[i].classList.remove('active');
+  
+  var botoes = document.querySelectorAll('.nav-item, .sidebar-btn');
+  for (var j = 0; j < botoes.length; j++) botoes[j].classList.remove('active');
+
+  document.getElementById(idAba).classList.add('active');
+
+  var itensCorrespondentes = document.querySelectorAll("[onclick*='" + idAba + "']");
+  for (var k = 0; k < itensCorrespondentes.length; k++) {
+    itensCorrespondentes[k].classList.add('active');
+  }
+}
+
+function load(texto) { 
+  document.getElementById('load-title').innerText = texto; 
+  document.getElementById('loading-overlay').style.display = 'flex'; 
+}
+
+function unload() { 
+  document.getElementById('loading-overlay').style.display = 'none'; 
+}
+
+function msg(id, texto, sucesso) { 
+  var d = document.getElementById(id); 
+  d.innerText = texto; 
+  d.className = "msg-card " + (sucesso ? "msg-sucesso" : "msg-erro"); 
+  d.style.display = "block"; 
+}
+
+function limparResultadosEmTela() {
+  document.getElementById('res-dua').style.display = 'none';
+  document.getElementById('res-dua').innerText = '';
+  document.getElementById('txt-plano-aula').value = '';
+
+  document.getElementById('res-cartao').style.display = 'none';
+  document.getElementById('res-carta').style.display = 'none';
+  document.getElementById('txt-carta').innerText = '';
+
+  document.getElementById('res-estudo').style.display = 'none';
+  document.getElementById('res-estudo').innerText = '';
+  document.getElementById('txt-obs').value = '';
+
+  document.getElementById('status-box-dua').innerHTML = '<span>ℹ️ Nenhuma adaptação registrada</span>';
+  document.getElementById('status-box-cartao').innerHTML = '<span>ℹ️ Cartão de apoio: Não gerado</span>';
+  document.getElementById('status-box-carta').innerHTML = '<span>ℹ️ Carta à regente: Não gerada</span>';
+  document.getElementById('status-box-estudo').innerHTML = '<span>ℹ️ Estudo de Caso: Não gerado</span>';
+}
+
+window.onload = function() {
+  carregarDadosPerfil();
+  carregarListaAlunos();
+};
+
+async function carregarListaAlunos() {
+  const res = await chamarAPI("listarAlunos");
+  var sel = document.getElementById('sel-global-aluno');
+  sel.innerHTML = '<option value="">-- Selecione o Estudante --</option>';
+  
+  if (res && res.sucesso && res.lista && res.lista.length > 0) {
+    for (var i = 0; i < res.lista.length; i++) {
+      cacheAlunos[res.lista[i].id] = res.lista[i];
+      var opt = document.createElement('option');
+      opt.value = res.lista[i].id;
+      opt.innerText = res.lista[i].nome;
+      sel.appendChild(opt);
+    }
+    alunoAtivoId = res.lista[0].id;
+    sel.value = alunoAtivoId;
+    carregarStatusDocumentos();
+  } else {
+    sel.innerHTML = '<option value="">Vazio (Sincronize nos Ajustes)</option>';
+  }
+}
+
+async function carregarDadosPerfil() {
+  const res = await chamarAPI("obterDadosProfessor");
+  if (res && res.sucesso && res.dados) {
+    var u = res.dados;
+    dadosProfessorCache = u;
+    document.getElementById('badge-usuario').innerText = u.nome ? u.nome.split(' ')[0] : (u.email || "Conectado");
+    if (u.cadastrado && u.temChave) {
+      document.getElementById('lbl-prof-nome').innerText = u.nome;
+      document.getElementById('lbl-prof-perfil').innerText = u.perfil === "AEE" ? "Professor(a) de AEE" : "Professor(a) Regente";
+      document.getElementById('lbl-prof-escola').innerText = u.escola || "Não informada";
+      document.getElementById('lbl-prof-pasta').innerText = u.pastaRaiz ? ("Configurada (" + u.pastaRaiz.substring(0,8) + "...)") : "Pendente";
+
+      document.getElementById('box-perfil-bloqueado').style.display = 'block';
+      document.getElementById('box-perfil-formulario').style.display = 'none';
+    } else {
+      document.getElementById('box-perfil-bloqueado').style.display = 'none';
+      document.getElementById('box-perfil-formulario').style.display = 'block';
+    }
+
+    document.getElementById('prof-nome').value = u.nome || "";
+    document.getElementById('prof-perfil').value = u.perfil || "AEE";
+    document.getElementById('prof-escola').value = u.escola || "";
+    document.getElementById('txt-pasta-raiz').value = u.pastaRaiz || "";
+  } else {
+    document.getElementById('badge-usuario').innerText = "Erro de conexão";
+  }
+}
+
+function destravarEdicaoPerfil() {
+  document.getElementById('box-perfil-bloqueado').style.display = 'none';
+  document.getElementById('box-perfil-formulario').style.display = 'block';
+}
+
+function aoTrocarAlunoGlobal(id) {
+  alunoAtivoId = id;
+  limparResultadosEmTela();
+  carregarStatusDocumentos();
+}
+
+async function carregarStatusDocumentos() {
+  if (!alunoAtivoId) return;
+  const res = await chamarAPI("obterUltimosDocumentos", { idAluno: alunoAtivoId });
+  if (!res || !res.sucesso || !res.documentos) return;
+  var docs = res.documentos;
+
+  var sDua = document.getElementById('status-box-dua');
+  if (docs.dua) sDua.innerHTML = '<span>✅ Última adaptação em <b>' + docs.dua.dataHora + '</b></span>';
+
+  var sCartao = document.getElementById('status-box-cartao');
+  if (docs.cartao && docs.cartao.url) sCartao.innerHTML = '<span>✅ Cartão gerado em <b>' + docs.cartao.dataHora + '</b></span> <a href="' + docs.cartao.url + '" target="_blank">Abrir Docs ➔</a>';
+  else sCartao.innerHTML = '<span>ℹ️ Cartão de apoio: Não gerado</span>';
+
+  var sCarta = document.getElementById('status-box-carta');
+  if (docs.carta && docs.carta.url) sCarta.innerHTML = '<span>✅ Carta gerada em <b>' + docs.carta.dataHora + '</b></span> <a href="' + docs.carta.url + '" target="_blank">Abrir Carta ➔</a>';
+  else sCarta.innerHTML = '<span>ℹ️ Carta à regente: Não gerada</span>';
+
+  var sEstudo = document.getElementById('status-box-estudo');
+  if (docs.estudo && docs.estudo.url) sEstudo.innerHTML = '<span>✅ Estudo emitido em <b>' + docs.estudo.dataHora + '</b></span> <a href="' + docs.estudo.url + '" target="_blank">Abrir Estudo ➔</a>';
+  else sEstudo.innerHTML = '<span>ℹ️ Estudo de Caso: Não gerado</span>';
+}
+
+async function salvarPerfil() {
+  var d = {
+    nome: document.getElementById('prof-nome').value,
+    perfil: document.getElementById('prof-perfil').value,
+    escola: document.getElementById('prof-escola').value,
+    pastaRaiz: document.getElementById('txt-pasta-raiz').value,
+    chave: document.getElementById('prof-chave').value
+  };
+  if (!d.nome.trim()) return alert("Digite seu nome.");
+
+  load("Salvando Ajustes...");
+  const res = await chamarAPI("salvarCadastroProfessor", { dados: d });
+  unload();
+  msg('msg-ajustes', res.mensagem, res.sucesso);
+  carregarDadosPerfil();
+}
+
+async function sincronizarPasta() {
+  var link = document.getElementById('txt-pasta-raiz').value;
+  if (!link.trim()) {
+    destravarEdicaoPerfil();
+    return msg('msg-ajustes', "Cole o link da pasta antes de sincronizar.", false);
+  }
+  load("Sincronizando Alunos...");
+  const res = await chamarAPI("sincronizarPasta", { linkPasta: link });
+  unload();
+  msg('msg-ajustes', res.mensagem, res.sucesso);
+  msg('msg-sync', res.mensagem, res.sucesso);
+  if (res.sucesso) {
+    carregarDadosPerfil();
+    carregarListaAlunos();
+  }
+}
+
+async function gerarDUA() {
+  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  load("Aplicando DUA...");
+  const res = await chamarAPI("adaptarPlanoDUA", {
+    idAluno: alunoAtivoId,
+    idPasta: cacheAlunos[alunoAtivoId].idPasta,
+    plano: document.getElementById('txt-plano-aula').value
+  });
+  unload();
+  if (res.sucesso) {
+    document.getElementById('res-dua').innerText = res.adaptacao;
+    document.getElementById('res-dua').style.display = 'block';
+    carregarStatusDocumentos();
+  } else {
+    msg('msg-dua', res.mensagem, false);
+  }
+}
+
+async function gerarCartaoAction() {
+  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  var a = cacheAlunos[alunoAtivoId];
+  load("Gerando Cartão de Apoio...");
+  document.getElementById('res-carta').style.display = 'none';
+  document.getElementById('res-cartao').style.display = 'none';
+
+  const res = await chamarAPI("gerarCartao", {
+    idAluno: alunoAtivoId,
+    nomeAluno: a.nome,
+    idPasta: a.idPasta
+  });
+  unload();
+
+  if (res.sucesso) {
+    document.getElementById('lbl-cartao-meta').innerText = "Aluno: " + a.nome + " • Turma: " + (a.turma || "AEE") + " • Escola: " + (dadosProfessorCache.escola || "Rede de Esteio");
+    document.getElementById('cartao-sinais').innerText = res.cartao.primeirosSinais;
+    document.getElementById('cartao-acalma').innerText = res.cartao.oQueAcalma;
+    document.getElementById('cartao-evitar').innerText = res.cartao.oQueEvitar;
+    document.getElementById('cartao-interesses').innerText = res.cartao.interessesFavoritos;
+    document.getElementById('cartao-apoio-status').innerText = res.cartao.apoioEscolar || "Profissional de apoio na escola";
+    document.getElementById('link-doc-cartao-btn').href = res.urlDocumento;
+    var zap = "https://api.whatsapp.com/send?text=" + encodeURIComponent("📇 *CARTÃO DE APOIO AO ALUNO*\n*Estudante:* " + a.nome + "\n\n🔵 *PRIMEIROS SINAIS:*\n" + res.cartao.primeirosSinais + "\n\n🟡 *O QUE ACALMA:*\n" + res.cartao.oQueAcalma + "\n\n🔴 *O QUE EVITAR:*\n" + res.cartao.oQueEvitar + "\n\n🟢 *INTERESSES FAVORITOS:*\n" + res.cartao.interessesFavoritos + "\n\nℹ️ *Apoio Escolar:* " + (res.cartao.apoioEscolar || "N/A"));
+    document.getElementById('btn-whats-cartao').href = zap;
+    document.getElementById('res-cartao').style.display = 'block';
+    carregarStatusDocumentos();
+  } else {
+    msg('msg-acolhimento', res.mensagem, false);
+  }
+}
+
+async function gerarCartaAction() {
+  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  var a = cacheAlunos[alunoAtivoId];
+  load("Redigindo Carta à Regente...");
+  document.getElementById('res-cartao').style.display = 'none';
+  document.getElementById('res-carta').style.display = 'none';
+
+  const res = await chamarAPI("gerarCarta", {
+    idAluno: alunoAtivoId,
+    nomeAluno: a.nome,
+    idPasta: a.idPasta,
+    regente: document.getElementById('txt-nome-regente').value
+  });
+  unload();
+
+  if (res.sucesso) {
+    document.getElementById('txt-carta').innerText = res.carta;
+    document.getElementById('link-doc-carta-btn').href = res.urlDocumento;
+    document.getElementById('res-carta').style.display = 'block';
+    carregarStatusDocumentos();
+  } else {
+    msg('msg-acolhimento', res.mensagem, false);
+  }
+}
+
+async function gerarEstudo() {
+  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  load("Gerando Estudo de Caso...");
+  const res = await chamarAPI("gerarEstudo", {
+    idAluno: alunoAtivoId,
+    nomeAluno: cacheAlunos[alunoAtivoId].nome,
+    idPasta: cacheAlunos[alunoAtivoId].idPasta
+  });
+  unload();
+
+  if (res.sucesso) {
+    document.getElementById('res-estudo').innerText = res.relatorio;
+    document.getElementById('res-estudo').style.display = 'block';
+    carregarStatusDocumentos();
+  } else {
+    msg('msg-estudo', res.mensagem, false);
+  }
+}
+
+async function salvarDiario() {
+  if (!alunoAtivoId) return alert("Selecione o estudante.");
+  load("Gravando no Diário...");
+  const res = await chamarAPI("salvarDiario", {
+    dados: {
+      idAluno: alunoAtivoId,
+      nomeAluno: cacheAlunos[alunoAtivoId].nome,
+      idPasta: cacheAlunos[alunoAtivoId].idPasta,
+      categoria: document.getElementById('sel-categoria').value,
+      observacao: document.getElementById('txt-obs').value
+    }
+  });
+  unload();
+  msg('msg-diario', res.mensagem, res.sucesso);
+  if (res.sucesso) document.getElementById('txt-obs').value = '';
+}
+
+function compartilharWhatsApp(idTexto) {
+  var txt = document.getElementById(idTexto).innerText;
+  window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(txt), '_blank');
+}
+</script>
+</body>
+</html>
