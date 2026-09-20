@@ -1,24 +1,20 @@
 {
+  "id": "/inclusao-conectada/",
   "name": "Inclusão Conectada",
   "short_name": "Inclusão",
-  "description": "Gestão pedagógica, DUA e acolhimento para Sala de Recursos e Educação Especial",
+  "description": "Gestão pedagógica, DUA e acolhimento para Sala de Recursos Multifuncionais e Educação Especial",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#0b57d0",
+  "categories": ["education"],
   "icons": [
     {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABlBMVEUAC3f///8A1s4OAAAAAXRSTlMAQObYZgAAAFBJREFUeNrtzTERAAAIAzCS/s0+Bg9uIAVa8pIuLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy9fdT8BbwB9WdYFbwAAAABJRU5ErkJggg==",
-      "sizes": "64x64",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAABlBMVEUAC3f///8A1s4OAAAAAXRSTlMAQObYZgAAAGpJREFUeNrtwTEBAAAAwqD1T20JT6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/BhpUAAB7jBhywAAAABJRU5ErkJggg==",
-      "sizes": "200x200",
-      "type": "image/png",
+      "src": "./icon.svg",
+      "sizes": "512x512 192x192 64x64",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]
