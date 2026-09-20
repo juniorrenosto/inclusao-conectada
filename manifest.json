@@ -12,27 +12,27 @@
   "categories": ["education"],
   "icons": [
     {
-      "src": "./icon-192.svg",
+      "src": "https://cdn-icons-png.flaticon.com/192/566/566985.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-192.svg",
+      "src": "https://cdn-icons-png.flaticon.com/192/566/566985.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "./icon-512.svg",
+      "src": "https://cdn-icons-png.flaticon.com/512/566/566985.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-512.svg",
+      "src": "https://cdn-icons-png.flaticon.com/512/566/566985.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ]
