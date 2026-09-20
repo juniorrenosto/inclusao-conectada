@@ -1,0 +1,33 @@
+name: Desenhar Puzzle da Inclusao
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar conversor de imagem
+        run: sudo apt-get update && sudo apt-get install -y librsvg2-bin
+      - name: Desenhar SVG e Converter para PNG
+        run: |
+          cat << 'EOF' > icon.svg
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+            <rect width="512" height="512" fill="#ffffff"/>
+            <path d="M 128 128 H 256 V 256 H 128 Z" fill="#ea4335"/>
+            <path d="M 256 128 H 384 V 256 H 256 Z" fill="#fbbc04"/>
+            <path d="M 128 256 H 256 V 384 H 128 Z" fill="#34a853"/>
+            <path d="M 256 256 H 384 V 384 H 256 Z" fill="#4285f4"/>
+            <circle cx="256" cy="128" r="45" fill="#ea4335"/>
+            <circle cx="384" cy="256" r="45" fill="#fbbc04"/>
+            <circle cx="256" cy="384" r="45" fill="#4285f4"/>
+            <circle cx="128" cy="256" r="45" fill="#ffffff"/>
+          </svg>
+          EOF
+          rsvg-convert -w 192 -h 192 icon.svg -o icon-192.png
+          rsvg-convert -w 512 -h 512 icon.svg -o icon-512.png
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add icon-192.png icon-512.png
+          git commit -m "Gera PNGs do puzzle validos" || exit 0
+          git push
