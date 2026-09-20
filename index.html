@@ -433,7 +433,11 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
             
             <button class="btn" style="background:var(--success);" onclick="sincronizarPasta()">🔄 Sincronizar Alunos da Pasta</button>
             <div id="msg-sync" class="msg-card" style="margin-top:12px;"></div>
+            
             <button class="btn btn-secondary" style="margin-top:10px;" onclick="destravarEdicaoPerfil()">✏️ Editar Dados / Pasta</button>
+
+            <!-- NOVO BOTÃO VERMELHO DE SAIR / LIMPAR DADOS -->
+            <button class="btn" style="background:var(--danger); margin-top:20px;" onclick="sairEApagarTudo()">🗑️ Sair e Apagar Todos os Dados</button>
           </div>
 
           <div id="box-perfil-formulario" class="card" style="display:none;">
@@ -611,34 +615,6 @@ function destravarEdicaoPerfil() {
   document.getElementById('box-perfil-formulario').style.display = 'block';
 }
 
-function aoTrocarAlunoGlobal(id) {
-  alunoAtivoId = id;
-  limparResultadosEmTela();
-  carregarStatusDocumentos();
-}
-
-async function carregarStatusDocumentos() {
-  if (!alunoAtivoId) return;
-  const res = await chamarAPI("obterUltimosDocumentos", { idAluno: alunoAtivoId });
-  if (!res || !res.sucesso || !res.documentos) return;
-  var docs = res.documentos;
-
-  var sDua = document.getElementById('status-box-dua');
-  if (docs.dua) sDua.innerHTML = '<span>✅ Última adaptação em <b>' + docs.dua.dataHora + '</b></span>';
-
-  var sCartao = document.getElementById('status-box-cartao');
-  if (docs.cartao && docs.cartao.url) sCartao.innerHTML = '<span>✅ Cartão gerado em <b>' + docs.cartao.dataHora + '</b></span> <a href="' + docs.cartao.url + '" target="_blank">Abrir Docs ➔</a>';
-  else sCartao.innerHTML = '<span>ℹ️ Cartão de apoio: Não gerado</span>';
-
-  var sCarta = document.getElementById('status-box-carta');
-  if (docs.carta && docs.carta.url) sCarta.innerHTML = '<span>✅ Carta gerada em <b>' + docs.carta.dataHora + '</b></span> <a href="' + docs.carta.url + '" target="_blank">Abrir Carta ➔</a>';
-  else sCarta.innerHTML = '<span>ℹ️ Carta à regente: Não gerada</span>';
-
-  var sEstudo = document.getElementById('status-box-estudo');
-  if (docs.estudo && docs.estudo.url) sEstudo.innerHTML = '<span>✅ Estudo emitido em <b>' + docs.estudo.dataHora + '</b></span> <a href="' + docs.estudo.url + '" target="_blank">Abrir Estudo ➔</a>';
-  else sEstudo.innerHTML = '<span>ℹ️ Estudo de Caso: Não gerado</span>';
-}
-
 async function salvarPerfil() {
   var d = {
     nome: document.getElementById('prof-nome').value,
@@ -671,6 +647,34 @@ async function sincronizarPasta() {
     carregarDadosPerfil();
     carregarListaAlunos();
   }
+}
+
+function aoTrocarAlunoGlobal(id) {
+  alunoAtivoId = id;
+  limparResultadosEmTela();
+  carregarStatusDocumentos();
+}
+
+async function carregarStatusDocumentos() {
+  if (!alunoAtivoId) return;
+  const res = await chamarAPI("obterUltimosDocumentos", { idAluno: alunoAtivoId });
+  if (!res || !res.sucesso || !res.documentos) return;
+  var docs = res.documentos;
+
+  var sDua = document.getElementById('status-box-dua');
+  if (docs.dua) sDua.innerHTML = '<span>✅ Última adaptação em <b>' + docs.dua.dataHora + '</b></span>';
+
+  var sCartao = document.getElementById('status-box-cartao');
+  if (docs.cartao && docs.cartao.url) sCartao.innerHTML = '<span>✅ Cartão gerado em <b>' + docs.cartao.dataHora + '</b></span> <a href="' + docs.cartao.url + '" target="_blank">Abrir Docs ➔</a>';
+  else sCartao.innerHTML = '<span>ℹ️ Cartão de apoio: Não gerado</span>';
+
+  var sCarta = document.getElementById('status-box-carta');
+  if (docs.carta && docs.carta.url) sCarta.innerHTML = '<span>✅ Carta gerada em <b>' + docs.carta.dataHora + '</b></span> <a href="' + docs.carta.url + '" target="_blank">Abrir Carta ➔</a>';
+  else sCarta.innerHTML = '<span>ℹ️ Carta à regente: Não gerada</span>';
+
+  var sEstudo = document.getElementById('status-box-estudo');
+  if (docs.estudo && docs.estudo.url) sEstudo.innerHTML = '<span>✅ Estudo emitido em <b>' + docs.estudo.dataHora + '</b></span> <a href="' + docs.estudo.url + '" target="_blank">Abrir Estudo ➔</a>';
+  else sEstudo.innerHTML = '<span>ℹ️ Estudo de Caso: Não gerado</span>';
 }
 
 async function gerarDUA() {
@@ -786,6 +790,45 @@ async function salvarDiario() {
 function compartilharWhatsApp(idTexto) {
   var txt = document.getElementById(idTexto).innerText;
   window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(txt), '_blank');
+}
+
+// NOVA FUNÇÃO: Sair e Apagar Tudo (Limpeza do Cache e PWA)
+async function sairEApagarTudo() {
+  const confirmacao = confirm("ATENÇÃO: Tem a certeza que deseja sair?\n\nIsto irá limpar completamente a memória e o cache do aplicativo neste aparelho.");
+  
+  if (confirmacao) {
+    // 1. Limpa os dados de sessão do navegador
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // 2. Destrói ativamente a memória cache do PWA (Service Worker)
+    if ('caches' in window) {
+      try {
+        const nomesDosCaches = await caches.keys();
+        for (let nome of nomesDosCaches) {
+          await caches.delete(nome);
+        }
+      } catch (e) {
+        console.log("Erro ao limpar caches", e);
+      }
+    }
+    
+    // 3. Desregista os Service Workers para não carregar a versão antiga offline
+    if ('serviceWorker' in navigator) {
+      try {
+        const registros = await navigator.serviceWorker.getRegistrations();
+        for(let registro of registros) {
+          await registro.unregister();
+        }
+      } catch (e) {
+        console.log("Erro ao desregistrar SW", e);
+      }
+    }
+    
+    alert("Memória do aplicativo apagada com sucesso! O ecrã vai recarregar.");
+    // 4. Recarrega a página forçando a procurar a versão mais recente
+    window.location.reload(true);
+  }
 }
 </script>
 </body>
