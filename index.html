@@ -15,7 +15,7 @@
   }
 </script>
 
-<!-- METATAGS DE APLICATIVO NATIVO (MOBILE / TABLET / DESKTOP) -->
+<!-- METATAGS DE APLICATIVO NATIVO -->
 <meta name="theme-color" content="#0b57d0">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -45,163 +45,54 @@
 * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
 body { margin: 0; background: var(--surface); color: var(--text); overflow: hidden; height: 100vh; }
 
-.app-container {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
+.app-container { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
 
-/* SIDEBAR (Desktop e Tablet Paisagem) */
-.app-sidebar {
-  display: none;
-  width: var(--sidebar-w);
-  background: var(--card-bg);
-  border-right: 1px solid var(--border);
-  flex-direction: column;
-  padding: 20px 12px;
-  z-index: 10;
-}
-
-.brand-header {
-  padding: 0 12px 20px 12px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 16px;
-}
+/* SIDEBAR */
+.app-sidebar { display: none; width: var(--sidebar-w); background: var(--card-bg); border-right: 1px solid var(--border); flex-direction: column; padding: 20px 12px; z-index: 10; }
+.brand-header { padding: 0 12px 20px 12px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
 .brand-title { margin: 0; color: var(--primary); font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
 .brand-subtitle { font-size: 11px; color: var(--text-sub); }
-
 .sidebar-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.sidebar-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 24px;
-  border: none;
-  background: transparent;
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-  text-align: left;
-}
+.sidebar-btn { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 24px; border: none; background: transparent; color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-align: left; }
 .sidebar-btn:hover { background: #f1f3f4; }
 .sidebar-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 700; }
 .sidebar-icon { font-size: 18px; width: 24px; text-align: center; }
 
 /* ÁREA PRINCIPAL */
-.main-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-  background: var(--surface);
-}
+.main-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; position: relative; background: var(--surface); }
+.app-topbar { background: var(--card-bg); padding: 12px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+.badge-user { font-size: 12px; background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 16px; font-weight: 600; }
 
-.app-topbar {
-  background: var(--card-bg);
-  padding: 12px 24px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.badge-user {
-  font-size: 12px;
-  background: var(--primary-light);
-  color: var(--primary);
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-weight: 600;
-}
-
-.student-bar {
-  background: var(--card-bg);
-  padding: 10px 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
+.student-bar { background: var(--card-bg); padding: 10px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .student-bar label { font-size: 13px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; gap: 6px; }
-.student-bar select {
-  max-width: 400px;
-  flex: 1;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  outline: none;
-}
+.student-bar select { max-width: 400px; flex: 1; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-size: 14px; font-weight: 600; color: var(--text); outline: none; }
 .student-bar select:focus { border-color: var(--primary); }
 
-.app-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px;
-  display: flex;
-  justify-content: center;
-}
-
-.content-inner {
-  width: 100%;
-  max-width: 900px;
-}
+.app-content { flex: 1; overflow-y: auto; padding: 24px; display: flex; justify-content: center; }
+.content-inner { width: 100%; max-width: 900px; }
 
 .tab-panel { display: none; }
 .tab-panel.active { display: block; animation: fadeIn 0.2s ease-in-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-}
+.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
 
 .form-group { margin-bottom: 16px; }
 .form-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 14px;
-  background: #fff;
-  outline: none;
-  transition: border-color 0.2s;
-}
+.form-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #fff; outline: none; transition: border-color 0.2s; }
 .form-input:focus { border-color: var(--primary); }
 textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 
-.btn {
-  width: 100%;
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-}
+/* CSS do Guia Passo a Passo Integrado */
+.cartao-guia { background-color: #e8f0fe; border-left: 5px solid var(--primary); padding: 16px; margin-bottom: 24px; border-radius: 8px; }
+.titulo-guia { color: var(--primary); margin: 0 0 8px 0; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.passo-item { background-color: #ffffff; padding: 12px; margin-top: 12px; border-radius: 6px; border: 1px solid var(--border); }
+.passo-item h4 { margin: 0 0 8px 0; color: var(--text); font-size: 14px; display: flex; align-items: center; gap: 6px; }
+.passo-item ul { margin: 0; padding-left: 0; list-style: none; color: var(--text-sub); font-size: 13px; line-height: 1.5; }
+.passo-item ul li { margin-bottom: 6px; display: flex; align-items: flex-start; gap: 6px; }
+.passo-item code { background-color: #f1f3f4; padding: 2px 4px; border-radius: 4px; color: var(--danger); font-weight: bold; word-break: break-all; }
+
+.btn { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; }
 .btn:hover { background: var(--primary-hover); }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-secondary { background: #f1f3f4; color: #3c4043; border: 1px solid var(--border); }
@@ -209,18 +100,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 .btn-whats { background: #25d366; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
 .btn-doc { background: #0f9d58; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
 
-.doc-status-box {
-  background: #f1f3f4;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 16px;
-  margin-bottom: 16px;
-  font-size: 12px;
-  color: var(--text-sub);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+.doc-status-box { background: #f1f3f4; border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 12px; color: var(--text-sub); display: flex; justify-content: space-between; align-items: center; }
 .doc-status-box a { color: var(--primary); font-weight: 700; text-decoration: none; }
 
 .card-desk-box { background: #faf6ee; border: 1px solid #e8dec8; border-radius: 16px; padding: 20px; margin-top: 16px; text-align: center; }
@@ -243,17 +123,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 .spinner { font-size: 28px; animation: spin 1.5s infinite linear; margin-bottom: 12px; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.app-bottombar {
-  display: flex;
-  width: 100%;
-  height: 64px;
-  border-top: 1px solid var(--border);
-  background: #ffffff;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-}
+.app-bottombar { display: flex; width: 100%; height: 64px; border-top: 1px solid var(--border); background: #ffffff; position: absolute; bottom: 0; left: 0; z-index: 100; }
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 11px; }
 .nav-item.active { color: var(--primary); font-weight: 700; }
 .nav-icon { font-size: 18px; padding: 3px 14px; border-radius: 14px; }
@@ -277,7 +147,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 
 <div class="app-container">
 
-  <!-- BARRA LATERAL (Desktop & Tablet Paisagem) -->
+  <!-- BARRA LATERAL (Desktop) -->
   <aside class="app-sidebar">
     <div class="brand-header">
       <h3 class="brand-title">🧩 Inclusão</h3>
@@ -344,33 +214,17 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
           </div>
           <div id="msg-acolhimento" class="msg-card"></div>
 
-          <!-- Card Visual -->
           <div id="res-cartao" style="display:none;">
             <div class="card-desk-box">
               <div class="pill-header">ACOLHER & CONECTAR</div>
               <h3 style="margin:4px 0 2px 0; color:#2b3b4c; font-size:18px;">Cartão de Apoio ao Aluno</h3>
               <div id="lbl-cartao-meta" class="card-desk-meta">Aluno: - • Escola: -</div>
 
-              <div class="card-desk-sec sec-sinais">
-                <div class="pill-badge">Primeiros Sinais</div>
-                <div id="cartao-sinais" class="card-desk-text">-</div>
-              </div>
-              <div class="card-desk-sec sec-acalma">
-                <div class="pill-badge">O que Acalma</div>
-                <div id="cartao-acalma" class="card-desk-text">-</div>
-              </div>
-              <div class="card-desk-sec sec-evitar">
-                <div class="pill-badge">O que Evitar</div>
-                <div id="cartao-evitar" class="card-desk-text">-</div>
-              </div>
-              <div class="card-desk-sec sec-interesses">
-                <div class="pill-badge">Interesses Favoritos</div>
-                <div id="cartao-interesses" class="card-desk-text">-</div>
-              </div>
-              <div style="font-size:12px; color:#555; margin-top:12px;">
-                <span id="cartao-apoio-status">Sem profissional de apoio na escola</span><br>
-                <i>Com carinho, Família e Equipe AEE</i>
-              </div>
+              <div class="card-desk-sec sec-sinais"><div class="pill-badge">Primeiros Sinais</div><div id="cartao-sinais" class="card-desk-text">-</div></div>
+              <div class="card-desk-sec sec-acalma"><div class="pill-badge">O que Acalma</div><div id="cartao-acalma" class="card-desk-text">-</div></div>
+              <div class="card-desk-sec sec-evitar"><div class="pill-badge">O que Evitar</div><div id="cartao-evitar" class="card-desk-text">-</div></div>
+              <div class="card-desk-sec sec-interesses"><div class="pill-badge">Interesses Favoritos</div><div id="cartao-interesses" class="card-desk-text">-</div></div>
+              <div style="font-size:12px; color:#555; margin-top:12px;"><span id="cartao-apoio-status">Sem profissional de apoio na escola</span><br><i>Com carinho, Família e Equipe AEE</i></div>
             </div>
             <div style="margin-top:16px; display: flex; gap: 8px;">
               <a id="link-doc-cartao-btn" class="btn-doc" target="_blank">📄 Abrir Docs no Drive</a>
@@ -378,7 +232,6 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
             </div>
           </div>
 
-          <!-- Carta Visual -->
           <div id="res-carta" style="display:none; margin-top:16px;">
             <div class="card">
               <h3 style="margin:0 0 12px 0; color:var(--text); font-size:16px;">💌 Carta à Regente</h3>
@@ -424,6 +277,8 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 
         <!-- ABA AJUSTES -->
         <div id="aba-ajustes" class="tab-panel">
+          
+          <!-- ECRÃ DE PERFIL JÁ CONFIGURADO -->
           <div id="box-perfil-bloqueado" class="card" style="display:none;">
             <div style="display:inline-block; background:var(--success-light); color:var(--success); font-size:12px; font-weight:700; padding:4px 12px; border-radius:16px; margin-bottom:14px;">✅ Perfil Cadastrado</div>
             <div style="margin-bottom:10px;"><b>Professor(a):</b> <span id="lbl-prof-nome">-</span></div>
@@ -435,37 +290,67 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
             <div id="msg-sync" class="msg-card" style="margin-top:12px;"></div>
             
             <button class="btn btn-secondary" style="margin-top:10px;" onclick="destravarEdicaoPerfil()">✏️ Editar Dados / Pasta</button>
-
-            <!-- NOVO BOTÃO VERMELHO DE SAIR / LIMPAR DADOS -->
             <button class="btn" style="background:var(--danger); margin-top:20px;" onclick="sairEApagarTudo()">🗑️ Sair e Apagar Todos os Dados</button>
           </div>
 
-          <div id="box-perfil-formulario" class="card" style="display:none;">
-            <div class="form-group">
-              <label class="form-label">Nome Completo</label>
-              <input type="text" id="prof-nome" class="form-input" placeholder="Seu nome">
+          <!-- ECRÃ DE CADASTRO (Aparece se estiver sem conta) -->
+          <div id="box-perfil-formulario" style="display:none;">
+            
+            <!-- NOSSO GUIA DE CONFIGURAÇÃO INTEGRADO AQUI -->
+            <div class="cartao-guia">
+              <h3 class="titulo-guia">🛠️ Como Conectar o seu Sistema</h3>
+              <p style="font-size: 13px; color: var(--text-sub); margin-top: 0; margin-bottom: 8px;">Siga os passos abaixo antes de salvar o seu perfil:</p>
+
+              <div class="passo-item">
+                <h4>🧠 Passo 1: Chave da IA (Google AI Studio)</h4>
+                <ul>
+                  <li><span>1.</span> <span>Acesse o <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.</span></li>
+                  <li><span>2.</span> <span>Faça login e clique em <strong>"Get API key"</strong> no menu.</span></li>
+                  <li><span>3.</span> <span>Clique no botão <strong>"Create API key"</strong>.</span></li>
+                  <li><span>4.</span> <span>Copie o código gerado e cole no último campo abaixo.</span></li>
+                </ul>
+              </div>
+
+              <div class="passo-item">
+                <h4>📁 Passo 2: ID da Pasta (Google Drive)</h4>
+                <ul>
+                  <li><span>1.</span> <span>Crie uma pasta para os alunos no <a href="https://drive.google.com/" target="_blank">Google Drive</a>.</span></li>
+                  <li><span>2.</span> <span>Abra essa pasta e olhe o link no topo do navegador.</span></li>
+                  <li><span>3.</span> <span>Copie <strong>apenas a mistura final de letras e números</strong>.</span></li>
+                  <li><span>4.</span> <span>Cole esse código no campo "Pasta Raiz" abaixo.</span></li>
+                </ul>
+              </div>
             </div>
-            <div class="form-group">
-              <label class="form-label">Função Principal</label>
-              <select id="prof-perfil" class="form-input">
-                <option value="AEE">Professor(a) de AEE / SRM</option>
-                <option value="Regente">Professor(a) de Sala Comum (Regente)</option>
-              </select>
+
+            <!-- O SEU FORMULÁRIO ORIGINAL -->
+            <div class="card">
+              <div class="form-group">
+                <label class="form-label">Nome Completo</label>
+                <input type="text" id="prof-nome" class="form-input" placeholder="Seu nome">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Função Principal</label>
+                <select id="prof-perfil" class="form-input">
+                  <option value="AEE">Professor(a) de AEE / SRM</option>
+                  <option value="Regente">Professor(a) de Sala Comum (Regente)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Unidade Escolar</label>
+                <input type="text" id="prof-escola" class="form-input" placeholder="Nome da escola municipal">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Link ou ID da Pasta Raiz no Google Drive</label>
+                <input type="text" id="txt-pasta-raiz" class="form-input" placeholder="Cole o link ou ID da pasta onde estão os alunos">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Chave de IA (Gemini API Key)</label>
+                <input type="password" id="prof-chave" class="form-input" placeholder="AIzaSy...">
+              </div>
+              <button class="btn" onclick="salvarPerfil()">Salvar Perfil & Configurações</button>
+              <div id="msg-ajustes" class="msg-card" style="margin-top:12px;"></div>
             </div>
-            <div class="form-group">
-              <label class="form-label">Unidade Escolar</label>
-              <input type="text" id="prof-escola" class="form-input" placeholder="Nome da escola municipal">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Link ou ID da Pasta Raiz no Google Drive</label>
-              <input type="text" id="txt-pasta-raiz" class="form-input" placeholder="Cole o link ou ID da pasta onde estão os alunos">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Chave de IA (Gemini API Key)</label>
-              <input type="password" id="prof-chave" class="form-input" placeholder="AIzaSy...">
-            </div>
-            <button class="btn" onclick="salvarPerfil()">Salvar Perfil & Configurações</button>
-            <div id="msg-ajustes" class="msg-card" style="margin-top:12px;"></div>
+
           </div>
         </div>
 
@@ -541,15 +426,12 @@ function limparResultadosEmTela() {
   document.getElementById('res-dua').style.display = 'none';
   document.getElementById('res-dua').innerText = '';
   document.getElementById('txt-plano-aula').value = '';
-
   document.getElementById('res-cartao').style.display = 'none';
   document.getElementById('res-carta').style.display = 'none';
   document.getElementById('txt-carta').innerText = '';
-
   document.getElementById('res-estudo').style.display = 'none';
   document.getElementById('res-estudo').innerText = '';
   document.getElementById('txt-obs').value = '';
-
   document.getElementById('status-box-dua').innerHTML = '<span>ℹ️ Nenhuma adaptação registrada</span>';
   document.getElementById('status-box-cartao').innerHTML = '<span>ℹ️ Cartão de apoio: Não gerado</span>';
   document.getElementById('status-box-carta').innerHTML = '<span>ℹ️ Carta à regente: Não gerada</span>';
@@ -588,6 +470,7 @@ async function carregarDadosPerfil() {
     var u = res.dados;
     dadosProfessorCache = u;
     document.getElementById('badge-usuario').innerText = u.nome ? u.nome.split(' ')[0] : (u.email || "Conectado");
+    
     if (u.cadastrado && u.temChave) {
       document.getElementById('lbl-prof-nome').innerText = u.nome;
       document.getElementById('lbl-prof-perfil').innerText = u.perfil === "AEE" ? "Professor(a) de AEE" : "Professor(a) Regente";
@@ -792,41 +675,24 @@ function compartilharWhatsApp(idTexto) {
   window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(txt), '_blank');
 }
 
-// NOVA FUNÇÃO: Sair e Apagar Tudo (Limpeza do Cache e PWA)
 async function sairEApagarTudo() {
   const confirmacao = confirm("ATENÇÃO: Tem a certeza que deseja sair?\n\nIsto irá limpar completamente a memória e o cache do aplicativo neste aparelho.");
-  
   if (confirmacao) {
-    // 1. Limpa os dados de sessão do navegador
     localStorage.clear();
     sessionStorage.clear();
-    
-    // 2. Destrói ativamente a memória cache do PWA (Service Worker)
     if ('caches' in window) {
       try {
         const nomesDosCaches = await caches.keys();
-        for (let nome of nomesDosCaches) {
-          await caches.delete(nome);
-        }
-      } catch (e) {
-        console.log("Erro ao limpar caches", e);
-      }
+        for (let nome of nomesDosCaches) await caches.delete(nome);
+      } catch (e) { console.log("Erro ao limpar caches", e); }
     }
-    
-    // 3. Desregista os Service Workers para não carregar a versão antiga offline
     if ('serviceWorker' in navigator) {
       try {
         const registros = await navigator.serviceWorker.getRegistrations();
-        for(let registro of registros) {
-          await registro.unregister();
-        }
-      } catch (e) {
-        console.log("Erro ao desregistrar SW", e);
-      }
+        for(let registro of registros) await registro.unregister();
+      } catch (e) { console.log("Erro ao desregistrar SW", e); }
     }
-    
     alert("Memória do aplicativo apagada com sucesso! O ecrã vai recarregar.");
-    // 4. Recarrega a página forçando a procurar a versão mais recente
     window.location.reload(true);
   }
 }
