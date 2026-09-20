@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajustes - Inclusão Conectada</title>
+  <style>
+    /* Estilos Gerais da Página */
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f7f6;
+      padding: 20px;
+      margin: 0;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      color: #202124;
+      margin-top: 0;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
+    }
+
+    /* Estilos do Guia Passo a Passo */
+    .cartao-guia {
+      background-color: #e8f0fe;
+      border-left: 5px solid #0b57d0;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      display: block; /* Controlado pelo JavaScript */
+    }
+
+    .titulo-guia {
+      color: #0b57d0;
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .passo-item {
+      background-color: #ffffff;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: 1px solid #dadce0;
+    }
+
+    .passo-item h4 {
+      margin-top: 0;
+      color: #202124;
+    }
+
+    .passo-item ol {
+      margin-bottom: 0;
+      padding-left: 20px;
+      color: #3c4043;
+      line-height: 1.5;
+    }
+
+    .passo-item code {
+      background-color: #f1f3f4;
+      padding: 3px 6px;
+      border-radius: 4px;
+      color: #d93025;
+      font-weight: bold;
+      word-break: break-all;
+    }
+
+    /* Estilos dos Campos de Formulário */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #3c4043;
+    }
+
+    input[type="text"], input[type="url"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    
+    input[type="text"]:focus, input[type="url"]:focus {
+      border-color: #0b57d0;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(11, 87, 208, 0.2);
+    }
+
+    button {
+      background-color: #0b57d0;
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      width: 100%;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #084298;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>⚙️ Configurações do Sistema</h2>
+
+    <!-- GUIA DE CONFIGURAÇÃO (Oculto após o cadastro) -->
+    <div id="guia-configuracao" class="cartao-guia">
+      <h3 class="titulo-guia">🛠️ Passo a Passo: Como Conectar o seu Sistema</h3>
+      <p>Para que o Inclusão Conectada funcione, precisamos ligá-lo ao seu Google Drive e ao sistema de automação. Siga os passos abaixo:</p>
+
+      <div class="passo-item">
+        <h4>🔗 Passo 1: URL da API (Google Apps Script)</h4>
+        <ol>
+          <li>Aceda ao seu painel do <a href="https://script.google.com/" target="_blank">Google Apps Script</a>.</li>
+          <li>Abra o projeto do sistema.</li>
+          <li>No canto superior direito, clique no botão azul <strong>Implantar</strong> e depois em <strong>Nova implantação</strong>.</li>
+          <li>Em "Quem tem acesso", escolha <strong>Qualquer pessoa</strong>.</li>
+          <li>Clique em <strong>Implantar</strong> (autorize os acessos da conta Google, se for pedido).</li>
+          <li>Copie o link gerado em <strong>URL do app da Web</strong> e cole no campo "Chave da API" abaixo.</li>
+        </ol>
+      </div>
+
+      <div class="passo-item">
+        <h4>📁 Passo 2: ID da Pasta do Google Drive</h4>
+        <ol>
+          <li>Abra o seu <a href="https://drive.google.com/" target="_blank">Google Drive</a> e crie uma nova pasta chamada <em>"Inclusão Conectada - Alunos"</em>.</li>
+          <li>Abra essa pasta com um duplo clique.</li>
+          <li>Olhe para a barra de endereços do seu navegador superior. O link será algo como:<br>
+            <code>drive.google.com/drive/folders/<strong>1a2B3c4D5e6F7g8H9i0J</strong></code>
+          </li>
+          <li>Copie <strong>apenas a mistura de letras e números</strong> que está no final do link.</li>
+          <li>Cole esse código no campo "ID da Pasta do Drive" abaixo.</li>
+        </ol>
+      </div>
+    </div>
+    <!-- FIM DO GUIA -->
+
+    <!-- CAMPOS DE CADASTRO -->
+    <div class="form-group">
+      <label for="input-api">🔗 Chave da API (URL do Google Apps Script):</label>
+      <input type="url" id="input-api" placeholder="Ex: https://script.google.com/macros/s/SEU_CODIGO/exec">
+    </div>
+    
+    <div class="form-group">
+      <label for="input-pasta">📁 ID da Pasta do Google Drive:</label>
+      <input type="text" id="input-pasta" placeholder="Ex: 1a2B3c4D5e6F7g8H9i0J">
+    </div>
+
+    <button onclick="salvarConfiguracoes()">💾 Guardar e Conectar</button>
+
+  </div>
+
+  <!-- LÓGICA JAVASCRIPT -->
+  <script>
+    // 1. Função para verificar o estado e preencher os campos se já houver dados
+    function carregarEVerificar() {
+      const chaveApiGuardada = localStorage.getItem('inclusao_api_url');
+      const idPastaGuardado = localStorage.getItem('inclusao_drive_id');
+      const guia = document.getElementById('guia-configuracao');
+      
+      // Se tiver dados guardados, preenche os inputs
+      if (chaveApiGuardada) document.getElementById('input-api').value = chaveApiGuardada;
+      if (idPastaGuardado) document.getElementById('input-pasta').value = idPastaGuardado;
+      
+      // Se ambos existirem, oculta o tutorial passo a passo
+      if (chaveApiGuardada && idPastaGuardado) {
+        guia.style.display = 'none';
+      } else {
+        guia.style.display = 'block';
+      }
+    }
+
+    // Executa a verificação assim que a página abre
+    document.addEventListener('DOMContentLoaded', carregarEVerificar);
+
+    // 2. Função acionada pelo botão "Guardar"
+    function salvarConfiguracoes() {
+      const apiInput = document.getElementById('input-api').value.trim();
+      const pastaInput = document.getElementById('input-pasta').value.trim();
+      
+      if (apiInput === '' || pastaInput === '') {
+        alert('⚠️ Por favor, preencha os dois campos antes de guardar.');
+        return;
+      }
+
+      // Guarda no armazenamento local do navegador/aplicativo
+      localStorage.setItem('inclusao_api_url', apiInput);
+      localStorage.setItem('inclusao_drive_id', pastaInput);
+      
+      alert('✅ Sistema conectado com sucesso! O passo a passo será ocultado.');
+      
+      // Reavalia a visualização (vai ocultar o guia)
+      carregarEVerificar();
+    }
+  </script>
+
+</body>
+</html>
