@@ -36,7 +36,6 @@
       padding: 20px;
       margin-bottom: 30px;
       border-radius: 8px;
-      display: block; /* Controlado pelo JavaScript */
     }
 
     .titulo-guia {
@@ -74,7 +73,7 @@
       word-break: break-all;
     }
 
-    /* Estilos dos Campos de Formulário */
+    /* Estilos dos Campos de Formulário e Botões */
     .form-group {
       margin-bottom: 20px;
     }
@@ -102,8 +101,6 @@
     }
 
     button {
-      background-color: #0b57d0;
-      color: white;
       border: none;
       padding: 14px 20px;
       border-radius: 6px;
@@ -111,11 +108,46 @@
       font-size: 16px;
       font-weight: bold;
       width: 100%;
-      transition: background-color 0.2s;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+    
+    button:active {
+      transform: scale(0.98);
     }
 
-    button:hover {
+    .btn-salvar {
+      background-color: #0b57d0;
+      color: white;
+    }
+
+    .btn-salvar:hover {
       background-color: #084298;
+    }
+
+    .btn-deslogar {
+      background-color: #fbbc04;
+      color: #202124;
+      margin-bottom: 15px;
+    }
+
+    .btn-deslogar:hover {
+      background-color: #e0a800;
+    }
+
+    .btn-excluir {
+      background-color: #d93025;
+      color: white;
+    }
+
+    .btn-excluir:hover {
+      background-color: #b3261e;
+    }
+
+    /* Estilo da Zona de Perigo */
+    #area-perigo {
+      margin-top: 40px;
+      border-top: 2px solid #f0f0f0;
+      padding-top: 20px;
     }
   </style>
 </head>
@@ -167,31 +199,50 @@
       <input type="text" id="input-pasta" placeholder="Ex: 1a2B3c4D5e6F7g8H9i0J">
     </div>
 
-    <button onclick="salvarConfiguracoes()">💾 Guardar e Conectar</button>
+    <button class="btn-salvar" onclick="salvarConfiguracoes()">💾 Guardar e Conectar</button>
+
+    <!-- ZONA DE PERIGO (Oculta até o sistema estar conectado) -->
+    <div id="area-perigo" style="display: none;">
+      <h3 style="color: #d93025; margin-top: 0;">⚠️ Zona de Perigo</h3>
+      <p style="color: #5f6368; font-size: 14px; margin-bottom: 20px;">
+        Estas ações irão desconectar o aplicativo deste dispositivo. Fique tranquilo: os dados dos alunos nas planilhas e no Google Drive <strong>não serão apagados</strong>.
+      </p>
+      
+      <button class="btn-deslogar" onclick="deslogarSistema()">
+        🔓 Desconectar (Sair do Sistema)
+      </button>
+      
+      <button class="btn-excluir" onclick="excluirDadosLocais()">
+        🗑️ Limpar Todos os Dados e Cache
+      </button>
+    </div>
 
   </div>
 
   <!-- LÓGICA JAVASCRIPT -->
   <script>
-    // 1. Função para verificar o estado e preencher os campos se já houver dados
+    // 1. Verifica se já existem dados e controla o que aparece no ecrã
     function carregarEVerificar() {
       const chaveApiGuardada = localStorage.getItem('inclusao_api_url');
       const idPastaGuardado = localStorage.getItem('inclusao_drive_id');
       const guia = document.getElementById('guia-configuracao');
+      const areaPerigo = document.getElementById('area-perigo');
       
-      // Se tiver dados guardados, preenche os inputs
+      // Preenche os campos se houver dados
       if (chaveApiGuardada) document.getElementById('input-api').value = chaveApiGuardada;
       if (idPastaGuardado) document.getElementById('input-pasta').value = idPastaGuardado;
       
-      // Se ambos existirem, oculta o tutorial passo a passo
+      // Controla a visibilidade
       if (chaveApiGuardada && idPastaGuardado) {
-        guia.style.display = 'none';
+        guia.style.display = 'none'; // Esconde o tutorial
+        areaPerigo.style.display = 'block'; // Mostra opções de sair
       } else {
-        guia.style.display = 'block';
+        guia.style.display = 'block'; // Mostra o tutorial
+        areaPerigo.style.display = 'none'; // Esconde opções de sair
       }
     }
 
-    // Executa a verificação assim que a página abre
+    // Executa a verificação assim que a página carrega
     document.addEventListener('DOMContentLoaded', carregarEVerificar);
 
     // 2. Função acionada pelo botão "Guardar"
@@ -204,14 +255,36 @@
         return;
       }
 
-      // Guarda no armazenamento local do navegador/aplicativo
       localStorage.setItem('inclusao_api_url', apiInput);
       localStorage.setItem('inclusao_drive_id', pastaInput);
       
-      alert('✅ Sistema conectado com sucesso! O passo a passo será ocultado.');
-      
-      // Reavalia a visualização (vai ocultar o guia)
-      carregarEVerificar();
+      alert('✅ Sistema conectado com sucesso!');
+      carregarEVerificar(); // Atualiza a tela
+    }
+
+    // 3. Função para Deslogar (Apaga apenas as chaves)
+    function deslogarSistema() {
+      const confirmar = confirm("Tem a certeza que deseja sair?\nTerá de inserir a Chave da API novamente para aceder aos dados dos alunos.");
+      if (confirmar) {
+        localStorage.removeItem('inclusao_api_url');
+        localStorage.removeItem('inclusao_drive_id');
+        document.getElementById('input-api').value = '';
+        document.getElementById('input-pasta').value = '';
+        alert("Desconectado com sucesso.");
+        carregarEVerificar(); // Atualiza a tela para o estado inicial
+      }
+    }
+
+    // 4. Função para Excluir Tudo (Limpeza profunda)
+    function excluirDadosLocais() {
+      const confirmar = confirm("ATENÇÃO: Isto irá apagar TODAS as configurações, preferências e cache locais deste aparelho.\nOs dados do Drive continuarão intactos. Deseja continuar?");
+      if (confirmar) {
+        localStorage.clear(); // Limpa tudo do PWA neste dispositivo
+        document.getElementById('input-api').value = '';
+        document.getElementById('input-pasta').value = '';
+        alert("Todos os dados locais foram excluídos.");
+        carregarEVerificar(); // Atualiza a tela
+      }
     }
   </script>
 
