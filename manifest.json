@@ -2,7 +2,7 @@
   "id": "/inclusao-conectada/",
   "name": "Inclusão Conectada",
   "short_name": "Inclusão",
-  "description": "Gestão pedagógica, DUA e acolhimento para Sala de Recursos Multifuncionais e Educação Especial",
+  "description": "Gestão pedagógica, DUA e acolhimento para Sala de Recursos Multifuncionais",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -12,25 +12,25 @@
   "categories": ["education"],
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/google/material-design-icons/master/png/action/extension/materialicons/192dp/2x/baseline_extension_black_192dp.png",
+      "src": "https://placehold.co/192x192/0b57d0/ffffff.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://raw.githubusercontent.com/google/material-design-icons/master/png/action/extension/materialicons/192dp/2x/baseline_extension_black_192dp.png",
+      "src": "https://placehold.co/192x192/0b57d0/ffffff.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "https://raw.githubusercontent.com/google/material-design-icons/master/png/action/extension/materialicons/512dp/2x/baseline_extension_black_512dp.png",
+      "src": "https://placehold.co/512x512/0b57d0/ffffff.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://raw.githubusercontent.com/google/material-design-icons/master/png/action/extension/materialicons/512dp/2x/baseline_extension_black_512dp.png",
+      "src": "https://placehold.co/512x512/0b57d0/ffffff.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
