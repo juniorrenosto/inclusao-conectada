@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Inclusão Conectada</title>
 
-<!-- CONEXÃO DO MANIFEST E SERVICE WORKER (PWA / PLAY STORE) -->
+<!-- CONEXÃO DO MANIFEST E SERVICE WORKER -->
 <link rel="manifest" href="./manifest.json">
 <script>
   if ('serviceWorker' in navigator) {
@@ -15,7 +15,7 @@
   }
 </script>
 
-<!-- METATAGS DE APLICATIVO NATIVO -->
+<!-- METATAGS -->
 <meta name="theme-color" content="#0b57d0">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,10 +27,11 @@
 
 <style>
 :root {
+  /* CORES MODO CLARO (Fundo mais neutro para conforto visual) */
   --primary: #0b57d0;
   --primary-hover: #0842a0;
   --primary-light: #e8f0fe;
-  --surface: #f8fafd;
+  --surface: #f0f2f5; /* Fundo off-white (estilo Facebook/WhatsApp Web) */
   --card-bg: #ffffff;
   --border: #dadce0;
   --text: #1f1f1f;
@@ -40,6 +41,34 @@
   --danger: #d93025;
   --danger-light: #fce8e6;
   --sidebar-w: 240px;
+}
+
+/* MODO ESCURO AUTOMÁTICO (Segue o sistema do celular) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #121212;
+    --card-bg: #1e1e1e;
+    --border: #333333;
+    --text: #e8eaed;
+    --text-sub: #9aa0a6;
+    --primary: #8ab4f8; /* Azul mais claro para destacar no fundo escuro */
+    --primary-hover: #aecbfa;
+    --primary-light: rgba(138, 180, 248, 0.15);
+    --success-light: rgba(15, 157, 88, 0.15);
+    --danger-light: rgba(217, 48, 37, 0.15);
+  }
+  .form-input, .student-bar select { background: #202124 !important; color: #e8eaed !important; border-color: #5f6368 !important; }
+  .app-bottombar { background: #1e1e1e !important; border-top-color: #333333 !important; }
+  .loading-card { background: #1e1e1e !important; }
+  .passo-item { background-color: #202124 !important; }
+  .cartao-guia { background-color: rgba(138, 180, 248, 0.1) !important; border-left-color: var(--primary) !important; }
+  .passo-item code { background-color: #303134 !important; color: #f28b82 !important; }
+  .sec-sinais { background: rgba(74, 144, 226, 0.1) !important; }
+  .sec-acalma { background: rgba(245, 166, 35, 0.1) !important; }
+  .sec-evitar { background: rgba(217, 83, 79, 0.1) !important; }
+  .sec-interesses { background: rgba(92, 184, 92, 0.1) !important; }
+  .card-desk-box { background: #202124 !important; border-color: #333 !important; }
+  .card-desk-text { color: #e8eaed !important; }
 }
 
 * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -54,7 +83,7 @@ body { margin: 0; background: var(--surface); color: var(--text); overflow: hidd
 .brand-subtitle { font-size: 11px; color: var(--text-sub); }
 .sidebar-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .sidebar-btn { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 24px; border: none; background: transparent; color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-align: left; }
-.sidebar-btn:hover { background: #f1f3f4; }
+.sidebar-btn:hover { background: var(--primary-light); }
 .sidebar-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 700; }
 .sidebar-icon { font-size: 18px; width: 24px; text-align: center; }
 
@@ -95,12 +124,12 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 .btn { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; }
 .btn:hover { background: var(--primary-hover); }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-.btn-secondary { background: #f1f3f4; color: #3c4043; border: 1px solid var(--border); }
-.btn-secondary:hover { background: #e8eaed; }
-.btn-whats { background: #25d366; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+.btn-whats { background: #25d366; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: none; }
 .btn-doc { background: #0f9d58; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
 
-.doc-status-box { background: #f1f3f4; border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 12px; color: var(--text-sub); display: flex; justify-content: space-between; align-items: center; }
+.doc-status-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 12px; color: var(--text-sub); display: flex; justify-content: space-between; align-items: center; }
 .doc-status-box a { color: var(--primary); font-weight: 700; text-decoration: none; }
 
 .card-desk-box { background: #faf6ee; border: 1px solid #e8dec8; border-radius: 16px; padding: 20px; margin-top: 16px; text-align: center; }
@@ -115,10 +144,10 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 .card-desk-text { font-size: 14px; line-height: 1.5; color: #2c3e50; }
 
 .msg-card { padding: 12px 16px; border-radius: 8px; font-size: 13px; display: none; margin-bottom: 16px; }
-.msg-sucesso { background: var(--success-light); color: var(--success); border: 1px solid #ceead6; }
-.msg-erro { background: var(--danger-light); color: var(--danger); border: 1px solid #fad2cf; }
+.msg-sucesso { background: var(--success-light); color: var(--success); border: 1px solid var(--success-light); }
+.msg-erro { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger-light); }
 
-#loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 999; }
+#loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 999; }
 .loading-card { background: white; padding: 24px 36px; border-radius: 16px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
 .spinner { font-size: 28px; animation: spin 1.5s infinite linear; margin-bottom: 12px; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -127,7 +156,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
 .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 11px; }
 .nav-item.active { color: var(--primary); font-weight: 700; }
 .nav-icon { font-size: 18px; padding: 3px 14px; border-radius: 14px; }
-.nav-item.active .nav-icon { background: #c2e7ff; }
+.nav-item.active .nav-icon { background: var(--primary-light); }
 
 @media (min-width: 768px) {
   .app-sidebar { display: flex; }
@@ -165,10 +194,13 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
   <!-- ÁREA PRINCIPAL -->
   <div class="main-wrapper">
     
+    <!-- NOVO CABEÇALHO EM 3 NÍVEIS -->
     <header class="app-topbar">
       <div>
         <h3 style="margin:0; font-size: 16px; color: var(--primary);">Inclusão Conectada</h3>
-        <span style="font-size: 11px; color: var(--text-sub);">Sala de Recursos Multifuncionais / AEE</span>
+        <span style="font-size: 11px; color: var(--text-sub); display: block;">Sala de Recursos Multifuncionais - AEE</span>
+        <!-- Linha da escola que aparece automaticamente após cadastro -->
+        <span id="badge-escola" style="font-size: 12px; font-weight: 700; color: var(--text); display: none; margin-top: 3px;"></span>
       </div>
       <div id="badge-usuario" class="badge-user">Conectando...</div>
     </header>
@@ -217,14 +249,14 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
           <div id="res-cartao" style="display:none;">
             <div class="card-desk-box">
               <div class="pill-header">ACOLHER & CONECTAR</div>
-              <h3 style="margin:4px 0 2px 0; color:#2b3b4c; font-size:18px;">Cartão de Apoio ao Aluno</h3>
+              <h3 style="margin:4px 0 2px 0; color:var(--text); font-size:18px;">Cartão de Apoio ao Aluno</h3>
               <div id="lbl-cartao-meta" class="card-desk-meta">Aluno: - • Escola: -</div>
 
               <div class="card-desk-sec sec-sinais"><div class="pill-badge">Primeiros Sinais</div><div id="cartao-sinais" class="card-desk-text">-</div></div>
               <div class="card-desk-sec sec-acalma"><div class="pill-badge">O que Acalma</div><div id="cartao-acalma" class="card-desk-text">-</div></div>
               <div class="card-desk-sec sec-evitar"><div class="pill-badge">O que Evitar</div><div id="cartao-evitar" class="card-desk-text">-</div></div>
               <div class="card-desk-sec sec-interesses"><div class="pill-badge">Interesses Favoritos</div><div id="cartao-interesses" class="card-desk-text">-</div></div>
-              <div style="font-size:12px; color:#555; margin-top:12px;"><span id="cartao-apoio-status">Sem profissional de apoio na escola</span><br><i>Com carinho, Família e Equipe AEE</i></div>
+              <div style="font-size:12px; color:var(--text-sub); margin-top:12px;"><span id="cartao-apoio-status">Sem profissional de apoio na escola</span><br><i>Com carinho, Família e Equipe AEE</i></div>
             </div>
             <div style="margin-top:16px; display: flex; gap: 8px;">
               <a id="link-doc-cartao-btn" class="btn-doc" target="_blank">📄 Abrir Docs no Drive</a>
@@ -239,7 +271,7 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
             </div>
             <div style="margin-top:12px; display: flex; gap: 8px;">
               <a id="link-doc-carta-btn" class="btn-doc" target="_blank">📄 Abrir Carta no Docs</a>
-              <button class="btn-whats" style="border:none;" onclick="compartilharWhatsApp('txt-carta')">💬 Enviar WhatsApp</button>
+              <button class="btn-whats" onclick="compartilharWhatsApp('txt-carta')">💬 Enviar WhatsApp</button>
             </div>
           </div>
         </div>
@@ -291,12 +323,17 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
             
             <button class="btn btn-secondary" style="margin-top:10px;" onclick="destravarEdicaoPerfil()">✏️ Editar Dados / Pasta</button>
             <button class="btn" style="background:var(--danger); margin-top:20px;" onclick="sairEApagarTudo()">🗑️ Sair e Apagar Todos os Dados</button>
+
+            <!-- NOVO BOTÃO DE HELP DESK -->
+            <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
+            <p style="font-size: 13px; color: var(--text-sub); text-align: center; margin-bottom: 12px;">Precisa de assistência com o sistema?</p>
+            <button class="btn btn-whats" style="width: 100%; justify-content: center;" onclick="abrirHelpDesk()">
+              💬 Help Desk - Falar com o Suporte
+            </button>
           </div>
 
-          <!-- ECRÃ DE CADASTRO (Aparece se estiver sem conta) -->
+          <!-- ECRÃ DE CADASTRO -->
           <div id="box-perfil-formulario" style="display:none;">
-            
-            <!-- NOSSO GUIA DE CONFIGURAÇÃO INTEGRADO AQUI -->
             <div class="cartao-guia">
               <h3 class="titulo-guia">🛠️ Como Conectar o seu Sistema</h3>
               <p style="font-size: 13px; color: var(--text-sub); margin-top: 0; margin-bottom: 8px;">Siga os passos abaixo antes de salvar o seu perfil:</p>
@@ -322,7 +359,6 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
               </div>
             </div>
 
-            <!-- O SEU FORMULÁRIO ORIGINAL -->
             <div class="card">
               <div class="form-group">
                 <label class="form-label">Nome Completo</label>
@@ -350,7 +386,12 @@ textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
               <button class="btn" onclick="salvarPerfil()">Salvar Perfil & Configurações</button>
               <div id="msg-ajustes" class="msg-card" style="margin-top:12px;"></div>
             </div>
-
+            
+            <!-- HELP DESK NA TELA DE LOGIN TAMBÉM -->
+            <button class="btn btn-whats" style="width: 100%; justify-content: center; margin-bottom: 20px;" onclick="abrirHelpDesk()">
+              💬 Dificuldade para conectar? Fale com o Suporte
+            </button>
+            
           </div>
         </div>
 
@@ -387,23 +428,19 @@ async function chamarAPI(action, payload = {}) {
     return await resposta.json();
   } catch (erro) {
     console.error("Erro na chamada à API:", erro);
-    return { sucesso: false, mensagem: "Erro de comunicação com o servidor: " + erro.message };
+    return { sucesso: false, mensagem: "Erro de comunicação com o servidor. Verifique a internet." };
   }
 }
 
 function trocarAba(idAba, el) {
   var abas = document.querySelectorAll('.tab-panel');
   for (var i = 0; i < abas.length; i++) abas[i].classList.remove('active');
-  
   var botoes = document.querySelectorAll('.nav-item, .sidebar-btn');
   for (var j = 0; j < botoes.length; j++) botoes[j].classList.remove('active');
 
   document.getElementById(idAba).classList.add('active');
-
   var itensCorrespondentes = document.querySelectorAll("[onclick*='" + idAba + "']");
-  for (var k = 0; k < itensCorrespondentes.length; k++) {
-    itensCorrespondentes[k].classList.add('active');
-  }
+  for (var k = 0; k < itensCorrespondentes.length; k++) itensCorrespondentes[k].classList.add('active');
 }
 
 function load(texto) { 
@@ -411,9 +448,7 @@ function load(texto) {
   document.getElementById('loading-overlay').style.display = 'flex'; 
 }
 
-function unload() { 
-  document.getElementById('loading-overlay').style.display = 'none'; 
-}
+function unload() { document.getElementById('loading-overlay').style.display = 'none'; }
 
 function msg(id, texto, sucesso) { 
   var d = document.getElementById(id); 
@@ -424,13 +459,11 @@ function msg(id, texto, sucesso) {
 
 function limparResultadosEmTela() {
   document.getElementById('res-dua').style.display = 'none';
-  document.getElementById('res-dua').innerText = '';
   document.getElementById('txt-plano-aula').value = '';
   document.getElementById('res-cartao').style.display = 'none';
   document.getElementById('res-carta').style.display = 'none';
   document.getElementById('txt-carta').innerText = '';
   document.getElementById('res-estudo').style.display = 'none';
-  document.getElementById('res-estudo').innerText = '';
   document.getElementById('txt-obs').value = '';
   document.getElementById('status-box-dua').innerHTML = '<span>ℹ️ Nenhuma adaptação registrada</span>';
   document.getElementById('status-box-cartao').innerHTML = '<span>ℹ️ Cartão de apoio: Não gerado</span>';
@@ -469,7 +502,7 @@ async function carregarDadosPerfil() {
   if (res && res.sucesso && res.dados) {
     var u = res.dados;
     dadosProfessorCache = u;
-    document.getElementById('badge-usuario').innerText = u.nome ? u.nome.split(' ')[0] : (u.email || "Conectado");
+    document.getElementById('badge-usuario').innerText = u.nome ? u.nome.split(' ')[0] : "Conectado";
     
     if (u.cadastrado && u.temChave) {
       document.getElementById('lbl-prof-nome').innerText = u.nome;
@@ -477,9 +510,16 @@ async function carregarDadosPerfil() {
       document.getElementById('lbl-prof-escola').innerText = u.escola || "Não informada";
       document.getElementById('lbl-prof-pasta').innerText = u.pastaRaiz ? ("Configurada (" + u.pastaRaiz.substring(0,8) + "...)") : "Pendente";
 
+      // ATUALIZA O NOME DA ESCOLA NO CABEÇALHO (NOVA FUNÇÃO)
+      if (u.escola) {
+        document.getElementById('badge-escola').innerText = u.escola;
+        document.getElementById('badge-escola').style.display = 'block';
+      }
+
       document.getElementById('box-perfil-bloqueado').style.display = 'block';
       document.getElementById('box-perfil-formulario').style.display = 'none';
     } else {
+      document.getElementById('badge-escola').style.display = 'none';
       document.getElementById('box-perfil-bloqueado').style.display = 'none';
       document.getElementById('box-perfil-formulario').style.display = 'block';
     }
@@ -489,7 +529,7 @@ async function carregarDadosPerfil() {
     document.getElementById('prof-escola').value = u.escola || "";
     document.getElementById('txt-pasta-raiz').value = u.pastaRaiz || "";
   } else {
-    document.getElementById('badge-usuario').innerText = "Erro de conexão";
+    document.getElementById('badge-usuario').innerText = "Offline";
   }
 }
 
@@ -507,7 +547,6 @@ async function salvarPerfil() {
     chave: document.getElementById('prof-chave').value
   };
   
-  // VALIDAÇÕES DE SEGURANÇA (Obriga a preencher tudo)
   if (!d.nome.trim()) return alert("⚠️ Por favor, digite o seu Nome Completo.");
   if (!d.escola.trim()) return alert("⚠️ Por favor, digite o nome da Unidade Escolar.");
   if (!d.pastaRaiz.trim()) return alert("⚠️ Por favor, cole o ID ou Link da Pasta do Drive (Passo 2).");
@@ -522,19 +561,13 @@ async function salvarPerfil() {
 
 async function sincronizarPasta() {
   var link = document.getElementById('txt-pasta-raiz').value;
-  if (!link.trim()) {
-    destravarEdicaoPerfil();
-    return msg('msg-ajustes', "Cole o link da pasta antes de sincronizar.", false);
-  }
+  if (!link.trim()) return alert("Cole o link da pasta antes de sincronizar.");
   load("Sincronizando Alunos...");
   const res = await chamarAPI("sincronizarPasta", { linkPasta: link });
   unload();
   msg('msg-ajustes', res.mensagem, res.sucesso);
   msg('msg-sync', res.mensagem, res.sucesso);
-  if (res.sucesso) {
-    carregarDadosPerfil();
-    carregarListaAlunos();
-  }
+  if (res.sucesso) { carregarDadosPerfil(); carregarListaAlunos(); }
 }
 
 function aoTrocarAlunoGlobal(id) {
@@ -554,47 +587,29 @@ async function carregarStatusDocumentos() {
 
   var sCartao = document.getElementById('status-box-cartao');
   if (docs.cartao && docs.cartao.url) sCartao.innerHTML = '<span>✅ Cartão gerado em <b>' + docs.cartao.dataHora + '</b></span> <a href="' + docs.cartao.url + '" target="_blank">Abrir Docs ➔</a>';
-  else sCartao.innerHTML = '<span>ℹ️ Cartão de apoio: Não gerado</span>';
 
   var sCarta = document.getElementById('status-box-carta');
   if (docs.carta && docs.carta.url) sCarta.innerHTML = '<span>✅ Carta gerada em <b>' + docs.carta.dataHora + '</b></span> <a href="' + docs.carta.url + '" target="_blank">Abrir Carta ➔</a>';
-  else sCarta.innerHTML = '<span>ℹ️ Carta à regente: Não gerada</span>';
 
   var sEstudo = document.getElementById('status-box-estudo');
   if (docs.estudo && docs.estudo.url) sEstudo.innerHTML = '<span>✅ Estudo emitido em <b>' + docs.estudo.dataHora + '</b></span> <a href="' + docs.estudo.url + '" target="_blank">Abrir Estudo ➔</a>';
-  else sEstudo.innerHTML = '<span>ℹ️ Estudo de Caso: Não gerado</span>';
 }
 
 async function gerarDUA() {
   if (!alunoAtivoId) return alert("Selecione o estudante.");
   load("Aplicando DUA...");
-  const res = await chamarAPI("adaptarPlanoDUA", {
-    idAluno: alunoAtivoId,
-    idPasta: cacheAlunos[alunoAtivoId].idPasta,
-    plano: document.getElementById('txt-plano-aula').value
-  });
+  const res = await chamarAPI("adaptarPlanoDUA", { idAluno: alunoAtivoId, idPasta: cacheAlunos[alunoAtivoId].idPasta, plano: document.getElementById('txt-plano-aula').value });
   unload();
-  if (res.sucesso) {
-    document.getElementById('res-dua').innerText = res.adaptacao;
-    document.getElementById('res-dua').style.display = 'block';
-    carregarStatusDocumentos();
-  } else {
-    msg('msg-dua', res.mensagem, false);
-  }
+  if (res.sucesso) { document.getElementById('res-dua').innerText = res.adaptacao; document.getElementById('res-dua').style.display = 'block'; carregarStatusDocumentos(); } 
+  else msg('msg-dua', res.mensagem, false);
 }
 
 async function gerarCartaoAction() {
   if (!alunoAtivoId) return alert("Selecione o estudante.");
   var a = cacheAlunos[alunoAtivoId];
   load("Gerando Cartão de Apoio...");
-  document.getElementById('res-carta').style.display = 'none';
-  document.getElementById('res-cartao').style.display = 'none';
-
-  const res = await chamarAPI("gerarCartao", {
-    idAluno: alunoAtivoId,
-    nomeAluno: a.nome,
-    idPasta: a.idPasta
-  });
+  document.getElementById('res-carta').style.display = 'none'; document.getElementById('res-cartao').style.display = 'none';
+  const res = await chamarAPI("gerarCartao", { idAluno: alunoAtivoId, nomeAluno: a.nome, idPasta: a.idPasta });
   unload();
 
   if (res.sucesso) {
@@ -603,30 +618,20 @@ async function gerarCartaoAction() {
     document.getElementById('cartao-acalma').innerText = res.cartao.oQueAcalma;
     document.getElementById('cartao-evitar').innerText = res.cartao.oQueEvitar;
     document.getElementById('cartao-interesses').innerText = res.cartao.interessesFavoritos;
-    document.getElementById('cartao-apoio-status').innerText = res.cartao.apoioEscolar || "Profissional de apoio na escola";
     document.getElementById('link-doc-cartao-btn').href = res.urlDocumento;
-    var zap = "https://api.whatsapp.com/send?text=" + encodeURIComponent("📇 *CARTÃO DE APOIO AO ALUNO*\n*Estudante:* " + a.nome + "\n\n🔵 *PRIMEIROS SINAIS:*\n" + res.cartao.primeirosSinais + "\n\n🟡 *O QUE ACALMA:*\n" + res.cartao.oQueAcalma + "\n\n🔴 *O QUE EVITAR:*\n" + res.cartao.oQueEvitar + "\n\n🟢 *INTERESSES FAVORITOS:*\n" + res.cartao.interessesFavoritos + "\n\nℹ️ *Apoio Escolar:* " + (res.cartao.apoioEscolar || "N/A"));
+    var zap = "https://api.whatsapp.com/send?text=" + encodeURIComponent("📇 *CARTÃO DE APOIO AO ALUNO*\n*Estudante:* " + a.nome + "\n\n🔵 *PRIMEIROS SINAIS:*\n" + res.cartao.primeirosSinais + "\n\n🟡 *O QUE ACALMA:*\n" + res.cartao.oQueAcalma + "\n\n🔴 *O QUE EVITAR:*\n" + res.cartao.oQueEvitar + "\n\n🟢 *INTERESSES FAVORITOS:*\n" + res.cartao.interessesFavoritos);
     document.getElementById('btn-whats-cartao').href = zap;
     document.getElementById('res-cartao').style.display = 'block';
     carregarStatusDocumentos();
-  } else {
-    msg('msg-acolhimento', res.mensagem, false);
-  }
+  } else msg('msg-acolhimento', res.mensagem, false);
 }
 
 async function gerarCartaAction() {
   if (!alunoAtivoId) return alert("Selecione o estudante.");
   var a = cacheAlunos[alunoAtivoId];
   load("Redigindo Carta à Regente...");
-  document.getElementById('res-cartao').style.display = 'none';
-  document.getElementById('res-carta').style.display = 'none';
-
-  const res = await chamarAPI("gerarCarta", {
-    idAluno: alunoAtivoId,
-    nomeAluno: a.nome,
-    idPasta: a.idPasta,
-    regente: document.getElementById('txt-nome-regente').value
-  });
+  document.getElementById('res-cartao').style.display = 'none'; document.getElementById('res-carta').style.display = 'none';
+  const res = await chamarAPI("gerarCarta", { idAluno: alunoAtivoId, nomeAluno: a.nome, idPasta: a.idPasta, regente: document.getElementById('txt-nome-regente').value });
   unload();
 
   if (res.sucesso) {
@@ -634,42 +639,22 @@ async function gerarCartaAction() {
     document.getElementById('link-doc-carta-btn').href = res.urlDocumento;
     document.getElementById('res-carta').style.display = 'block';
     carregarStatusDocumentos();
-  } else {
-    msg('msg-acolhimento', res.mensagem, false);
-  }
+  } else msg('msg-acolhimento', res.mensagem, false);
 }
 
 async function gerarEstudo() {
   if (!alunoAtivoId) return alert("Selecione o estudante.");
   load("Gerando Estudo de Caso...");
-  const res = await chamarAPI("gerarEstudo", {
-    idAluno: alunoAtivoId,
-    nomeAluno: cacheAlunos[alunoAtivoId].nome,
-    idPasta: cacheAlunos[alunoAtivoId].idPasta
-  });
+  const res = await chamarAPI("gerarEstudo", { idAluno: alunoAtivoId, nomeAluno: cacheAlunos[alunoAtivoId].nome, idPasta: cacheAlunos[alunoAtivoId].idPasta });
   unload();
-
-  if (res.sucesso) {
-    document.getElementById('res-estudo').innerText = res.relatorio;
-    document.getElementById('res-estudo').style.display = 'block';
-    carregarStatusDocumentos();
-  } else {
-    msg('msg-estudo', res.mensagem, false);
-  }
+  if (res.sucesso) { document.getElementById('res-estudo').innerText = res.relatorio; document.getElementById('res-estudo').style.display = 'block'; carregarStatusDocumentos(); } 
+  else msg('msg-estudo', res.mensagem, false);
 }
 
 async function salvarDiario() {
   if (!alunoAtivoId) return alert("Selecione o estudante.");
   load("Gravando no Diário...");
-  const res = await chamarAPI("salvarDiario", {
-    dados: {
-      idAluno: alunoAtivoId,
-      nomeAluno: cacheAlunos[alunoAtivoId].nome,
-      idPasta: cacheAlunos[alunoAtivoId].idPasta,
-      categoria: document.getElementById('sel-categoria').value,
-      observacao: document.getElementById('txt-obs').value
-    }
-  });
+  const res = await chamarAPI("salvarDiario", { dados: { idAluno: alunoAtivoId, nomeAluno: cacheAlunos[alunoAtivoId].nome, idPasta: cacheAlunos[alunoAtivoId].idPasta, categoria: document.getElementById('sel-categoria').value, observacao: document.getElementById('txt-obs').value } });
   unload();
   msg('msg-diario', res.mensagem, res.sucesso);
   if (res.sucesso) document.getElementById('txt-obs').value = '';
@@ -680,24 +665,20 @@ function compartilharWhatsApp(idTexto) {
   window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(txt), '_blank');
 }
 
+// FUNÇÃO PARA O BOTÃO DO HELP DESK
+function abrirHelpDesk() {
+  const numero = "5551984031031"; // Seu número configurado
+  const mensagem = "Olá! Preciso de ajuda com o aplicativo Inclusão Conectada.";
+  window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`, '_blank');
+}
+
 async function sairEApagarTudo() {
   const confirmacao = confirm("ATENÇÃO: Tem a certeza que deseja sair?\n\nIsto irá limpar completamente a memória e o cache do aplicativo neste aparelho.");
   if (confirmacao) {
-    localStorage.clear();
-    sessionStorage.clear();
-    if ('caches' in window) {
-      try {
-        const nomesDosCaches = await caches.keys();
-        for (let nome of nomesDosCaches) await caches.delete(nome);
-      } catch (e) { console.log("Erro ao limpar caches", e); }
-    }
-    if ('serviceWorker' in navigator) {
-      try {
-        const registros = await navigator.serviceWorker.getRegistrations();
-        for(let registro of registros) await registro.unregister();
-      } catch (e) { console.log("Erro ao desregistrar SW", e); }
-    }
-    alert("Memória do aplicativo apagada com sucesso! O ecrã vai recarregar.");
+    localStorage.clear(); sessionStorage.clear();
+    if ('caches' in window) { try { const ns = await caches.keys(); for (let n of ns) await caches.delete(n); } catch (e) {} }
+    if ('serviceWorker' in navigator) { try { const rs = await navigator.serviceWorker.getRegistrations(); for(let r of rs) await r.unregister(); } catch (e) {} }
+    alert("Memória apagada com sucesso! O ecrã vai recarregar.");
     window.location.reload(true);
   }
 }
