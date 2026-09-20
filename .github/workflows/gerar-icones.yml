@@ -1,0 +1,29 @@
+name: Gerar Icones PNG Oficiais
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout do repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
+      - name: Converter icon.svg para PNGs reais
+        run: |
+          magick icon.svg -resize 192x192 icon-192.png
+          magick icon.svg -resize 512x512 icon-512.png
+
+      - name: Gravar icones no repositorio
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add icon-192.png icon-512.png
+          git commit -m "Adiciona icon-192.png e icon-512.png oficiais" || exit 0
+          git push
