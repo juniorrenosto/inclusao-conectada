@@ -35,7 +35,7 @@
   --success-light: #e6f4ea;
   --danger: #d93025;
   --danger-light: #fce8e6;
-  --sidebar-w: 250px;
+  --sidebar-w: 260px;
 }
 
 body.dark-theme {
@@ -82,7 +82,7 @@ body { margin: 0; background: var(--surface); color: var(--text); height: 100vh;
 }
 .brand { display: flex; align-items: center; gap: 10px; padding: 8px 12px; margin-bottom: 20px; }
 .brand-icon { color: var(--primary); font-size: 28px; }
-.brand-title { font-weight: 700; font-size: 18px; color: var(--text); }
+.brand-title { font-weight: 700; font-size: 17px; color: var(--text); white-space: nowrap; }
 
 .nav-menu { display: flex; flex-direction: column; gap: 4px; }
 .nav-item {
@@ -130,7 +130,7 @@ body { margin: 0; background: var(--surface); color: var(--text); height: 100vh;
 .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .card-header .material-symbols-outlined { color: var(--primary); }
 .card-title { font-size: 16px; font-weight: 600; margin: 0; }
-.card-desc { font-size: 13px; color: var(--text-sub); margin-top: 4px; }
+.card-desc { font-size: 13px; color: var(--text-sub); margin-top: 4px; line-height: 1.5; }
 
 .form-group { margin-bottom: 16px; text-align: left; }
 label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-sub); }
@@ -249,7 +249,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
     <div>
       <div class="brand">
         <span class="material-symbols-outlined brand-icon">diversity_3</span>
-        <span class="brand-title">Inclusão</span>
+        <span class="brand-title">Inclusão Conectada</span>
       </div>
 
       <nav class="nav-menu">
@@ -290,7 +290,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
         <button class="btn-menu-mobile" onclick="toggleSidebar()">
           <span class="material-symbols-outlined">menu</span>
         </button>
-        <span class="header-title" id="page-title">Adaptação de Aula (DUA)</span>
+        <span class="header-title" id="page-title">Adaptação (DUA)</span>
       </div>
       <div style="font-size:13px; font-weight:600; color:var(--primary);" id="badge-usuario"></div>
     </header>
@@ -303,8 +303,8 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
           <div class="card-header">
             <span class="material-symbols-outlined">school</span>
             <div>
-              <h2 class="card-title">Adaptação sob Desenho Universal para a Aprendizagem</h2>
-              <div class="card-desc">Selecione o estudante para recuperar o histórico e contextualizar a proposta.</div>
+              <h2 class="card-title">Adaptação (Desenho Universal para a Aprendizagem)</h2>
+              <div class="card-desc">O DUA é uma abordagem que ajuda a eliminar barreiras no ensino. Selecione o estudante para transformar o seu plano de aula regular em uma proposta acessível, oferecendo diferentes formas de engajamento, representação e expressão.</div>
             </div>
           </div>
           <div class="form-group">
@@ -328,8 +328,8 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
           <div class="card-header">
             <span class="material-symbols-outlined">badge</span>
             <div>
-              <h2 class="card-title">Cartão de Apoio Rápido & Apresentação</h2>
-              <div class="card-desc">Síntese de autorregulação e carta de apresentação ao professor regente.</div>
+              <h2 class="card-title">Cartão de Apoio & Carta à Família</h2>
+              <div class="card-desc">Gere materiais essenciais de apoio: um Cartão com estratégias rápidas de manejo para os professores da turma, e uma Carta de acolhimento e parceria direcionada à família do estudante.</div>
             </div>
           </div>
           <div class="form-group">
@@ -337,15 +337,15 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <select id="sel-aluno-acolher"><option value="">A carregar estudantes...</option></select>
           </div>
           <div class="form-group">
-            <label>Nome do Professor Regente (opcional):</label>
-            <input type="text" id="txt-regente-nome" placeholder="Ex: Profa. Juliana">
+            <label>Nome da Família / Responsável (opcional):</label>
+            <input type="text" id="txt-familia-nome" placeholder="Ex: Sra. Maria (Mãe)">
           </div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
             <button class="btn-primary" onclick="executarCartao()">
               <span class="material-symbols-outlined">contact_emergency</span> Gerar Cartão
             </button>
             <button class="btn-primary" onclick="executarCarta()">
-              <span class="material-symbols-outlined">mail</span> Gerar Carta à Docência
+              <span class="material-symbols-outlined">mail</span> Gerar Carta à Família
             </button>
           </div>
           <div id="res-acolher" class="result-box" style="display:none;"></div>
@@ -358,8 +358,8 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
           <div class="card-header">
             <span class="material-symbols-outlined">history_edu</span>
             <div>
-              <h2 class="card-title">Registo de Atendimento e Evolução</h2>
-              <div class="card-desc">Salva o relato na aba "Diario" e anexa um arquivo .txt na pasta do estudante no Drive.</div>
+              <h2 class="card-title">Registro de Atendimento e Evolução</h2>
+              <div class="card-desc">Registre observações, avanços e mediações. O histórico é organizado automaticamente para embasar análises futuras.</div>
             </div>
           </div>
           <div class="form-group">
@@ -381,7 +381,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <textarea id="txt-diario-obs" placeholder="Descreva os avanços, barreiras identificadas ou mediações realizadas..."></textarea>
           </div>
           <button class="btn-primary" onclick="executarSalvarDiario()">
-            <span class="material-symbols-outlined">save</span> Registar Atendimento
+            <span class="material-symbols-outlined">save</span> Registrar Atendimento
           </button>
         </div>
       </section>
@@ -393,7 +393,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <span class="material-symbols-outlined">psychology_alt</span>
             <div>
               <h2 class="card-title">Estudo de Caso Integrado</h2>
-              <div class="card-desc">Gera um relatório fundamentado analisando os diários e documentos anteriores.</div>
+              <div class="card-desc">Consolide os registros e acompanhamentos anteriores em um relatório analítico e profissional.</div>
             </div>
           </div>
           <div class="form-group">
@@ -415,7 +415,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <h2 class="card-title">Configurações e Integração</h2>
           </div>
           <p style="font-size:14px; color:var(--text-sub); line-height:1.6; margin-bottom: 20px;">
-            Para que a Inteligência Artificial consiga redigir os planos e aceder ao histórico dos seus estudantes, precisamos de ligar o sistema à sua conta.
+            Gerencie o seu ambiente de trabalho e a conexão segura com a Inteligência Artificial. Para redigir planos e aceder ao histórico, siga os passos abaixo.
           </p>
           
           <div style="background: var(--primary-light); padding: 16px; border-radius: 8px; margin-bottom: 20px; font-size: 13px;">
@@ -444,7 +444,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
 
           <hr style="border:0; border-top:1px solid var(--border); margin: 30px 0 20px 0;">
           
-          <!-- NOVO BLOCO EXPLICATIVO DO BOTÃO DE SAÍDA -->
           <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: var(--surface); padding: 16px; border-radius: 8px; border: 1px solid var(--border);">
             <div style="flex: 1; min-width: 200px;">
               <h3 style="font-size: 14px; margin: 0 0 4px 0; color: var(--text);">Privacidade e Segurança</h3>
@@ -508,7 +507,7 @@ async function lidarComLoginGoogle(response) {
       iniciarAplicacao(res.dados);
     } 
     else if (res && res.isNovoUsuario) {
-      // CADASTRO SILENCIOSO: Cria a conta na planilha sem interromper a navegação!
+      // CADASTRO SILENCIOSO
       document.getElementById('msg-login').innerText = "A preparar a sua nova área de trabalho...";
       const resCad = await chamarAPI("cadastrarUsuario", {
          email: emailGoogle, nome: nomeGoogle || "Professor(a)", perfil: "AEE", escola: "", chave: "", pasta: ""
@@ -532,7 +531,7 @@ async function lidarComLoginGoogle(response) {
   }
 }
 
-// === NOVA FUNÇÃO PARA SALVAR AJUSTES ===
+// === SALVAR AJUSTES ===
 async function salvarConfiguracoes() {
   const escola = document.getElementById('config-escola').value.trim();
   const pasta = document.getElementById('config-pasta').value.trim();
@@ -545,7 +544,6 @@ async function salvarConfiguracoes() {
   esconderLoading();
   
   if(res && res.sucesso) {
-    // Atualiza a cache local para não ter de relogar
     if(dadosUsuarioAtivo) {
        dadosUsuarioAtivo.escola = escola;
        dadosUsuarioAtivo.pastaRaiz = pasta;
@@ -556,7 +554,6 @@ async function salvarConfiguracoes() {
        storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
        
        document.getElementById('lbl-prof-escola').innerText = escola || "AEE";
-       
        if (pasta) carregarAlunos(pasta);
     }
     mostrarModal("Sucesso", "Configurações guardadas! A Inteligência Artificial já está pronta a usar.");
@@ -583,7 +580,6 @@ function iniciarAplicacao(dados) {
   document.getElementById('lbl-prof-escola').innerText = dados.escola || dados.perfil || "AEE";
   document.getElementById('badge-usuario').innerText = (dados.nome ? dados.nome.split(' ')[0] : "Utilizador");
   
-  // Preenche a aba de ajustes com o que já tem guardado
   if(document.getElementById('config-escola')) document.getElementById('config-escola').value = dados.escola || "";
   if(document.getElementById('config-pasta')) document.getElementById('config-pasta').value = dados.pastaRaiz || "";
   if(document.getElementById('config-chave')) document.getElementById('config-chave').value = dados.chave || "";
@@ -609,7 +605,7 @@ function sairEApagarTudo() {
 }
 
 // ==========================================
-// COMUNICAÇÃO COM A API (GOOGLE APPS SCRIPT)
+// COMUNICAÇÃO COM A API
 // ==========================================
 async function chamarAPI(action, payload = {}) {
   try {
@@ -701,14 +697,14 @@ async function executarCartao() {
 
 async function executarCarta() {
   const sel = document.getElementById('sel-aluno-acolher');
-  const regente = document.getElementById('txt-regente-nome').value.trim();
+  const familia = document.getElementById('txt-familia-nome').value.trim();
   if (!sel.value) return mostrarModal("Atenção", "Selecione um estudante.");
 
-  mostrarLoading("Redigindo carta de apresentação...");
+  mostrarLoading("Redigindo carta à família...");
   const res = await chamarAPI("gerarCarta", {
     idPasta: sel.value,
     nomeAluno: sel.options[sel.selectedIndex].text,
-    regente: regente
+    familia: familia
   });
   esconderLoading();
 
@@ -780,8 +776,8 @@ function trocarAba(tabId) {
     'tab-dua': 0, 'tab-acolher': 1, 'tab-diario': 2, 'tab-estudo': 3, 'tab-ajustes': 4
   };
   const titles = {
-    'tab-dua': 'Adaptação de Aula (DUA)',
-    'tab-acolher': 'Cartão de Apoio & Carta Regente',
+    'tab-dua': 'Adaptação (DUA)',
+    'tab-acolher': 'Cartão de Apoio & Carta à Família',
     'tab-diario': 'Diário de Bordo',
     'tab-estudo': 'Estudo de Caso Integrado',
     'tab-ajustes': 'Configurações e Integração'
