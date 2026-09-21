@@ -52,11 +52,11 @@ body.dark-theme {
 * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 body { margin: 0; background: var(--surface); color: var(--text); height: 100vh; overflow: hidden; }
 
-/* ECRÃ DE LOGIN / BLOQUEIO */
-#login-screen {
-  position: fixed; inset: 0; background: var(--surface);
-  z-index: 9999; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; padding: 24px; text-align: center;
+/* ECRÃS FLUTUANTES (LOGIN / CADASTRO) */
+.fullscreen-overlay {
+  position: fixed; inset: 0; background: var(--surface); z-index: 9999; 
+  display: flex; flex-direction: column; align-items: center; justify-content: center; 
+  padding: 24px; text-align: center;
 }
 .login-card {
   background: var(--card-bg); padding: 36px 28px; border-radius: 20px;
@@ -132,9 +132,9 @@ body { margin: 0; background: var(--surface); color: var(--text); height: 100vh;
 .card-title { font-size: 16px; font-weight: 600; margin: 0; }
 .card-desc { font-size: 13px; color: var(--text-sub); margin-top: 4px; }
 
-.form-group { margin-bottom: 16px; }
+.form-group { margin-bottom: 16px; text-align: left; }
 label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-sub); }
-input[type="text"], select, textarea {
+input[type="text"], input[type="password"], select, textarea {
   width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border);
   background: var(--card-bg); color: var(--text); font-size: 14px; outline: none;
 }
@@ -147,6 +147,7 @@ textarea { resize: vertical; min-height: 100px; }
   border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s;
 }
 .btn-primary:hover { background: var(--primary-hover); }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 
 /* SISTEMA DE RESULTADOS */
 .result-box {
@@ -164,7 +165,6 @@ textarea { resize: vertical; min-height: 100px; }
   width: 100%; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 
 #loading-overlay {
   position: fixed; inset: 0; background: rgba(255,255,255,0.7); display: none;
@@ -188,7 +188,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
 <body>
 
 <!-- TELA DE LOGIN OAUTH 2.0 -->
-<div id="login-screen">
+<div id="login-screen" class="fullscreen-overlay">
   <div class="login-card">
     <div class="material-symbols-outlined login-logo">psychology</div>
     <h1 class="login-title">Inclusão Conectada</h1>
@@ -224,6 +224,55 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
   </div>
 </div>
 
+<!-- ECRÃ DE AUTO-CADASTRO (Aparece se for a primeira vez do utilizador) -->
+<div id="cadastro-screen" class="fullscreen-overlay" style="display:none; z-index:9998;">
+  <div class="login-card" style="max-width:480px; max-height: 90vh; overflow-y: auto;">
+    <div class="material-symbols-outlined login-logo">person_add</div>
+    <h2 class="login-title">Concluir o Cadastro</h2>
+    <p class="login-sub">Parece ser a sua primeira vez aqui! Preencha as configurações do seu ambiente para ativar a sua conta.</p>
+
+    <div class="form-group">
+      <label>Seu E-mail Google (Automático):</label>
+      <input type="text" id="cad-email" disabled style="background:#e8eaed; color:#5f6368;">
+    </div>
+    <div class="form-group">
+      <label>Nome Completo:</label>
+      <input type="text" id="cad-nome" placeholder="Como quer ser chamado(a)">
+    </div>
+    
+    <div style="display:flex; gap:10px;">
+        <div class="form-group" style="flex:1;">
+          <label>Perfil:</label>
+          <select id="cad-perfil">
+            <option value="AEE">Professor(a) de AEE</option>
+            <option value="Regente">Professor(a) Regente</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex:1;">
+          <label>Turma / Escola:</label>
+          <input type="text" id="cad-escola" placeholder="Sua escola atual">
+        </div>
+    </div>
+
+    <div class="form-group">
+      <label>Chave do Google Gemini (IA):</label>
+      <input type="password" id="cad-chave" placeholder="AIzaSy...">
+    </div>
+    
+    <div class="form-group">
+      <label>ID ou Link da Pasta do Drive (Onde estão os alunos):</label>
+      <input type="text" id="cad-pasta" placeholder="Cole o link da pasta do Google Drive">
+    </div>
+
+    <button class="btn-primary" style="width:100%; margin-top:16px;" onclick="enviarCadastro()">
+      <span class="material-symbols-outlined">how_to_reg</span> Ativar Minha Conta
+    </button>
+    <button class="btn-secondary" style="width:100%; margin-top:10px;" onclick="cancelarCadastro()">
+      Voltar ao Início
+    </button>
+  </div>
+</div>
+
 <!-- ESTRUTURA MODAL DE DIÁLOGO -->
 <div id="custom-modal" class="modal-overlay">
   <div class="modal-box">
@@ -241,7 +290,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
   <p id="loading-texto" style="margin-top:16px; font-weight:500; font-size:14px;">Carregando...</p>
 </div>
 
-<!-- APLICAÇÃO -->
+<!-- APLICAÇÃO (Visível apenas após login) -->
 <div class="app-container">
   
   <!-- BARRA LATERAL -->
@@ -274,8 +323,8 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
     <!-- WIDGET DE USUÁRIO -->
     <div class="user-profile-widget">
       <div class="user-info">
-        <span class="user-name" id="lbl-prof-nome">Carregando...</span>
-        <span class="user-sub" id="lbl-prof-escola">Carregando...</span>
+        <span class="user-name" id="lbl-prof-nome">A carregar...</span>
+        <span class="user-sub" id="lbl-prof-escola">A carregar...</span>
       </div>
       <button class="btn-logout" onclick="sairEApagarTudo()">
         <span class="material-symbols-outlined" style="font-size:18px;">logout</span> Sair
@@ -358,7 +407,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
           <div class="card-header">
             <span class="material-symbols-outlined">history_edu</span>
             <div>
-              <h2 class="card-title">Registro de Atendimento e Evolução</h2>
+              <h2 class="card-title">Registo de Atendimento e Evolução</h2>
               <div class="card-desc">Salva o relato na aba "Diario" e anexa um arquivo .txt na pasta do estudante no Drive.</div>
             </div>
           </div>
@@ -381,7 +430,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <textarea id="txt-diario-obs" placeholder="Descreva os avanços, barreiras identificadas ou mediações realizadas..."></textarea>
           </div>
           <button class="btn-primary" onclick="executarSalvarDiario()">
-            <span class="material-symbols-outlined">save</span> Registrar Atendimento
+            <span class="material-symbols-outlined">save</span> Registar Atendimento
           </button>
         </div>
       </section>
@@ -415,7 +464,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <h2 class="card-title">Configurações do Ambiente</h2>
           </div>
           <p style="font-size:14px; color:var(--text-sub); line-height:1.6;">
-            Os seus dados e credenciais de Inteligência Artificial são sincronizados centralmente a partir da sua conta Google e da base de dados administrativa.
+            Os seus dados e credenciais de Inteligência Artificial estão sincronizados centralmente a partir da sua conta Google e da base de dados administrativa.
           </p>
           <div style="margin-top:20px;">
             <button class="btn-primary" style="background:var(--danger);" onclick="sairEApagarTudo()">
@@ -456,6 +505,7 @@ async function lidarComLoginGoogle(response) {
   try {
     const payload = decodificarJWT(response.credential);
     const emailGoogle = payload.email;
+    const nomeGoogle = payload.name;
     const isPartilhado = document.getElementById('chk-partilhado').checked;
     
     document.getElementById('msg-login').innerText = "Validando credenciais...";
@@ -465,23 +515,74 @@ async function lidarComLoginGoogle(response) {
     const res = await chamarAPI("fazerLogin", { email: emailGoogle });
     
     if (res && res.sucesso) {
+      // Já possui conta registada, efetua o login direto
       const storage = isPartilhado ? sessionStorage : localStorage;
       storage.setItem('user_auth_email', res.dados.email);
       storage.setItem('user_auth_dados', JSON.stringify(res.dados));
-      
       iniciarAplicacao(res.dados);
-    } else {
-      document.getElementById('msg-login').innerText = res.mensagem || "Acesso negado. Verifique o cadastro na planilha.";
+    } 
+    else if (res && res.isNovoUsuario) {
+      // Novo utilizador: abre o ecrã de auto-cadastro com dados pré-preenchidos
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('cadastro-screen').style.display = 'flex';
+      
+      document.getElementById('cad-email').value = res.email;
+      document.getElementById('cad-nome').value = nomeGoogle || "";
+    } 
+    else {
+      // Erro desconhecido
+      document.getElementById('msg-login').innerText = res.mensagem || "Falha na validação.";
       document.getElementById('login-screen').style.opacity = '1';
       document.getElementById('login-screen').style.pointerEvents = 'auto';
     }
   } catch (err) {
-    document.getElementById('msg-login').innerText = "Falha ao processar credencial de autenticação.";
+    document.getElementById('msg-login').innerText = "Falha ao processar login.";
     document.getElementById('login-screen').style.opacity = '1';
     document.getElementById('login-screen').style.pointerEvents = 'auto';
   }
 }
 
+// === FUNÇÕES PARA O AUTO-CADASTRO (NOVO UTILIZADOR) ===
+async function enviarCadastro() {
+  const email = document.getElementById('cad-email').value;
+  const nome = document.getElementById('cad-nome').value.trim();
+  const perfil = document.getElementById('cad-perfil').value;
+  const escola = document.getElementById('cad-escola').value.trim();
+  const chave = document.getElementById('cad-chave').value.trim();
+  const pasta = document.getElementById('cad-pasta').value.trim();
+
+  if(!nome || !escola || !chave || !pasta) {
+     return mostrarModal("Atenção", "Preencha todos os campos do cadastro.");
+  }
+
+  mostrarLoading("Criando a sua conta no sistema...");
+  const res = await chamarAPI("cadastrarUsuario", {
+     email: email, nome: nome, perfil: perfil, escola: escola, chave: chave, pasta: pasta
+  });
+  esconderLoading();
+
+  if(res && res.sucesso) {
+     const isPartilhado = document.getElementById('chk-partilhado') ? document.getElementById('chk-partilhado').checked : false;
+     const storage = isPartilhado ? sessionStorage : localStorage;
+     storage.setItem('user_auth_email', res.dados.email);
+     storage.setItem('user_auth_dados', JSON.stringify(res.dados));
+
+     document.getElementById('cadastro-screen').style.display = 'none';
+     iniciarAplicacao(res.dados);
+  } else {
+     mostrarModal("Erro", res.mensagem || "Falha ao cadastrar.");
+  }
+}
+
+function cancelarCadastro() {
+   document.getElementById('cadastro-screen').style.display = 'none';
+   document.getElementById('login-screen').style.display = 'flex';
+   document.getElementById('login-screen').style.opacity = '1';
+   document.getElementById('login-screen').style.pointerEvents = 'auto';
+   document.getElementById('msg-login').innerText = "Cadastro cancelado.";
+}
+
+// === CONTROLE DE SESSÃO ===
 function verificarSessaoAtiva() {
   const dadosSalvos = sessionStorage.getItem('user_auth_dados') || localStorage.getItem('user_auth_dados');
   if (dadosSalvos) {
@@ -494,10 +595,11 @@ function verificarSessaoAtiva() {
 function iniciarAplicacao(dados) {
   dadosUsuarioAtivo = dados;
   document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('cadastro-screen').style.display = 'none';
   
   document.getElementById('lbl-prof-nome').innerText = dados.nome || dados.email;
   document.getElementById('lbl-prof-escola').innerText = dados.escola || dados.perfil || "AEE";
-  document.getElementById('badge-usuario').innerText = (dados.nome ? dados.nome.split(' ')[0] : "Usuário");
+  document.getElementById('badge-usuario').innerText = (dados.nome ? dados.nome.split(' ')[0] : "Utilizador");
   
   carregarAlunos(dados.pastaRaiz);
 }
@@ -598,7 +700,7 @@ async function executarCartao() {
   if (res && res.sucesso) {
     const box = document.getElementById('res-acolher');
     box.style.display = "block";
-    box.innerHTML = `<b>Documento criado no Drive:</b> <a href="${res.urlDocumento}" target="_blank">Acessar Cartão</a><br><br>` +
+    box.innerHTML = `<b>Documento criado no Drive:</b> <a href="${res.urlDocumento}" target="_blank">Aceder ao Cartão</a><br><br>` +
                     `<b>Primeiros Sinais:</b> ${res.cartao.primeirosSinais}<br>` +
                     `<b>O que Acalma:</b> ${res.cartao.oQueAcalma}<br>` +
                     `<b>O que Evitar:</b> ${res.cartao.oQueEvitar}<br>` +
@@ -624,7 +726,7 @@ async function executarCarta() {
   if (res && res.sucesso) {
     const box = document.getElementById('res-acolher');
     box.style.display = "block";
-    box.innerHTML = `<b>Carta criada no Drive:</b> <a href="${res.urlDocumento}" target="_blank">Acessar Documento</a><br><br>${res.carta}`;
+    box.innerHTML = `<b>Carta criada no Drive:</b> <a href="${res.urlDocumento}" target="_blank">Aceder ao Documento</a><br><br>${res.carta}`;
   } else {
     mostrarModal("Erro", res.mensagem || "Falha ao gerar carta.");
   }
@@ -636,7 +738,7 @@ async function executarSalvarDiario() {
   const cat = document.getElementById('sel-diario-categoria').value;
   if (!sel.value || !obs) return mostrarModal("Atenção", "Preencha a observação e selecione o estudante.");
 
-  mostrarLoading("Registrando atendimento...");
+  mostrarLoading("Registando atendimento...");
   const res = await chamarAPI("salvarDiario", {
     dados: {
       idPasta: sel.value,
@@ -648,7 +750,7 @@ async function executarSalvarDiario() {
   esconderLoading();
 
   if (res && res.sucesso) {
-    mostrarModal("Sucesso", res.mensagem || "Registro concluído!");
+    mostrarModal("Sucesso", res.mensagem || "Registo concluído!");
     document.getElementById('txt-diario-obs').value = "";
   } else {
     mostrarModal("Erro", res.mensagem || "Falha ao salvar diário.");
