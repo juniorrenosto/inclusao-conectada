@@ -17,8 +17,6 @@
 <meta name="theme-color" content="#0b57d0">
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABlBMVEUAC3f///8A1s4OAAAAAXRSTlMAQObYZgAAAFBJREFUeNrtzTERAAAIAzCS/s0+Bg9uIAVa8pIuLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy9fdT8BbwB9WdYFbwAAAABJRU5ErkJggg==">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-
-<!-- BIBLIOTECA OFICIAL DO GOOGLE IDENTITY SERVICES -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
@@ -166,6 +164,16 @@ textarea { resize: vertical; min-height: 100px; }
 }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 
+/* MODAL DE TERMOS LGPD - MAIOR */
+.modal-termos-box {
+  background: var(--card-bg); border-radius: 16px; padding: 30px; max-width: 600px;
+  width: 100%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15); text-align: left;
+}
+.modal-termos-box h3 { margin-top: 0; color: var(--primary); }
+.modal-termos-box h4 { margin-top: 20px; margin-bottom: 8px; font-size: 14px; color: var(--text); }
+.modal-termos-box p { font-size: 13px; line-height: 1.6; color: var(--text-sub); margin-bottom: 10px; }
+
 #loading-overlay {
   position: fixed; inset: 0; background: rgba(255,255,255,0.7); display: none;
   align-items: center; justify-content: center; flex-direction: column; z-index: 10001;
@@ -221,10 +229,16 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
     </div>
     
     <p id="msg-login" style="color: var(--danger); font-size: 13px; margin-top: 16px; font-weight: bold;"></p>
+    
+    <!-- LINK PARA TERMOS DE USO -->
+    <div style="margin-top: 24px; font-size: 12px; color: var(--text-sub);">
+      Ao entrar, você concorda com os nossos 
+      <a href="#" onclick="abrirTermos()" style="color: var(--primary); text-decoration: none; font-weight: 600;">Termos de Uso e LGPD</a>.
+    </div>
   </div>
 </div>
 
-<!-- ESTRUTURA MODAL DE DIÁLOGO -->
+<!-- MODAL DE DIÁLOGO PADRÃO -->
 <div id="custom-modal" class="modal-overlay">
   <div class="modal-box">
     <h3 id="modal-titulo" style="margin-top:0;">Aviso</h3>
@@ -236,15 +250,37 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
   </div>
 </div>
 
+<!-- MODAL DE TERMOS LGPD -->
+<div id="termos-modal" class="modal-overlay">
+  <div class="modal-termos-box">
+    <h3>Termos de Uso e Política de Privacidade (LGPD)</h3>
+    
+    <h4>1. Natureza do Serviço e Processamento de Dados</h4>
+    <p>O <b>Inclusão Conectada</b> opera exclusivamente como uma interface de processamento ("Software as a Service"). Não possuímos banco de dados próprio para armazenar os relatórios, históricos, laudos ou diários de bordo dos estudantes.</p>
+    
+    <h4>2. Responsabilidade e Armazenamento (Google Drive)</h4>
+    <p>Todos os dados pedagógicos gerados ou lidos pelo sistema são salvos e operados diretamente na conta do Google Drive vinculada pelo usuário (Professor/Instituição). O usuário é o controlador absoluto dos dados, sendo sua responsabilidade assegurar o consentimento familiar adequado de acordo com as normas da sua Instituição e a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018).</p>
+
+    <h4>3. Uso de Inteligência Artificial</h4>
+    <p>A formulação de Planos de Aula, Cartões de Apoio e Estudos de Caso utiliza as chaves de API privadas (Google Gemini) fornecidas pelo próprio usuário. A transmissão de contexto para a Inteligência Artificial é criptografada e os dados não são utilizados pelo sistema central para treino de modelos de linguagem.</p>
+
+    <h4>4. Sigilo Profissional</h4>
+    <p>Recomendamos aos profissionais de Educação Especial que, ao submeter históricos para adaptação via IA, utilizem apenas as informações estritamente necessárias para a prática pedagógica, omitindo dados médicos excessivamente sensíveis que não afetem a rotina escolar direta.</p>
+
+    <div class="modal-actions" style="margin-top: 30px;">
+      <button class="btn-primary" onclick="fecharTermos()" style="width: 100%;">Ciente e de Acordo</button>
+    </div>
+  </div>
+</div>
+
 <div id="loading-overlay">
   <div class="spinner"></div>
   <p id="loading-texto" style="margin-top:16px; font-weight:500; font-size:14px;">Carregando...</p>
 </div>
 
-<!-- APLICAÇÃO (Visível apenas após login) -->
+<!-- APLICAÇÃO -->
 <div class="app-container">
   
-  <!-- BARRA LATERAL -->
   <aside class="app-sidebar" id="app-sidebar">
     <div>
       <div class="brand">
@@ -271,7 +307,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
       </nav>
     </div>
 
-    <!-- WIDGET DE USUÁRIO -->
     <div class="user-profile-widget">
       <div class="user-info">
         <span class="user-name" id="lbl-prof-nome">A carregar...</span>
@@ -283,7 +318,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
     </div>
   </aside>
 
-  <!-- PAINEL PRINCIPAL -->
   <div class="main-wrapper">
     <header class="app-header">
       <div class="header-left">
@@ -407,7 +441,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
         </div>
       </section>
 
-      <!-- ABA 5: AJUSTES COM INSTRUÇÕES E BOTÃO MELHORADO -->
+      <!-- ABA 5: AJUSTES -->
       <section id="tab-ajustes" class="tab-content">
         <div class="card">
           <div class="card-header">
@@ -448,8 +482,8 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <div style="flex: 1; min-width: 200px;">
               <h3 style="font-size: 14px; margin: 0 0 4px 0; color: var(--text);">Privacidade e Segurança</h3>
               <p style="font-size: 13px; color: var(--text-sub); margin: 0; line-height: 1.4;">
-                Ao encerrar a sessão, removemos o cache local e desconectamos a sua conta Google deste dispositivo. 
-                Recomendado se estiver a aceder através de um computador partilhado.
+                Ao encerrar a sessão, removemos o cache local. Recomendado se estiver usando um computador partilhado.<br>
+                <a href="#" onclick="abrirTermos()" style="color: var(--primary); font-weight: bold; text-decoration: none;">Ler Termos e LGPD completos</a>
               </p>
             </div>
             <button class="btn-primary" style="background:var(--danger); white-space: nowrap;" onclick="sairEApagarTudo()">
@@ -476,6 +510,16 @@ window.onload = function() {
 };
 
 // ==========================================
+// ABERTURA DOS TERMOS LGPD
+// ==========================================
+function abrirTermos() {
+  document.getElementById('termos-modal').style.display = 'flex';
+}
+function fecharTermos() {
+  document.getElementById('termos-modal').style.display = 'none';
+}
+
+// ==========================================
 // AUTENTICAÇÃO GOOGLE E CONTROLE DE SESSÃO
 // ==========================================
 function decodificarJWT(token) {
@@ -500,14 +544,12 @@ async function lidarComLoginGoogle(response) {
     const res = await chamarAPI("fazerLogin", { email: emailGoogle });
     
     if (res && res.sucesso) {
-      // Já tem conta: Entra direto!
       const storage = isPartilhado ? sessionStorage : localStorage;
       storage.setItem('user_auth_email', res.dados.email);
       storage.setItem('user_auth_dados', JSON.stringify(res.dados));
       iniciarAplicacao(res.dados);
     } 
     else if (res && res.isNovoUsuario) {
-      // CADASTRO SILENCIOSO
       document.getElementById('msg-login').innerText = "A preparar a sua nova área de trabalho...";
       const resCad = await chamarAPI("cadastrarUsuario", {
          email: emailGoogle, nome: nomeGoogle || "Professor(a)", perfil: "AEE", escola: "", chave: "", pasta: ""
@@ -531,18 +573,16 @@ async function lidarComLoginGoogle(response) {
   }
 }
 
-// === SALVAR AJUSTES (COM MENSAGENS INTELIGENTES) ===
+// === SALVAR AJUSTES ===
 async function salvarConfiguracoes() {
   const escola = document.getElementById('config-escola').value.trim();
   const pasta = document.getElementById('config-pasta').value.trim();
   const chave = document.getElementById('config-chave').value.trim();
   
-  // 1. Verifica se tentou guardar tudo em branco
   if (!pasta && !chave && !escola) {
     return mostrarModal("Aviso", "Não preencheu nenhum dado para atualizar.");
   }
 
-  // 2. Avisos amigáveis para campos incompletos
   let mensagemFinal = "Configurações guardadas com sucesso!";
   if (pasta && !chave) {
     mensagemFinal = "A sua Pasta foi configurada! Lembre-se de adicionar a Chave Gemini mais tarde para conseguir gerar os planos DUA e Cartões de Apoio.";
@@ -577,7 +617,6 @@ async function salvarConfiguracoes() {
   }
 }
 
-// === CONTROLE DE SESSÃO ===
 function verificarSessaoAtiva() {
   const dadosSalvos = sessionStorage.getItem('user_auth_dados') || localStorage.getItem('user_auth_dados');
   if (dadosSalvos) {
@@ -620,7 +659,7 @@ function sairEApagarTudo() {
 }
 
 // ==========================================
-// COMUNICAÇÃO COM A API
+// COMUNICAÇÃO COM A API E OPERAÇÕES
 // ==========================================
 async function chamarAPI(action, payload = {}) {
   try {
@@ -640,9 +679,6 @@ async function chamarAPI(action, payload = {}) {
   }
 }
 
-// ==========================================
-// SINCRONIZAÇÃO E OPERAÇÕES PEDAGÓGICAS
-// ==========================================
 async function carregarAlunos(pastaId) {
   const res = await chamarAPI("listarAlunos", { linkPasta: pastaId });
   if (res && res.sucesso) {
@@ -777,9 +813,6 @@ async function executarEstudo() {
   }
 }
 
-// ==========================================
-// INTERFACE E COMPONENTES MODAIS
-// ==========================================
 function trocarAba(tabId) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
