@@ -841,7 +841,25 @@ function trocarAba(tabId) {
 }
 
 function toggleSidebar() {
-  document.getElementById('app-sidebar').classList.toggle('open');
+  const sidebar = document.getElementById('app-sidebar');
+  sidebar.classList.toggle('open');
+  
+  let overlay = document.getElementById('sidebar-overlay');
+  
+  // Cria a camada de fundo escurecido se ela ainda não existir
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'sidebar-overlay';
+    // O z-index 499 garante que fica atrás da barra (500) mas à frente do resto da página
+    overlay.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 499;';
+    
+    // Ao clicar neste fundo, fecha a barra lateral
+    overlay.onclick = () => toggleSidebar();
+    document.body.appendChild(overlay);
+  }
+  
+  // Mostra ou esconde a camada consoante o estado atual do menu
+  overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
 }
 
 function mostrarLoading(txt) {
