@@ -5,243 +5,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Inclusão Conectada</title>
 
-<link rel="manifest" href="./manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW falhou:', err));
-    });
-  }
-</script>
-
 <meta name="theme-color" content="#0b57d0">
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABlBMVEUAC3f///8A1s4OAAAAAXRSTlMAQObYZgAAAFBJREFUeNrtzTERAAAIAzCS/s0+Bg9uIAVa8pIuLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy9fdT8BbwB9WdYFbwAAAABJRU5ErkJggg==">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-<!-- Mantemos a biblioteca oficial do Google -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
 :root {
-  --primary: #0b57d0;
-  --primary-hover: #0842a0;
-  --primary-light: #e8f0fe;
-  --surface: #f8fafd;
-  --card-bg: #ffffff;
-  --border: #dadce0;
-  --text: #1f1f1f;
-  --text-sub: #5f6368;
-  --success: #0f9d58;
-  --success-light: #e6f4ea;
-  --danger: #d93025;
-  --danger-light: #fce8e6;
-  --sidebar-w: 260px;
+  --primary: #0b57d0; --primary-hover: #0842a0; --primary-light: #e8f0fe;
+  --surface: #f8fafd; --card-bg: #ffffff; --border: #dadce0;
+  --text: #1f1f1f; --text-sub: #5f6368; --success: #0f9d58;
+  --danger: #d93025; --danger-light: #fce8e6; --sidebar-w: 260px;
 }
 
 body.dark-theme {
-  --surface: #131314;
-  --card-bg: #1e1f20;
-  --border: #3c4043;
-  --text: #e3e3e3;
-  --text-sub: #9aa0a6;
-  --primary: #8ab4f8;
-  --primary-hover: #aecbfa;
-  --primary-light: rgba(138, 180, 248, 0.15);
+  --surface: #131314; --card-bg: #1e1f20; --border: #3c4043;
+  --text: #e3e3e3; --text-sub: #9aa0a6; --primary: #8ab4f8;
+  --primary-hover: #aecbfa; --primary-light: rgba(138, 180, 248, 0.15);
 }
 
 * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 body { margin: 0; background: var(--surface); color: var(--text); height: 100vh; overflow: hidden; transition: background 0.3s, color 0.3s; }
 
-/* ECRÃ DE LOGIN */
-.fullscreen-overlay {
-  position: fixed; inset: 0; background: var(--surface); z-index: 9999; 
-  display: flex; flex-direction: column; align-items: center; justify-content: center; 
-  padding: 24px; text-align: center;
-}
-.login-card {
-  background: var(--card-bg); padding: 36px 28px; border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.08); max-width: 420px; width: 100%;
-  border: 1px solid var(--border);
-}
+/* LOGIN */
+.fullscreen-overlay { position: fixed; inset: 0; background: var(--surface); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+.login-card { background: var(--card-bg); padding: 36px 28px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); max-width: 420px; width: 100%; border: 1px solid var(--border); }
 .login-logo { font-size: 52px; color: var(--primary); margin-bottom: 12px; }
-.login-title { font-size: 22px; font-weight: 700; margin: 0 0 8px 0; color: var(--text); }
-.login-sub { font-size: 14px; color: var(--text-sub); margin-bottom: 24px; line-height: 1.5; }
-.security-check {
-  display: flex; align-items: flex-start; gap: 10px; font-size: 13px;
-  color: var(--text); margin-bottom: 24px; background: var(--primary-light);
-  padding: 12px 14px; border-radius: 10px; text-align: left;
-}
-.security-check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--primary); cursor: pointer; }
+.security-check { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text); margin-bottom: 24px; background: var(--primary-light); padding: 12px 14px; border-radius: 10px; text-align: left; }
 
-/* ESTRUTURA PRINCIPAL */
+/* ESTRUTURA E CABEÇALHO GLOBAL */
 .app-container { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
-.app-sidebar {
-  width: var(--sidebar-w); background: var(--card-bg); border-right: 1px solid var(--border);
-  display: flex; flex-direction: column; justify-content: space-between; padding: 16px 12px;
-  transition: transform 0.25s ease;
-}
-.brand { display: flex; align-items: center; gap: 10px; padding: 8px 12px; margin-bottom: 20px; }
-.brand-icon { color: var(--primary); font-size: 28px; }
-.brand-title { font-weight: 700; font-size: 17px; color: var(--text); white-space: nowrap; }
+.app-sidebar { width: var(--sidebar-w); background: var(--card-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; padding: 16px 12px; transition: transform 0.25s ease; z-index: 500; }
+.main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); }
 
-.nav-menu { display: flex; flex-direction: column; gap: 4px; }
-.nav-item {
-  display: flex; align-items: center; gap: 14px; padding: 12px 16px;
-  border-radius: 24px; color: var(--text-sub); text-decoration: none;
-  font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s;
-}
+.app-header { height: 64px; border-bottom: 1px solid var(--border); background: var(--card-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; gap: 12px; }
+.header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+.btn-menu-mobile { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); }
+
+/* DROPDOWN GLOBAL DE ALUNOS */
+.global-student-selector { flex: 1; max-width: 350px; display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 6px 12px; border-radius: 24px; border: 1px solid var(--border); }
+.global-student-selector select { border: none; background: transparent; color: var(--text); font-weight: 600; font-size: 14px; width: 100%; outline: none; cursor: pointer; }
+.global-student-selector select:focus { outline: none; }
+
+.header-right { display: flex; align-items: center; gap: 8px; }
+.btn-icon { background: none; border: none; color: var(--text-sub); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; transition: background 0.2s; }
+.btn-icon:hover { background: var(--surface); color: var(--text); }
+.btn-logout-header { color: var(--danger); }
+.btn-logout-header:hover { background: var(--danger-light); }
+
+.brand { display: flex; align-items: center; gap: 10px; padding: 8px 12px; margin-bottom: 20px; }
+.brand-title { font-weight: 700; font-size: 17px; color: var(--text); }
+.nav-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 24px; color: var(--text-sub); text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-bottom: 4px; }
 .nav-item:hover { background: var(--surface); color: var(--text); }
 .nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
-.nav-item .material-symbols-outlined { font-size: 22px; }
-
-.user-profile-widget {
-  padding: 12px; border-top: 1px solid var(--border); display: flex;
-  flex-direction: column; gap: 10px;
-}
-.user-info { display: flex; flex-direction: column; gap: 2px; }
-.user-name { font-size: 14px; font-weight: 600; }
-.user-sub { font-size: 11px; color: var(--text-sub); }
-.btn-logout {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 8px; border-radius: 8px; background: var(--danger-light);
-  color: var(--danger); border: none; font-size: 13px; font-weight: 600;
-  cursor: pointer; width: 100%; transition: opacity 0.2s;
-}
-.btn-logout:hover { opacity: 0.85; }
-
-/* ÁREA CENTRAL */
-.main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); }
-.app-header {
-  height: 64px; border-bottom: 1px solid var(--border); background: var(--card-bg);
-  display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
-}
-.header-left { display: flex; align-items: center; gap: 12px; }
-.btn-menu-mobile { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); }
-.header-title { font-size: 18px; font-weight: 600; }
-
-.header-right { display: flex; align-items: center; gap: 16px; }
-.btn-tema { 
-  background: none; border: none; color: var(--text-sub); cursor: pointer; 
-  display: flex; align-items: center; padding: 8px; border-radius: 50%; transition: background 0.2s;
-}
-.btn-tema:hover { background: var(--surface); color: var(--text); }
 
 .content-body { flex: 1; overflow-y: auto; padding: 24px; }
-
-/* CARTÕES E FORMULÁRIOS */
 .tab-content { display: none; max-width: 900px; margin: 0 auto; }
 .tab-content.active { display: block; }
-.card {
-  background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border);
-  padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-}
-.card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-.card-header .material-symbols-outlined { color: var(--primary); }
-.card-title { font-size: 16px; font-weight: 600; margin: 0; }
-.card-desc { font-size: 13px; color: var(--text-sub); margin-top: 4px; line-height: 1.5; }
+.card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
 
 .form-group { margin-bottom: 16px; text-align: left; }
 label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-sub); }
-input[type="text"], input[type="password"], select, textarea {
-  width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border);
-  background: var(--card-bg); color: var(--text); font-size: 14px; outline: none;
-}
+input[type="text"], input[type="password"], select, textarea { width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); font-size: 14px; outline: none; }
 input:focus, select:focus, textarea:focus { border-color: var(--primary); }
 textarea { resize: vertical; min-height: 100px; }
 
-.btn-primary {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  background: var(--primary); color: #fff; border: none; padding: 12px 20px;
-  border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s;
-}
+.btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
 .btn-primary:hover { background: var(--primary-hover); }
 .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-.btn-secondary:hover { background: var(--border); }
+.result-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-top: 16px; white-space: pre-wrap; font-size: 14px; line-height: 1.6; display: none; }
 
-/* SISTEMA DE RESULTADOS */
-.result-box {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
-  padding: 16px; margin-top: 16px; white-space: pre-wrap; font-size: 14px; line-height: 1.6;
-}
+/* SANFONA (ACCORDION) */
+.accordion { background: var(--primary-light); color: var(--primary); cursor: pointer; padding: 14px; width: 100%; border: none; text-align: left; outline: none; font-size: 14px; font-weight: 600; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.panel { padding: 0 16px; background: var(--surface); max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-radius: 8px; margin-bottom: 16px; }
+.panel p { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
 
 /* MODAL E LOADING */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none;
-  align-items: center; justify-content: center; z-index: 10000; padding: 20px;
-}
-.modal-box {
-  background: var(--card-bg); border-radius: 16px; padding: 24px; max-width: 420px;
-  width: 100%; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; }
+.modal-box { background: var(--card-bg); border-radius: 16px; padding: 24px; max-width: 420px; width: 100%; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-
-/* MODAL DE TERMOS LGPD */
-.modal-termos-box {
-  background: var(--card-bg); border-radius: 16px; padding: 30px; max-width: 600px;
-  width: 100%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15); text-align: left;
-}
-.modal-termos-box h3 { margin-top: 0; color: var(--primary); }
-.modal-termos-box h4 { margin-top: 20px; margin-bottom: 8px; font-size: 14px; color: var(--text); }
-.modal-termos-box p { font-size: 13px; line-height: 1.6; color: var(--text-sub); margin-bottom: 10px; }
-
-#loading-overlay {
-  position: fixed; inset: 0; background: rgba(255,255,255,0.7); display: none;
-  align-items: center; justify-content: center; flex-direction: column; z-index: 10001;
-}
-body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
-.spinner {
-  width: 44px; height: 44px; border: 4px solid var(--border);
-  border-top-color: var(--primary); border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
+#loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.8); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 10001; }
+body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
+.spinner { width: 44px; height: 44px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-@media(max-width: 768px) {
-  .app-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 500; transform: translateX(-100%); }
-  .app-sidebar.open { transform: translateX(0); }
-  .btn-menu-mobile { display: block; }
-}
+@media(max-width: 768px) { .app-sidebar { position: fixed; inset: 0 auto 0 0; transform: translateX(-100%); } .app-sidebar.open { transform: translateX(0); } .btn-menu-mobile { display: block; } .header-left { max-width: calc(100% - 100px); } }
 </style>
-<script>
-  if (localStorage.getItem('tema-inclusao') === 'dark') {
-    document.documentElement.classList.add('dark-theme');
-    document.addEventListener('DOMContentLoaded', () => document.body.classList.add('dark-theme'));
-  }
-</script>
 </head>
 <body>
 
-<!-- TELA DE LOGIN OAUTH 2.0 ATUALIZADA -->
+<!-- LOGIN OAUTH 2.0 -->
 <div id="login-screen" class="fullscreen-overlay">
   <div class="login-card">
     <div class="material-symbols-outlined login-logo">psychology</div>
-    <h1 class="login-title">Inclusão Conectada</h1>
-    <p class="login-sub">Ambiente restrito de Gestão e Adaptação Pedagógica (AEE). Autentique-se com a sua conta autorizada.</p>
+    <h1 style="margin:0 0 8px 0; font-size:22px;">Inclusão Conectada</h1>
+    <p style="font-size:14px; color:var(--text-sub); margin-bottom:24px;">Ambiente restrito (AEE). Autentique-se com a sua conta escolar.</p>
     
     <div class="security-check">
       <input type="checkbox" id="chk-partilhado">
-      <label for="chk-partilhado">
-        <b>Computador da Escola / Compartilhado</b><br>
-        <span style="font-size:11px; color:var(--text-sub);">Encerra a sessão e descarta credenciais temporárias automaticamente ao fechar o navegador.</span>
-      </label>
+      <label for="chk-partilhado"><b>Computador Compartilhado</b><br><span style="font-size:11px;">Encerra a sessão ao fechar.</span></label>
     </div>
 
-    <!-- NOVO BOTÃO DE AUTORIZAÇÃO DIRETA -->
-    <button class="btn-primary" style="font-size: 15px; padding: 14px 20px; width: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;" onclick="iniciarLoginDrive()">
-      <span class="material-symbols-outlined">add_to_drive</span>
-      Autorizar Acesso ao Drive
+    <button class="btn-primary" style="width: 100%; border-radius: 12px; padding: 14px; margin-bottom:10px;" onclick="iniciarLoginDrive()">
+      <span class="material-symbols-outlined">add_to_drive</span> Autorizar Acesso ao Drive
     </button>
-    
-    <p id="msg-login" style="color: var(--danger); font-size: 13px; margin-top: 16px; font-weight: bold;"></p>
-    
-    <div style="margin-top: 24px; font-size: 12px; color: var(--text-sub);">
-      Ao entrar, você concorda com os nossos 
-      <a href="#" onclick="abrirTermos()" style="color: var(--primary); text-decoration: none; font-weight: 600;">Termos de Uso e LGPD</a>.
-    </div>
+    <p id="msg-login" style="color: var(--danger); font-size: 13px; font-weight: bold;"></p>
   </div>
 </div>
 
-<!-- MODAIS -->
+<!-- MODAL GENÉRICO -->
 <div id="custom-modal" class="modal-overlay">
   <div class="modal-box">
     <h3 id="modal-titulo" style="margin-top:0;">Aviso</h3>
@@ -253,243 +125,149 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
   </div>
 </div>
 
-<div id="termos-modal" class="modal-overlay">
-  <div class="modal-termos-box">
-    <h3>Termos de Uso e Política de Privacidade (LGPD)</h3>
-    <h4>1. Natureza do Serviço e Processamento de Dados</h4>
-    <p>O <b>Inclusão Conectada</b> opera exclusivamente como uma interface de processamento ("Software as a Service"). Não possuímos banco de dados próprio para armazenar os relatórios, históricos, laudos ou diários de bordo dos estudantes.</p>
-    <h4>2. Responsabilidade e Armazenamento (Google Drive)</h4>
-    <p>Todos os dados pedagógicos gerados ou lidos pelo sistema são salvos e operados diretamente na conta do Google Drive vinculada pelo usuário (Professor/Instituição). O usuário é o controlador absoluto dos dados, sendo sua responsabilidade assegurar o consentimento familiar adequado de acordo com as normas da sua Instituição e a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018).</p>
-    <h4>3. Uso de Inteligência Artificial</h4>
-    <p>A formulação de Planos de Aula, Cartões de Apoio e Estudos de Caso utiliza as chaves de API privadas (Google Gemini) fornecidas pelo próprio usuário. A transmissão de contexto para a Inteligência Artificial é criptografada e os dados não são utilizados pelo sistema central para treino de modelos de linguagem.</p>
-    <h4>4. Sigilo Profissional</h4>
-    <p>Recomendamos aos profissionais de Educação Especial que, ao submeter históricos para adaptação via IA, utilizem apenas as informações estritamente necessárias para a prática pedagógica, omitindo dados médicos excessivamente sensíveis que não afetem a rotina escolar direta.</p>
-    <div class="modal-actions" style="margin-top: 30px;">
-      <button class="btn-primary" onclick="fecharTermos()" style="width: 100%;">Ciente e de Acordo</button>
-    </div>
-  </div>
-</div>
-
 <div id="loading-overlay">
   <div class="spinner"></div>
-  <p id="loading-texto" style="margin-top:16px; font-weight:500; font-size:14px;">Carregando...</p>
+  <p id="loading-texto" style="margin-top:16px; font-weight:500;">A processar...</p>
 </div>
 
-<!-- APLICAÇÃO -->
 <div class="app-container">
+  <!-- MENU LATERAL -->
   <aside class="app-sidebar" id="app-sidebar">
     <div>
-      <div class="brand">
-        <span class="material-symbols-outlined brand-icon">diversity_3</span>
-        <span class="brand-title">Inclusão Conectada</span>
-      </div>
+      <div class="brand"><span class="material-symbols-outlined" style="color:var(--primary); font-size:28px;">diversity_3</span><span class="brand-title">Inclusão Conectada</span></div>
       <nav class="nav-menu">
-        <a class="nav-item active" onclick="trocarAba('tab-dua')">
-          <span class="material-symbols-outlined">auto_fix_high</span> DUA (Adaptação)
-        </a>
-        <a class="nav-item" onclick="trocarAba('tab-acolher')">
-          <span class="material-symbols-outlined">favorite</span> Cartão & Carta
-        </a>
-        <a class="nav-item" onclick="trocarAba('tab-diario')">
-          <span class="material-symbols-outlined">edit_note</span> Diário de Bordo
-        </a>
-        <a class="nav-item" onclick="trocarAba('tab-estudo')">
-          <span class="material-symbols-outlined">assignment</span> Estudo de Caso
-        </a>
-        <a class="nav-item" onclick="trocarAba('tab-ajustes')">
-          <span class="material-symbols-outlined">settings</span> Ajustes
-        </a>
+        <a class="nav-item active" onclick="trocarAba('tab-dua')"><span class="material-symbols-outlined">auto_fix_high</span> DUA (Adaptação)</a>
+        <a class="nav-item" onclick="trocarAba('tab-acolher')"><span class="material-symbols-outlined">favorite</span> Cartão & Carta</a>
+        <a class="nav-item" onclick="trocarAba('tab-diario')"><span class="material-symbols-outlined">edit_note</span> Diário de Bordo</a>
+        <a class="nav-item" onclick="trocarAba('tab-estudo')"><span class="material-symbols-outlined">assignment</span> Estudo de Caso</a>
+        <a class="nav-item" onclick="trocarAba('tab-ajustes')"><span class="material-symbols-outlined">settings</span> Ajustes & Modelos</a>
       </nav>
     </div>
-    <div class="user-profile-widget">
-      <div class="user-info">
-        <span class="user-name" id="lbl-prof-nome">A carregar...</span>
-        <span class="user-sub" id="lbl-prof-escola">A carregar...</span>
-      </div>
-      <button class="btn-logout" onclick="sairEApagarTudo()">
-        <span class="material-symbols-outlined" style="font-size:18px;">logout</span> Sair
-      </button>
-    </div>
+    <div style="padding: 12px; font-size:12px; color:var(--text-sub); border-top:1px solid var(--border);" id="lbl-prof-nome">A carregar...</div>
   </aside>
 
   <div class="main-wrapper">
+    <!-- CABEÇALHO GLOBAL -->
     <header class="app-header">
       <div class="header-left">
-        <button class="btn-menu-mobile" onclick="toggleSidebar()">
-          <span class="material-symbols-outlined">menu</span>
-        </button>
-        <span class="header-title" id="page-title">Adaptação (DUA)</span>
+        <button class="btn-menu-mobile" onclick="toggleSidebar()"><span class="material-symbols-outlined">menu</span></button>
+        <div class="global-student-selector">
+          <span class="material-symbols-outlined" style="color:var(--primary);">person_search</span>
+          <select id="global-aluno" onchange="verificarMudancaAluno(this)">
+            <option value="">Nenhum aluno sincronizado...</option>
+          </select>
+        </div>
       </div>
       <div class="header-right">
-        <button class="btn-tema" onclick="alternarTema()" title="Mudar Tema">
-          <span class="material-symbols-outlined" id="icone-tema">dark_mode</span>
+        <button class="btn-icon" onclick="ciclarTema()" title="Alterar Tema">
+          <span class="material-symbols-outlined" id="icone-tema">brightness_medium</span>
         </button>
-        <div style="font-size:13px; font-weight:600; color:var(--primary);" id="badge-usuario"></div>
+        <button class="btn-icon btn-logout-header" onclick="sairEApagarTudo()" title="Encerrar Sessão">
+          <span class="material-symbols-outlined">logout</span>
+        </button>
       </div>
     </header>
 
     <main class="content-body">
-      
       <!-- ABA 1: DUA -->
       <section id="tab-dua" class="tab-content active">
         <div class="card">
-          <div class="card-header">
-            <span class="material-symbols-outlined">school</span>
-            <div>
-              <h2 class="card-title">Adaptação (Desenho Universal para a Aprendizagem)</h2>
-              <div class="card-desc">O DUA é uma abordagem que ajuda a eliminar barreiras no ensino. Digite ou selecione o estudante para transformar o seu plano de aula regular em uma proposta acessível.</div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Estudante (Digite para pesquisar):</label>
-            <input type="text" id="input-aluno-dua" list="lista-alunos-geral" placeholder="Ex: Ana Maria...">
-          </div>
+          <h2 style="margin-top:0; font-size:18px;">Adaptação (DUA)</h2>
+          <p style="font-size:13px; color:var(--text-sub);">O sistema usará a pasta do estudante selecionado no topo.</p>
           <div class="form-group">
             <label>Plano de Aula / Conteúdo Proposto:</label>
-            <textarea id="txt-plano-aula" placeholder="Descreva os objetivos, recursos e etapas da aula regular..."></textarea>
+            <textarea id="txt-plano-aula" class="monitor-mudanca" placeholder="Descreva os objetivos da aula regular..."></textarea>
           </div>
-          <button class="btn-primary" onclick="executarDUA()">
-            <span class="material-symbols-outlined">auto_awesome</span> Gerar Adaptação DUA
-          </button>
-          <div id="res-dua" class="result-box" style="display:none;"></div>
+          <button class="btn-primary" onclick="executarDUA()"><span class="material-symbols-outlined">auto_awesome</span> Gerar Adaptação DUA</button>
+          <div id="res-dua" class="result-box"></div>
         </div>
       </section>
 
       <!-- ABA 2: ACOLHER -->
       <section id="tab-acolher" class="tab-content">
         <div class="card">
-          <div class="card-header">
-            <span class="material-symbols-outlined">badge</span>
-            <div>
-              <h2 class="card-title">Cartão de Apoio & Carta à Família</h2>
-              <div class="card-desc">Gere materiais essenciais de apoio: um Cartão com estratégias rápidas de manejo para os professores da turma, e uma Carta de acolhimento e parceria direcionada à família do estudante.</div>
-            </div>
-          </div>
+          <h2 style="margin-top:0; font-size:18px;">Cartão de Apoio & Carta à Família</h2>
           <div class="form-group">
-            <label>Estudante (Digite para pesquisar):</label>
-            <input type="text" id="input-aluno-acolher" list="lista-alunos-geral" placeholder="Ex: João Pedro...">
-          </div>
-          <div class="form-group">
-            <label>Nome da Família / Responsável (opcional):</label>
+            <label>Nome do Responsável Familiar (Opcional para a carta):</label>
             <input type="text" id="txt-familia-nome" placeholder="Ex: Sra. Maria (Mãe)">
           </div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="btn-primary" onclick="executarCartao()">
-              <span class="material-symbols-outlined">contact_emergency</span> Gerar Cartão
-            </button>
-            <button class="btn-primary" onclick="executarCarta()">
-              <span class="material-symbols-outlined">mail</span> Gerar Carta à Família
-            </button>
+            <button class="btn-primary" onclick="executarCartao()"><span class="material-symbols-outlined">contact_emergency</span> Gerar Cartão</button>
+            <button class="btn-primary" onclick="executarCarta()"><span class="material-symbols-outlined">mail</span> Gerar Carta</button>
           </div>
-          <div id="res-acolher" class="result-box" style="display:none;"></div>
+          <div id="res-acolher" class="result-box"></div>
         </div>
       </section>
 
       <!-- ABA 3: DIÁRIO DE BORDO -->
       <section id="tab-diario" class="tab-content">
         <div class="card">
-          <div class="card-header">
-            <span class="material-symbols-outlined">history_edu</span>
-            <div>
-              <h2 class="card-title">Registro de Atendimento e Evolução</h2>
-              <div class="card-desc">Registre observações, avanços e mediações. O histórico é organizado automaticamente para embasar análises futuras.</div>
-            </div>
-          </div>
+          <h2 style="margin-top:0; font-size:18px;">Diário de Bordo</h2>
           <div class="form-group">
-            <label>Estudante (Digite para pesquisar):</label>
-            <input type="text" id="input-aluno-diario" list="lista-alunos-geral" placeholder="Ex: Lucas Silva...">
-          </div>
-          <div class="form-group">
-            <label>Dimensão / Categoria:</label>
+            <label>Categoria:</label>
             <select id="sel-diario-categoria">
-              <option value="Comunicação e Interação">Comunicação e Interação</option>
-              <option value="Cognitivo e Atenção">Cognitivo e Atenção</option>
-              <option value="Sensorial e Motor">Sensorial e Motor</option>
-              <option value="Autorregulação e Emoções">Autorregulação e Emoções</option>
-              <option value="Adaptação Curricular">Adaptação Curricular</option>
+              <option>Comunicação e Interação</option><option>Cognitivo e Atenção</option>
+              <option>Sensorial e Motor</option><option>Adaptação Curricular</option>
             </select>
           </div>
           <div class="form-group">
             <label>Observação Pedagógica:</label>
-            <textarea id="txt-diario-obs" placeholder="Descreva os avanços, barreiras identificadas ou mediações realizadas..."></textarea>
+            <textarea id="txt-diario-obs" class="monitor-mudanca" placeholder="Descreva os avanços ou barreiras..."></textarea>
           </div>
-          <button class="btn-primary" onclick="executarSalvarDiario()">
-            <span class="material-symbols-outlined">save</span> Registrar Atendimento
-          </button>
+          <button class="btn-primary" onclick="executarSalvarDiario()"><span class="material-symbols-outlined">save</span> Registrar Atendimento</button>
         </div>
       </section>
 
       <!-- ABA 4: ESTUDO DE CASO -->
       <section id="tab-estudo" class="tab-content">
         <div class="card">
-          <div class="card-header">
-            <span class="material-symbols-outlined">psychology_alt</span>
-            <div>
-              <h2 class="card-title">Estudo de Caso Integrado</h2>
-              <div class="card-desc">Consolide os registros e acompanhamentos anteriores em um relatório analítico e profissional.</div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Estudante (Digite para pesquisar):</label>
-            <input type="text" id="input-aluno-estudo" list="lista-alunos-geral" placeholder="Ex: Beatriz Lima...">
-          </div>
-          <button class="btn-primary" onclick="executarEstudo()">
-            <span class="material-symbols-outlined">summarize</span> Consolidar Estudo de Caso
-          </button>
-          <div id="res-estudo" class="result-box" style="display:none;"></div>
+          <h2 style="margin-top:0; font-size:18px;">Estudo de Caso Integrado</h2>
+          <p style="font-size:13px; color:var(--text-sub);">Gera um relatório base diretamente na pasta do estudante.</p>
+          <button class="btn-primary" onclick="executarEstudo()"><span class="material-symbols-outlined">summarize</span> Criar Estudo de Caso</button>
+          <div id="res-estudo" class="result-box"></div>
         </div>
       </section>
 
-      <datalist id="lista-alunos-geral"></datalist>
-
-      <!-- ABA 5: AJUSTES -->
+      <!-- ABA 5: AJUSTES INTELIGENTES -->
       <section id="tab-ajustes" class="tab-content">
         <div class="card">
-          <div class="card-header">
-            <span class="material-symbols-outlined">tune</span>
-            <h2 class="card-title">Configurações e Integração</h2>
-          </div>
-          <p style="font-size:14px; color:var(--text-sub); line-height:1.6; margin-bottom: 20px;">
-            Gerencie o seu ambiente de trabalho e a conexão segura com a Inteligência Artificial.
-          </p>
+          <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">tune</span> Configurações Base</h2>
           
+          <!-- SANFONA DE AJUDA -->
+          <button class="accordion"><span style="display:flex; align-items:center; gap:6px;"><span class="material-symbols-outlined">help</span> Como configurar o sistema? (Passo a passo)</span></button>
+          <div class="panel">
+            <p><b>1. Link da Pasta Raiz:</b> Crie uma pasta principal no seu Google Drive (ex: "Meus Alunos 2026"). Dentro dela, crie uma subpasta para cada aluno. Copie o link da pasta principal e cole abaixo.</p>
+            <p><b>2. Chave API da IA (Gemini):</b> Para que o sistema pense e escreva relatórios, precisa da chave da Inteligência Artificial. <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--primary);">Clique aqui para gerar a sua chave gratuita no AI Studio</a>.</p>
+          </div>
+
           <div class="form-group">
             <label>Sua Turma / Escola:</label>
-            <input type="text" id="config-escola" placeholder="Ex: Escola Municipal...">
+            <input type="text" id="config-escola" placeholder="Ex: EMEB Santo Inácio">
           </div>
           <div class="form-group">
-            <label>ID ou Link da Pasta do Drive (Raiz dos Alunos):</label>
+            <label>Link da Pasta do Drive (Raiz dos Alunos):</label>
             <input type="text" id="config-pasta" placeholder="https://drive.google.com/drive/folders/...">
           </div>
           <div class="form-group">
-            <label>Chave API (Google Gemini):</label>
+            <label>Código Secreto da IA (Gemini API):</label>
             <input type="password" id="config-chave" placeholder="AIzaSy...">
           </div>
           
-          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px;">
-            <button class="btn-primary" onclick="salvarConfiguracoes()">
-              <span class="material-symbols-outlined">save</span> Guardar Configurações
-            </button>
-            <button class="btn-secondary" onclick="sincronizarAlunosManual()" style="display: flex; align-items: center; gap: 6px;">
-              <span class="material-symbols-outlined">sync</span> Sincronizar Pastas
-            </button>
-            <div id="contador-alunos" style="font-size: 13px; font-weight: 600; color: var(--success); display: none; align-items: center; gap: 4px;"></div>
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <button class="btn-primary" onclick="salvarConfiguracoesParcial()"><span class="material-symbols-outlined">save</span> Guardar Definições</button>
+            <button class="btn-secondary" onclick="sincronizarAlunosManual()"><span class="material-symbols-outlined">sync</span> Sincronizar Alunos</button>
+            <div id="contador-alunos" style="font-size:13px; font-weight:600; color:var(--success); display:none; align-items:center; gap:4px;"></div>
           </div>
+        </div>
 
-          <hr style="border:0; border-top:1px solid var(--border); margin: 30px 0 20px 0;">
-          
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: var(--surface); padding: 16px; border-radius: 8px; border: 1px solid var(--border);">
-            <div style="flex: 1; min-width: 200px;">
-              <h3 style="font-size: 14px; margin: 0 0 4px 0; color: var(--text);">Privacidade e Segurança</h3>
-              <p style="font-size: 13px; color: var(--text-sub); margin: 0; line-height: 1.4;">
-                Ao encerrar a sessão, removemos o cache local e descartamos o Token do Google Drive.<br>
-              </p>
-            </div>
-            <button class="btn-primary" style="background:var(--danger); white-space: nowrap;" onclick="sairEApagarTudo()">
-              <span class="material-symbols-outlined">logout</span> Encerrar Sessão Segura
-            </button>
+        <div class="card">
+          <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">description</span> Documento Oficial (Cabeçalho da Escola)</h2>
+          <p style="font-size:13px; color:var(--text-sub);">Selecione um ficheiro do Word (.docx) com o logótipo e cabeçalho padrão da sua escola. O sistema vai usá-lo como modelo invisível para gerar todos os relatórios formatados.</p>
+          <div class="form-group">
+            <input type="file" id="file-modelo" accept=".docx" style="padding: 8px;">
           </div>
-
+          <button class="btn-secondary" onclick="fazerUploadModelo()"><span class="material-symbols-outlined">upload_file</span> Enviar Modelo para o Drive</button>
+          <p id="lbl-modelo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
         </div>
       </section>
 
@@ -498,83 +276,72 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
 </div>
 
 <script>
-// Mantém a API original
 const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuWu0SZyD6BEUdEb3IV73dHK-A6_qNppzDs0ZhB5xXage_k/exec";
 const CLIENT_ID = "400634410081-usp328ku7tm6aeu9pmu494k0te0h4h7r.apps.googleusercontent.com";
 
 var dadosUsuarioAtivo = null;
-var listaEstudantesCache = [];
 var tokenClient;
+var temaAtual = 'system'; // light, dark, system
+var idAlunoAnterior = "";
 
+// INICIALIZAÇÃO
 window.onload = function() {
   verificarSessaoAtiva();
-  atualizarIconeTema();
+  iniciarTemaGlobal();
+  configurarSanfona();
   
-  // INICIALIZA O NOVO CLIENTE OAUTH 2.0
   if (window.google && google.accounts && google.accounts.oauth2) {
     tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: CLIENT_ID,
       scope: 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
       callback: (resposta) => {
-        if (resposta.error !== undefined) {
-          document.getElementById('msg-login').innerText = "Autorização cancelada ou bloqueada.";
-          document.getElementById('login-screen').style.pointerEvents = 'auto';
-          return;
-        }
+        if (resposta.error) { document.getElementById('login-screen').style.pointerEvents = 'auto'; return; }
         processarNovoTokenOAuth(resposta.access_token);
       }
     });
   }
 };
 
-// ACIONADO PELO NOVO BOTÃO - COM A CORREÇÃO "select_account consent"
+// ACORDEÃO (SANFONA)
+function configurarSanfona() {
+  var acc = document.getElementsByClassName("accordion");
+  for (var i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.maxHeight) panel.style.maxHeight = null;
+      else panel.style.maxHeight = panel.scrollHeight + "px";
+    });
+  }
+}
+
+// LOGIN E OAUTH
 function iniciarLoginDrive() {
-  document.getElementById('msg-login').innerText = "A aguardar a sua autorização no Google...";
+  document.getElementById('msg-login').innerText = "A aguardar a autorização do Google...";
   document.getElementById('login-screen').style.pointerEvents = 'none';
   tokenClient.requestAccessToken({prompt: 'select_account consent'});
 }
 
-// LIDA COM O RESULTADO DA AUTORIZAÇÃO
 async function processarNovoTokenOAuth(accessToken) {
   try {
-    document.getElementById('msg-login').innerText = "A validar o seu perfil...";
-    
-    // Obter os dados (email/nome) do usuário logado usando o Token Mestre
-    const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    });
-    const userInfo = await userInfoRes.json();
-    
-    const emailGoogle = userInfo.email;
-    const nomeGoogle = userInfo.name;
     const isPartilhado = document.getElementById('chk-partilhado').checked;
     const storage = isPartilhado ? sessionStorage : localStorage;
-    
-    // GUARDAR A CHAVE MESTRA DO DRIVE NO NAVEGADOR
     storage.setItem('drive_token', accessToken);
     
-    // Passar a bola para o seu backend antigo para criar ou carregar o utilizador
-    const res = await chamarAPI("fazerLogin", { email: emailGoogle });
+    const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: `Bearer ${accessToken}` } });
+    const userInfo = await userInfoRes.json();
+    
+    const res = await chamarAPI("fazerLogin", { email: userInfo.email });
     
     if (res && res.sucesso) {
-      storage.setItem('user_auth_email', res.dados.email);
-      storage.setItem('user_auth_dados', JSON.stringify(res.dados));
+      storage.setItem('user_auth_email', res.dados.email); storage.setItem('user_auth_dados', JSON.stringify(res.dados));
       iniciarAplicacao(res.dados);
-    } 
-    else if (res && res.isNovoUsuario) {
-      document.getElementById('msg-login').innerText = "A preparar a sua nova área de trabalho...";
-      const resCad = await chamarAPI("cadastrarUsuario", {
-         email: emailGoogle, nome: nomeGoogle || "Professor(a)", perfil: "AEE", escola: "", chave: "", pasta: ""
-      });
+    } else if (res && res.isNovoUsuario) {
+      const resCad = await chamarAPI("cadastrarUsuario", { email: userInfo.email, nome: userInfo.name || "Professor", escola: "", chave: "", pasta: "" });
       if(resCad.sucesso) {
-         storage.setItem('user_auth_email', resCad.dados.email);
-         storage.setItem('user_auth_dados', JSON.stringify(resCad.dados));
+         storage.setItem('user_auth_email', resCad.dados.email); storage.setItem('user_auth_dados', JSON.stringify(resCad.dados));
          iniciarAplicacao(resCad.dados);
-         mostrarModal("Bem-vindo(a) ao Inclusão Conectada!", "O seu acesso direto ao Drive foi autorizado com sucesso.");
       }
-    } else {
-      document.getElementById('msg-login').innerText = res.mensagem || "Falha na validação.";
-      document.getElementById('login-screen').style.pointerEvents = 'auto';
     }
   } catch (err) {
     document.getElementById('msg-login').innerText = "Falha ao comunicar com o Google Drive.";
@@ -582,84 +349,16 @@ async function processarNovoTokenOAuth(accessToken) {
   }
 }
 
-function alternarTema() {
-  document.body.classList.toggle('dark-theme');
-  const isDark = document.body.classList.contains('dark-theme');
-  localStorage.setItem('tema-inclusao', isDark ? 'dark' : 'light');
-  atualizarIconeTema();
-}
-
-function atualizarIconeTema() {
-  const isDark = document.body.classList.contains('dark-theme');
-  const icone = document.getElementById('icone-tema');
-  if (icone) icone.innerText = isDark ? 'light_mode' : 'dark_mode';
-}
-
-function abrirTermos() { document.getElementById('termos-modal').style.display = 'flex'; }
-function fecharTermos() { document.getElementById('termos-modal').style.display = 'none'; }
-
-async function chamarAPI(action, payload = {}) {
-  try {
-    const emailSessao = sessionStorage.getItem('user_auth_email') || localStorage.getItem('user_auth_email');
-    if (emailSessao) payload.emailUsuario = emailSessao;
-    
-    // AGORA ENVIAMOS SEMPRE A CHAVE MESTRA PARA O BACKEND USAR SE PRECISAR
-    const driveToken = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
-    if (driveToken) payload.tokenDrive = driveToken;
-
-    const corpo = JSON.stringify({ action: action, ...payload });
-    const resposta = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: corpo
-    });
-    return await resposta.json();
-  } catch (erro) {
-    console.error("Erro na API:", erro);
-    return { sucesso: false, mensagem: "Erro de conexão com o servidor." };
-  }
-}
-
-async function salvarConfiguracoes() {
-  const escola = document.getElementById('config-escola').value.trim();
-  const pasta = document.getElementById('config-pasta').value.trim();
-  const chave = document.getElementById('config-chave').value.trim();
-  
-  if (!pasta && !chave && !escola) return mostrarModal("Aviso", "Não preencheu nenhum dado para atualizar.");
-
-  mostrarLoading("A atualizar o seu perfil...");
-  const res = await chamarAPI("atualizarUsuario", { escola: escola, pasta: pasta, chave: chave });
-  esconderLoading();
-  
-  if(res && res.sucesso) {
-    if(dadosUsuarioAtivo) {
-       dadosUsuarioAtivo.escola = escola;
-       dadosUsuarioAtivo.pastaRaiz = pasta;
-       dadosUsuarioAtivo.chave = chave;
-       const isPartilhado = document.getElementById('chk-partilhado') ? document.getElementById('chk-partilhado').checked : false;
-       const storage = isPartilhado ? sessionStorage : localStorage;
-       storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
-       document.getElementById('lbl-prof-escola').innerText = escola || "AEE";
-       if (pasta) carregarAlunos(pasta);
-    }
-    mostrarModal("Sucesso", "Configurações guardadas com sucesso!");
-  } else {
-    mostrarModal("Erro", res.mensagem || "Não foi possível atualizar.");
-  }
-}
-
 function verificarSessaoAtiva() {
-  const dadosSalvos = sessionStorage.getItem('user_auth_dados') || localStorage.getItem('user_auth_dados');
-  if (dadosSalvos) iniciarAplicacao(JSON.parse(dadosSalvos));
+  const dados = sessionStorage.getItem('user_auth_dados') || localStorage.getItem('user_auth_dados');
+  if (dados) iniciarAplicacao(JSON.parse(dados));
   else document.getElementById('login-screen').style.display = 'flex';
 }
 
 function iniciarAplicacao(dados) {
   dadosUsuarioAtivo = dados;
   document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('lbl-prof-nome').innerText = dados.nome || dados.email;
-  document.getElementById('lbl-prof-escola').innerText = dados.escola || dados.perfil || "AEE";
-  document.getElementById('badge-usuario').innerText = (dados.nome ? dados.nome.split(' ')[0] : "Utilizador");
+  document.getElementById('lbl-prof-nome').innerText = "Logado como: " + (dados.nome || dados.email);
   
   if(document.getElementById('config-escola')) document.getElementById('config-escola').value = dados.escola || "";
   if(document.getElementById('config-pasta')) document.getElementById('config-pasta').value = dados.pastaRaiz || "";
@@ -669,207 +368,261 @@ function iniciarAplicacao(dados) {
 }
 
 function sairEApagarTudo() {
-  mostrarConfirmacao("Deseja realmente sair? As credenciais e dados temporários serão removidos.", () => {
-      sessionStorage.clear();
-      localStorage.clear();
-      window.location.reload(true);
-  }, "Encerrar Sessão");
+  mostrarConfirmacao("Deseja realmente sair? As suas credenciais temporárias do Google serão descartadas por segurança.", () => {
+      sessionStorage.clear(); localStorage.clear(); window.location.reload(true);
+  });
 }
 
+// API GERAL
+async function chamarAPI(action, payload = {}) {
+  try {
+    const email = sessionStorage.getItem('user_auth_email') || localStorage.getItem('user_auth_email');
+    if (email) payload.emailUsuario = email;
+    const driveToken = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
+    if (driveToken) payload.tokenDrive = driveToken;
+
+    const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: action, ...payload }) });
+    return await res.json();
+  } catch (erro) { return { sucesso: false, mensagem: "Erro de conexão." }; }
+}
+
+// TEMA VISUAL (3 ESTADOS)
+function iniciarTemaGlobal() {
+  temaAtual = localStorage.getItem('tema_global') || 'system';
+  aplicarTema(temaAtual);
+}
+function ciclarTema() {
+  if(temaAtual === 'light') temaAtual = 'dark';
+  else if(temaAtual === 'dark') temaAtual = 'system';
+  else temaAtual = 'light';
+  localStorage.setItem('tema_global', temaAtual);
+  aplicarTema(temaAtual);
+}
+function aplicarTema(tema) {
+  const isDarkSystem = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const setDark = tema === 'dark' || (tema === 'system' && isDarkSystem);
+  
+  if(setDark) document.body.classList.add('dark-theme');
+  else document.body.classList.remove('dark-theme');
+  
+  const iconMap = { 'light': 'light_mode', 'dark': 'dark_mode', 'system': 'brightness_medium' };
+  document.getElementById('icone-tema').innerText = iconMap[tema];
+}
+
+// SALVAMENTO PARCIAL INTELIGENTE
+async function salvarConfiguracoesParcial() {
+  const escola = document.getElementById('config-escola').value.trim();
+  const pasta = document.getElementById('config-pasta').value.trim();
+  const chave = document.getElementById('config-chave').value.trim();
+  
+  mostrarLoading("A atualizar o seu perfil...");
+  const res = await chamarAPI("atualizarUsuario", { escola: escola, pasta: pasta, chave: chave });
+  esconderLoading();
+  
+  if(res && res.sucesso) {
+    if(dadosUsuarioAtivo) {
+       dadosUsuarioAtivo.escola = escola; dadosUsuarioAtivo.pastaRaiz = pasta; dadosUsuarioAtivo.chave = chave;
+       const storage = sessionStorage.getItem('user_auth_dados') ? sessionStorage : localStorage;
+       storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
+    }
+    
+    // Alertas inteligentes
+    if(!pasta || !escola || !chave) {
+       mostrarModal("Guardado, mas incompleto", "As informações foram salvas. Porém, certifique-se de preencher a Escola, Pasta e Chave IA para conseguir gerar relatórios.");
+    } else {
+       mostrarModal("Sucesso", "Configurações guardadas com sucesso!");
+       carregarAlunos(pasta);
+    }
+  } else {
+    mostrarModal("Erro", res.mensagem || "Falha ao atualizar.");
+  }
+}
+
+// SINCRONIZAÇÃO E ESTUDANTE ATIVO
 async function carregarAlunos(pastaId) {
-  const contadorEl = document.getElementById('contador-alunos');
-  if (contadorEl) contadorEl.style.display = 'none';
+  const contador = document.getElementById('contador-alunos');
+  contador.style.display = 'none';
   const res = await chamarAPI("listarAlunos", { linkPasta: pastaId });
   
   if (res && res.sucesso) {
-    listaEstudantesCache = res.lista;
-    popularDatalistAlunos(res.lista);
-    if (contadorEl) {
-      contadorEl.style.display = 'flex';
-      contadorEl.style.color = 'var(--success)';
-      contadorEl.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">check_circle</span> ${res.lista.length} aluno(s) sincronizado(s)`;
-    }
+    const sel = document.getElementById('global-aluno');
+    sel.innerHTML = '<option value="">Selecione um Estudante...</option>';
+    res.lista.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.id; opt.innerText = a.nome; sel.appendChild(opt);
+    });
+    contador.style.display = 'flex'; contador.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">check_circle</span> ${res.lista.length} aluno(s) lidos`;
   } else {
-    if (contadorEl) {
-      contadorEl.style.display = 'flex';
-      contadorEl.style.color = 'var(--danger)';
-      contadorEl.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">error</span> Erro ao carregar alunos.`;
-    }
+    contador.style.display = 'flex'; contador.style.color = 'var(--danger)';
+    contador.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">error</span> Erro ao carregar pastas.`;
   }
 }
 
 async function sincronizarAlunosManual() {
   const pasta = document.getElementById('config-pasta').value.trim();
-  if (!pasta) return mostrarModal("Aviso", "Insira o link da pasta do Drive antes de tentar sincronizar.");
-  mostrarLoading("A sincronizar as pastas dos alunos...");
+  if (!pasta) return mostrarModal("Aviso", "Insira o link da pasta do Drive antes de sincronizar.");
+  mostrarLoading("A sincronizar as pastas...");
   await carregarAlunos(pasta);
   esconderLoading();
 }
 
-function popularDatalistAlunos(alunos) {
-  const datalist = document.getElementById('lista-alunos-geral');
-  if (!datalist) return;
-  datalist.innerHTML = '';
-  alunos.forEach(a => {
-    const opt = document.createElement('option');
-    opt.value = a.nome;
-    datalist.appendChild(opt);
-  });
-}
-
-function obterIdAlunoPorNome(inputId) {
-  const nomeDigitado = document.getElementById(inputId).value.trim();
-  if (!nomeDigitado) return null;
-  const alunoEncontrado = listaEstudantesCache.find(a => a.nome.toLowerCase() === nomeDigitado.toLowerCase());
-  return alunoEncontrado ? alunoEncontrado.id : null;
-}
-
-async function executarDUA() {
-  const idPasta = obterIdAlunoPorNome('input-aluno-dua');
-  const plano = document.getElementById('txt-plano-aula').value.trim();
-  if (!idPasta || !plano) return mostrarModal("Atenção", "Selecione um estudante válido da lista e informe a aula proposta.");
+function verificarMudancaAluno(selectEl) {
+  const txt1 = document.getElementById('txt-plano-aula').value.trim();
+  const txt2 = document.getElementById('txt-diario-obs').value.trim();
   
-  mostrarLoading("Gerando adaptação sob princípios DUA...");
-  const res = await chamarAPI("adaptarPlanoDUA", { idPasta: idPasta, plano: plano });
+  if (txt1 !== "" || txt2 !== "") {
+    mostrarConfirmacao("Você tem textos não guardados nas abas. Mudar de aluno agora irá limpar esses textos. Tem a certeza?", () => {
+      document.getElementById('txt-plano-aula').value = "";
+      document.getElementById('txt-diario-obs').value = "";
+      idAlunoAnterior = selectEl.value;
+      fecharCaixasResultado();
+    });
+    // Reverter dropdown se cancelar (handled by modal architecture if needed, mas por simplicidade limpamos ao aceitar)
+    selectEl.value = idAlunoAnterior; // Reverte visualmente até confirmação
+  } else {
+    idAlunoAnterior = selectEl.value;
+    fecharCaixasResultado();
+  }
+}
+function fecharCaixasResultado() { document.querySelectorAll('.result-box').forEach(b => b.style.display = 'none'); }
+
+function getAlunoAtivo() {
+  const sel = document.getElementById('global-aluno');
+  if(!sel.value) { mostrarModal("Atenção", "Por favor, selecione um estudante no topo da tela primeiro."); return null; }
+  return { id: sel.value, nome: sel.options[sel.selectedIndex].text };
+}
+
+// UPLOAD DE DOCUMENTO MODELO DIRETO PARA O DRIVE
+async function fazerUploadModelo() {
+  const fileInput = document.getElementById('file-modelo');
+  if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro .docx primeiro.");
+  
+  const token = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
+  if(!token) return mostrarModal("Erro", "Token do Drive expirado.");
+
+  mostrarLoading("Enviando modelo para o Drive...");
+  const file = fileInput.files[0];
+  const metadata = { name: "Modelo_Inclusao_Conectada", mimeType: 'application/vnd.google-apps.document' };
+  
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
+  form.append('file', file);
+
+  try {
+    const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+      method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form
+    });
+    const data = await res.json();
+    esconderLoading();
+    if(data.id) {
+       // Guarda o ID do modelo no banco de dados do utilizador
+       await chamarAPI("atualizarUsuario", { modeloId: data.id });
+       const lbl = document.getElementById('lbl-modelo-status');
+       lbl.style.display = 'block'; lbl.innerHTML = "<b>Modelo guardado com sucesso!</b> (O sistema usará este cabeçalho nos próximos documentos).";
+    } else { mostrarModal("Erro", "Falha ao enviar modelo."); }
+  } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro de conexão ao enviar ficheiro."); }
+}
+
+// EXECUÇÕES COM O ESTUDANTE GLOBAL
+async function executarDUA() {
+  const aluno = getAlunoAtivo(); if(!aluno) return;
+  const plano = document.getElementById('txt-plano-aula').value.trim();
+  if(!plano) return mostrarModal("Atenção", "Preencha a aula proposta.");
+  
+  mostrarLoading("Gerando adaptação DUA...");
+  const res = await chamarAPI("adaptarPlanoDUA", { idPasta: aluno.id, plano: plano });
   esconderLoading();
   if (res && res.sucesso) {
-    const box = document.getElementById('res-dua');
-    box.style.display = "block";
-    box.innerText = res.adaptacao;
-  } else {
-    mostrarModal("Erro", res.mensagem || "Falha na geração DUA.");
-  }
+    const box = document.getElementById('res-dua'); box.style.display = "block"; box.innerText = res.adaptacao;
+  } else { mostrarModal("Erro", res.mensagem || "Falha na geração."); }
 }
 
 async function executarCartao() {
-  const idPasta = obterIdAlunoPorNome('input-aluno-acolher');
-  const inputEl = document.getElementById('input-aluno-acolher');
-  if (!idPasta) return mostrarModal("Atenção", "Selecione um estudante válido da lista.");
-  
-  mostrarLoading("Compilando dados de regulação...");
-  const res = await chamarAPI("gerarCartao", { idPasta: idPasta, nomeAluno: inputEl.value });
+  const aluno = getAlunoAtivo(); if(!aluno) return;
+  mostrarLoading("Compilando estratégias...");
+  const res = await chamarAPI("gerarCartao", { idPasta: aluno.id, nomeAluno: aluno.nome });
   esconderLoading();
   if (res && res.sucesso) {
-    const box = document.getElementById('res-acolher');
-    box.style.display = "block";
-    box.innerHTML = `<b>Documento criado no Drive:</b> <a href="${res.urlDocumento}" target="_blank">Aceder ao Cartão</a><br><br>` +
-                    `<b>Primeiros Sinais:</b> ${res.cartao.primeirosSinais}<br>` +
-                    `<b>O que Acalma:</b> ${res.cartao.oQueAcalma}<br>` +
-                    `<b>O que Evitar:</b> ${res.cartao.oQueEvitar}<br>` +
-                    `<b>Interesses:</b> ${res.cartao.interessesFavoritos}`;
-  } else {
-    mostrarModal("Erro", res.mensagem || "Falha ao gerar cartão.");
-  }
+    const box = document.getElementById('res-acolher'); box.style.display = "block";
+    box.innerHTML = `<b>Salvo na pasta do aluno:</b> <a href="${res.urlDocumento}" target="_blank">Abrir Cartão</a><br><br>${res.cartao.primeirosSinais}`;
+  } else mostrarModal("Erro", res.mensagem);
 }
 
 async function executarCarta() {
-  const idPasta = obterIdAlunoPorNome('input-aluno-acolher');
-  const inputEl = document.getElementById('input-aluno-acolher');
-  const familia = document.getElementById('txt-familia-nome').value.trim();
-  if (!idPasta) return mostrarModal("Atenção", "Selecione um estudante válido da lista.");
-
-  mostrarLoading("Redigindo carta à família...");
-  const res = await chamarAPI("gerarCarta", { idPasta: idPasta, nomeAluno: inputEl.value, familia: familia });
+  const aluno = getAlunoAtivo(); if(!aluno) return;
+  const fam = document.getElementById('txt-familia-nome').value.trim();
+  mostrarLoading("Redigindo carta oficial...");
+  const res = await chamarAPI("gerarCarta", { idPasta: aluno.id, nomeAluno: aluno.nome, familia: fam });
   esconderLoading();
   if (res && res.sucesso) {
-    const box = document.getElementById('res-acolher');
-    box.style.display = "block";
-    box.innerHTML = `<b>Carta criada no Drive:</b> <a href="${res.urlDocumento}" target="_blank">Aceder ao Documento</a><br><br>${res.carta}`;
-  } else {
-    mostrarModal("Erro", res.mensagem || "Falha ao gerar carta.");
-  }
+    const box = document.getElementById('res-acolher'); box.style.display = "block";
+    box.innerHTML = `<b>Salva na pasta do aluno:</b> <a href="${res.urlDocumento}" target="_blank">Abrir Carta</a><br><br>Concluído.`;
+  } else mostrarModal("Erro", res.mensagem);
 }
 
 async function executarSalvarDiario() {
-  const idPasta = obterIdAlunoPorNome('input-aluno-diario');
-  const inputEl = document.getElementById('input-aluno-diario');
+  const aluno = getAlunoAtivo(); if(!aluno) return;
   const obs = document.getElementById('txt-diario-obs').value.trim();
   const cat = document.getElementById('sel-diario-categoria').value;
-  if (!idPasta || !obs) return mostrarModal("Atenção", "Selecione um estudante válido e preencha a observação.");
+  if (!obs) return mostrarModal("Atenção", "Preencha a observação.");
 
-  mostrarLoading("Registando atendimento...");
-  const res = await chamarAPI("salvarDiario", { dados: { idPasta: idPasta, nomeAluno: inputEl.value, categoria: cat, observacao: obs } });
+  mostrarLoading("Salvando na pasta do estudante...");
+  const res = await chamarAPI("salvarDiario", { dados: { idPasta: aluno.id, nomeAluno: aluno.nome, categoria: cat, observacao: obs } });
   esconderLoading();
   if (res && res.sucesso) {
-    mostrarModal("Sucesso", res.mensagem || "Registo concluído!");
+    mostrarModal("Sucesso", "O registo foi salvo diretamente no Drive do aluno!");
     document.getElementById('txt-diario-obs').value = "";
-  } else {
-    mostrarModal("Erro", res.mensagem || "Falha ao salvar diário.");
-  }
+  } else mostrarModal("Erro", res.mensagem);
 }
 
 async function executarEstudo() {
-  const idPasta = obterIdAlunoPorNome('input-aluno-estudo');
-  const inputEl = document.getElementById('input-aluno-estudo');
-  if (!idPasta) return mostrarModal("Atenção", "Selecione um estudante válido da lista.");
-
-  mostrarLoading("Analisando histórico pedagógico...");
-  const res = await chamarAPI("gerarEstudo", { idPasta: idPasta, nomeAluno: inputEl.value });
+  const aluno = getAlunoAtivo(); if(!aluno) return;
+  mostrarLoading("Gerando Relatório de Estudo de Caso...");
+  const res = await chamarAPI("gerarEstudo", { idPasta: aluno.id, nomeAluno: aluno.nome });
   esconderLoading();
   if (res && res.sucesso) {
-    const box = document.getElementById('res-estudo');
-    box.style.display = "block";
-    box.innerHTML = `<b>Estudo de Caso Gerado:</b> <a href="${res.urlDocumento}" target="_blank">Abrir no Drive</a><br><br>${res.relatorio}`;
-  } else {
-    mostrarModal("Erro", res.mensagem || "Falha na análise.");
-  }
+    const box = document.getElementById('res-estudo'); box.style.display = "block";
+    box.innerHTML = `<b>Relatório gerado e salvo:</b> <a href="${res.urlDocumento}" target="_blank">Abrir Relatório Oficial</a>`;
+  } else mostrarModal("Erro", res.mensagem);
 }
 
+// NAVEGAÇÃO
 function trocarAba(tabId) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const target = document.getElementById(tabId);
-  if (target) target.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  
   const navMap = { 'tab-dua': 0, 'tab-acolher': 1, 'tab-diario': 2, 'tab-estudo': 3, 'tab-ajustes': 4 };
-  const titles = {
-    'tab-dua': 'Adaptação (DUA)', 'tab-acolher': 'Cartão de Apoio & Carta à Família',
-    'tab-diario': 'Diário de Bordo', 'tab-estudo': 'Estudo de Caso Integrado', 'tab-ajustes': 'Configurações e Integração'
-  };
-  const navItems = document.querySelectorAll('.nav-item');
-  if (navItems[navMap[tabId]]) navItems[navMap[tabId]].classList.add('active');
-  document.getElementById('page-title').innerText = titles[tabId];
+  document.querySelectorAll('.nav-item')[navMap[tabId]].classList.add('active');
   if (window.innerWidth <= 768) toggleSidebar();
 }
 
 function toggleSidebar() {
-  const sidebar = document.getElementById('app-sidebar');
-  sidebar.classList.toggle('open');
+  const sidebar = document.getElementById('app-sidebar'); sidebar.classList.toggle('open');
   let overlay = document.getElementById('sidebar-overlay');
   if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.id = 'sidebar-overlay';
+    overlay = document.createElement('div'); overlay.id = 'sidebar-overlay';
     overlay.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 499;';
-    overlay.onclick = () => toggleSidebar();
-    document.body.appendChild(overlay);
+    overlay.onclick = () => toggleSidebar(); document.body.appendChild(overlay);
   }
   overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
 }
 
-function mostrarLoading(txt) {
-  document.getElementById('loading-texto').innerText = txt;
-  document.getElementById('loading-overlay').style.display = 'flex';
-}
+function mostrarLoading(txt) { document.getElementById('loading-texto').innerText = txt; document.getElementById('loading-overlay').style.display = 'flex'; }
 function esconderLoading() { document.getElementById('loading-overlay').style.display = 'none'; }
-
 function mostrarModal(titulo, msg) {
   const m = document.getElementById('custom-modal');
-  document.getElementById('modal-titulo').innerText = titulo;
-  document.getElementById('modal-mensagem').innerText = msg;
+  document.getElementById('modal-titulo').innerText = titulo; document.getElementById('modal-mensagem').innerText = msg;
   document.getElementById('modal-btn-cancelar').style.display = 'none';
   document.getElementById('modal-btn-confirmar').onclick = () => m.style.display = 'none';
   m.style.display = 'flex';
 }
-
-function mostrarConfirmacao(msg, onConfirm, labelBtn = "Confirmar") {
+function mostrarConfirmacao(msg, onConfirm) {
   const m = document.getElementById('custom-modal');
-  document.getElementById('modal-titulo').innerText = "Confirmação";
-  document.getElementById('modal-mensagem').innerText = msg;
-  const btnCancel = document.getElementById('modal-btn-cancelar');
-  const btnOk = document.getElementById('modal-btn-confirmar');
-  btnCancel.style.display = 'inline-block';
-  btnCancel.onclick = () => m.style.display = 'none';
-  btnOk.innerText = labelBtn;
-  btnOk.onclick = () => { m.style.display = 'none'; onConfirm(); };
+  document.getElementById('modal-titulo').innerText = "Confirmação"; document.getElementById('modal-mensagem').innerText = msg;
+  document.getElementById('modal-btn-cancelar').style.display = 'inline-block';
+  document.getElementById('modal-btn-cancelar').onclick = () => m.style.display = 'none';
+  document.getElementById('modal-btn-confirmar').onclick = () => { m.style.display = 'none'; onConfirm(); };
   m.style.display = 'flex';
 }
 </script>
