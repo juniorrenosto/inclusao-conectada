@@ -52,7 +52,7 @@ body.dark-theme {
 * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 body { margin: 0; background: var(--surface); color: var(--text); height: 100vh; overflow: hidden; }
 
-/* ECRÃS FLUTUANTES (LOGIN / CADASTRO) */
+/* ECRÃ DE LOGIN */
 .fullscreen-overlay {
   position: fixed; inset: 0; background: var(--surface); z-index: 9999; 
   display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -221,55 +221,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
     </div>
     
     <p id="msg-login" style="color: var(--danger); font-size: 13px; margin-top: 16px; font-weight: bold;"></p>
-  </div>
-</div>
-
-<!-- ECRÃ DE AUTO-CADASTRO (Aparece se for a primeira vez do utilizador) -->
-<div id="cadastro-screen" class="fullscreen-overlay" style="display:none; z-index:9998;">
-  <div class="login-card" style="max-width:480px; max-height: 90vh; overflow-y: auto;">
-    <div class="material-symbols-outlined login-logo">person_add</div>
-    <h2 class="login-title">Concluir o Cadastro</h2>
-    <p class="login-sub">Parece ser a sua primeira vez aqui! Preencha as configurações do seu ambiente para ativar a sua conta.</p>
-
-    <div class="form-group">
-      <label>Seu E-mail Google (Automático):</label>
-      <input type="text" id="cad-email" disabled style="background:#e8eaed; color:#5f6368;">
-    </div>
-    <div class="form-group">
-      <label>Nome Completo:</label>
-      <input type="text" id="cad-nome" placeholder="Como quer ser chamado(a)">
-    </div>
-    
-    <div style="display:flex; gap:10px;">
-        <div class="form-group" style="flex:1;">
-          <label>Perfil:</label>
-          <select id="cad-perfil">
-            <option value="AEE">Professor(a) de AEE</option>
-            <option value="Regente">Professor(a) Regente</option>
-          </select>
-        </div>
-        <div class="form-group" style="flex:1;">
-          <label>Turma / Escola:</label>
-          <input type="text" id="cad-escola" placeholder="Sua escola atual">
-        </div>
-    </div>
-
-    <div class="form-group">
-      <label>Chave do Google Gemini (IA):</label>
-      <input type="password" id="cad-chave" placeholder="AIzaSy...">
-    </div>
-    
-    <div class="form-group">
-      <label>ID ou Link da Pasta do Drive (Onde estão os alunos):</label>
-      <input type="text" id="cad-pasta" placeholder="Cole o link da pasta do Google Drive">
-    </div>
-
-    <button class="btn-primary" style="width:100%; margin-top:16px;" onclick="enviarCadastro()">
-      <span class="material-symbols-outlined">how_to_reg</span> Ativar Minha Conta
-    </button>
-    <button class="btn-secondary" style="width:100%; margin-top:10px;" onclick="cancelarCadastro()">
-      Voltar ao Início
-    </button>
   </div>
 </div>
 
@@ -456,21 +407,46 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
         </div>
       </section>
 
-      <!-- ABA 5: AJUSTES -->
+      <!-- ABA 5: AJUSTES COM INSTRUÇÕES -->
       <section id="tab-ajustes" class="tab-content">
         <div class="card">
           <div class="card-header">
             <span class="material-symbols-outlined">tune</span>
-            <h2 class="card-title">Configurações do Ambiente</h2>
+            <h2 class="card-title">Configurações e Integração</h2>
           </div>
-          <p style="font-size:14px; color:var(--text-sub); line-height:1.6;">
-            Os seus dados e credenciais de Inteligência Artificial estão sincronizados centralmente a partir da sua conta Google e da base de dados administrativa.
+          <p style="font-size:14px; color:var(--text-sub); line-height:1.6; margin-bottom: 20px;">
+            Para que a Inteligência Artificial consiga redigir os planos e aceder ao histórico dos seus estudantes, precisamos de ligar o sistema à sua conta.
           </p>
-          <div style="margin-top:20px;">
-            <button class="btn-primary" style="background:var(--danger);" onclick="sairEApagarTudo()">
-              <span class="material-symbols-outlined">delete_forever</span> Encerrar Sessão e Limpar Cache Local
-            </button>
+          
+          <div style="background: var(--primary-light); padding: 16px; border-radius: 8px; margin-bottom: 20px; font-size: 13px;">
+            <strong>Passo 1: A Pasta dos Estudantes</strong><br>
+            Crie uma pasta no seu Google Drive (ex: "Meus Alunos AEE") e dentro dela crie uma pasta para cada estudante. Cole o link da pasta principal abaixo.<br><br>
+            <strong>Passo 2: A Chave Mágica (Gemini)</strong><br>
+            Aceda ao <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--primary); font-weight:bold;">Google AI Studio</a> com o seu e-mail, clique em "Create API Key" e cole o código gerado abaixo.
           </div>
+
+          <div class="form-group">
+            <label>Sua Turma / Escola:</label>
+            <input type="text" id="config-escola" placeholder="Ex: Escola Municipal...">
+          </div>
+          <div class="form-group">
+            <label>ID ou Link da Pasta do Drive (Raiz dos Alunos):</label>
+            <input type="text" id="config-pasta" placeholder="https://drive.google.com/drive/folders/...">
+          </div>
+          <div class="form-group">
+            <label>Chave API (Google Gemini):</label>
+            <input type="password" id="config-chave" placeholder="AIzaSy...">
+          </div>
+          
+          <button class="btn-primary" onclick="salvarConfiguracoes()">
+            <span class="material-symbols-outlined">save</span> Guardar Configurações
+          </button>
+
+          <hr style="border:0; border-top:1px solid var(--border); margin: 30px 0 20px 0;">
+          
+          <button class="btn-primary" style="background:var(--danger);" onclick="sairEApagarTudo()">
+            <span class="material-symbols-outlined">logout</span> Encerrar Sessão Segura
+          </button>
         </div>
       </section>
 
@@ -508,78 +484,74 @@ async function lidarComLoginGoogle(response) {
     const nomeGoogle = payload.name;
     const isPartilhado = document.getElementById('chk-partilhado').checked;
     
-    document.getElementById('msg-login').innerText = "Validando credenciais...";
-    document.getElementById('login-screen').style.opacity = '0.7';
+    document.getElementById('msg-login').innerText = "A entrar no sistema...";
     document.getElementById('login-screen').style.pointerEvents = 'none';
 
     const res = await chamarAPI("fazerLogin", { email: emailGoogle });
     
     if (res && res.sucesso) {
-      // Já possui conta registada, efetua o login direto
+      // Já tem conta: Entra direto!
       const storage = isPartilhado ? sessionStorage : localStorage;
       storage.setItem('user_auth_email', res.dados.email);
       storage.setItem('user_auth_dados', JSON.stringify(res.dados));
       iniciarAplicacao(res.dados);
     } 
     else if (res && res.isNovoUsuario) {
-      // Novo utilizador: abre o ecrã de auto-cadastro com dados pré-preenchidos
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('cadastro-screen').style.display = 'flex';
+      // CADASTRO SILENCIOSO: Cria a conta na planilha sem interromper a navegação!
+      document.getElementById('msg-login').innerText = "A preparar a sua nova área de trabalho...";
+      const resCad = await chamarAPI("cadastrarUsuario", {
+         email: emailGoogle, nome: nomeGoogle || "Professor(a)", perfil: "AEE", escola: "", chave: "", pasta: ""
+      });
       
-      document.getElementById('cad-email').value = res.email;
-      document.getElementById('cad-nome').value = nomeGoogle || "";
-    } 
-    else {
-      // Erro desconhecido
+      if(resCad.sucesso) {
+         const storage = isPartilhado ? sessionStorage : localStorage;
+         storage.setItem('user_auth_email', resCad.dados.email);
+         storage.setItem('user_auth_dados', JSON.stringify(resCad.dados));
+         
+         iniciarAplicacao(resCad.dados);
+         mostrarModal("Bem-vindo(a) ao Inclusão Conectada!", "A sua conta foi criada com sucesso.\nExplore a interface à vontade! Quando quiser usar a Inteligência Artificial, vá à aba 'Ajustes' para configurar o seu acesso.");
+      }
+    } else {
       document.getElementById('msg-login').innerText = res.mensagem || "Falha na validação.";
-      document.getElementById('login-screen').style.opacity = '1';
       document.getElementById('login-screen').style.pointerEvents = 'auto';
     }
   } catch (err) {
     document.getElementById('msg-login').innerText = "Falha ao processar login.";
-    document.getElementById('login-screen').style.opacity = '1';
     document.getElementById('login-screen').style.pointerEvents = 'auto';
   }
 }
 
-// === FUNÇÕES PARA O AUTO-CADASTRO (NOVO UTILIZADOR) ===
-async function enviarCadastro() {
-  const email = document.getElementById('cad-email').value;
-  const nome = document.getElementById('cad-nome').value.trim();
-  const perfil = document.getElementById('cad-perfil').value;
-  const escola = document.getElementById('cad-escola').value.trim();
-  const chave = document.getElementById('cad-chave').value.trim();
-  const pasta = document.getElementById('cad-pasta').value.trim();
-
-  if(!nome || !escola || !chave || !pasta) {
-     return mostrarModal("Atenção", "Preencha todos os campos do cadastro.");
-  }
-
-  mostrarLoading("Criando a sua conta no sistema...");
-  const res = await chamarAPI("cadastrarUsuario", {
-     email: email, nome: nome, perfil: perfil, escola: escola, chave: chave, pasta: pasta
+// === NOVA FUNÇÃO PARA SALVAR AJUSTES ===
+async function salvarConfiguracoes() {
+  const escola = document.getElementById('config-escola').value.trim();
+  const pasta = document.getElementById('config-pasta').value.trim();
+  const chave = document.getElementById('config-chave').value.trim();
+  
+  mostrarLoading("A atualizar o seu perfil...");
+  const res = await chamarAPI("atualizarUsuario", {
+    escola: escola, pasta: pasta, chave: chave
   });
   esconderLoading();
-
+  
   if(res && res.sucesso) {
-     const isPartilhado = document.getElementById('chk-partilhado') ? document.getElementById('chk-partilhado').checked : false;
-     const storage = isPartilhado ? sessionStorage : localStorage;
-     storage.setItem('user_auth_email', res.dados.email);
-     storage.setItem('user_auth_dados', JSON.stringify(res.dados));
-
-     document.getElementById('cadastro-screen').style.display = 'none';
-     iniciarAplicacao(res.dados);
+    // Atualiza a cache local para não ter de relogar
+    if(dadosUsuarioAtivo) {
+       dadosUsuarioAtivo.escola = escola;
+       dadosUsuarioAtivo.pastaRaiz = pasta;
+       dadosUsuarioAtivo.chave = chave;
+       
+       const isPartilhado = document.getElementById('chk-partilhado') ? document.getElementById('chk-partilhado').checked : false;
+       const storage = isPartilhado ? sessionStorage : localStorage;
+       storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
+       
+       document.getElementById('lbl-prof-escola').innerText = escola || "AEE";
+       
+       if (pasta) carregarAlunos(pasta);
+    }
+    mostrarModal("Sucesso", "Configurações guardadas! A Inteligência Artificial já está pronta a usar.");
   } else {
-     mostrarModal("Erro", res.mensagem || "Falha ao cadastrar.");
+    mostrarModal("Erro", res.mensagem || "Não foi possível atualizar.");
   }
-}
-
-function cancelarCadastro() {
-   document.getElementById('cadastro-screen').style.display = 'none';
-   document.getElementById('login-screen').style.display = 'flex';
-   document.getElementById('login-screen').style.opacity = '1';
-   document.getElementById('login-screen').style.pointerEvents = 'auto';
-   document.getElementById('msg-login').innerText = "Cadastro cancelado.";
 }
 
 // === CONTROLE DE SESSÃO ===
@@ -595,13 +567,19 @@ function verificarSessaoAtiva() {
 function iniciarAplicacao(dados) {
   dadosUsuarioAtivo = dados;
   document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('cadastro-screen').style.display = 'none';
   
   document.getElementById('lbl-prof-nome').innerText = dados.nome || dados.email;
   document.getElementById('lbl-prof-escola').innerText = dados.escola || dados.perfil || "AEE";
   document.getElementById('badge-usuario').innerText = (dados.nome ? dados.nome.split(' ')[0] : "Utilizador");
   
-  carregarAlunos(dados.pastaRaiz);
+  // Preenche a aba de ajustes com o que já tem guardado
+  if(document.getElementById('config-escola')) document.getElementById('config-escola').value = dados.escola || "";
+  if(document.getElementById('config-pasta')) document.getElementById('config-pasta').value = dados.pastaRaiz || "";
+  if(document.getElementById('config-chave')) document.getElementById('config-chave').value = dados.chave || "";
+  
+  if (dados.pastaRaiz) {
+      carregarAlunos(dados.pastaRaiz);
+  }
 }
 
 function sairEApagarTudo() {
@@ -649,7 +627,7 @@ async function carregarAlunos(pastaId) {
     listaEstudantesCache = res.lista;
     popularSelectsAlunos(res.lista);
   } else {
-    mostrarModal("Aviso", "Não foi possível listar as pastas de estudantes: " + (res.mensagem || "Erro desconhecido."));
+    console.log("Pasta vazia ou erro:", res.mensagem);
   }
 }
 
@@ -795,7 +773,7 @@ function trocarAba(tabId) {
     'tab-acolher': 'Cartão de Apoio & Carta Regente',
     'tab-diario': 'Diário de Bordo',
     'tab-estudo': 'Estudo de Caso Integrado',
-    'tab-ajustes': 'Configurações do Ambiente'
+    'tab-ajustes': 'Configurações e Integração'
   };
   
   const navItems = document.querySelectorAll('.nav-item');
