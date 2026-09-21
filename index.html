@@ -17,6 +17,7 @@
 <meta name="theme-color" content="#0b57d0">
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABlBMVEUAC3f///8A1s4OAAAAAXRSTlMAQObYZgAAAFBJREFUeNrtzTERAAAIAzCS/s0+Bg9uIAVa8pIuLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy9fdT8BbwB9WdYFbwAAAABJRU5ErkJggg==">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+<!-- Mantemos a biblioteca oficial do Google -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
@@ -202,7 +203,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
 }
 </style>
 <script>
-  // Aplica o modo escuro imediatamente se o utilizador já tiver ativado antes, para evitar o "flash" branco
   if (localStorage.getItem('tema-inclusao') === 'dark') {
     document.documentElement.classList.add('dark-theme');
     document.addEventListener('DOMContentLoaded', () => document.body.classList.add('dark-theme'));
@@ -211,7 +211,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
 </head>
 <body>
 
-<!-- TELA DE LOGIN OAUTH 2.0 -->
+<!-- TELA DE LOGIN OAUTH 2.0 ATUALIZADA -->
 <div id="login-screen" class="fullscreen-overlay">
   <div class="login-card">
     <div class="material-symbols-outlined login-logo">psychology</div>
@@ -226,23 +226,11 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
       </label>
     </div>
 
-    <!-- BOTÃO OFICIAL DO GOOGLE -->
-    <div id="g_id_onload"
-         data-client_id="400634410081-usp328ku7tm6aeu9pmu494k0te0h4h7r.apps.googleusercontent.com"
-         data-context="signin"
-         data-ux_mode="popup"
-         data-callback="lidarComLoginGoogle"
-         data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin"
-         data-type="standard"
-         data-shape="rectangular"
-         data-theme="outline"
-         data-text="signin_with"
-         data-size="large"
-         data-logo_alignment="center"
-         data-width="320">
-    </div>
+    <!-- NOVO BOTÃO DE AUTORIZAÇÃO DIRETA -->
+    <button class="btn-primary" style="font-size: 15px; padding: 14px 20px; width: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;" onclick="iniciarLoginDrive()">
+      <span class="material-symbols-outlined">add_to_drive</span>
+      Autorizar Acesso ao Drive
+    </button>
     
     <p id="msg-login" style="color: var(--danger); font-size: 13px; margin-top: 16px; font-weight: bold;"></p>
     
@@ -253,7 +241,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
   </div>
 </div>
 
-<!-- MODAL DE DIÁLOGO PADRÃO -->
+<!-- MODAIS -->
 <div id="custom-modal" class="modal-overlay">
   <div class="modal-box">
     <h3 id="modal-titulo" style="margin-top:0;">Aviso</h3>
@@ -265,23 +253,17 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
   </div>
 </div>
 
-<!-- MODAL DE TERMOS LGPD -->
 <div id="termos-modal" class="modal-overlay">
   <div class="modal-termos-box">
     <h3>Termos de Uso e Política de Privacidade (LGPD)</h3>
-    
     <h4>1. Natureza do Serviço e Processamento de Dados</h4>
     <p>O <b>Inclusão Conectada</b> opera exclusivamente como uma interface de processamento ("Software as a Service"). Não possuímos banco de dados próprio para armazenar os relatórios, históricos, laudos ou diários de bordo dos estudantes.</p>
-    
     <h4>2. Responsabilidade e Armazenamento (Google Drive)</h4>
     <p>Todos os dados pedagógicos gerados ou lidos pelo sistema são salvos e operados diretamente na conta do Google Drive vinculada pelo usuário (Professor/Instituição). O usuário é o controlador absoluto dos dados, sendo sua responsabilidade assegurar o consentimento familiar adequado de acordo com as normas da sua Instituição e a Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018).</p>
-
     <h4>3. Uso de Inteligência Artificial</h4>
     <p>A formulação de Planos de Aula, Cartões de Apoio e Estudos de Caso utiliza as chaves de API privadas (Google Gemini) fornecidas pelo próprio usuário. A transmissão de contexto para a Inteligência Artificial é criptografada e os dados não são utilizados pelo sistema central para treino de modelos de linguagem.</p>
-
     <h4>4. Sigilo Profissional</h4>
     <p>Recomendamos aos profissionais de Educação Especial que, ao submeter históricos para adaptação via IA, utilizem apenas as informações estritamente necessárias para a prática pedagógica, omitindo dados médicos excessivamente sensíveis que não afetem a rotina escolar direta.</p>
-
     <div class="modal-actions" style="margin-top: 30px;">
       <button class="btn-primary" onclick="fecharTermos()" style="width: 100%;">Ciente e de Acordo</button>
     </div>
@@ -295,14 +277,12 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
 
 <!-- APLICAÇÃO -->
 <div class="app-container">
-  
   <aside class="app-sidebar" id="app-sidebar">
     <div>
       <div class="brand">
         <span class="material-symbols-outlined brand-icon">diversity_3</span>
         <span class="brand-title">Inclusão Conectada</span>
       </div>
-
       <nav class="nav-menu">
         <a class="nav-item active" onclick="trocarAba('tab-dua')">
           <span class="material-symbols-outlined">auto_fix_high</span> DUA (Adaptação)
@@ -321,7 +301,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
         </a>
       </nav>
     </div>
-
     <div class="user-profile-widget">
       <div class="user-info">
         <span class="user-name" id="lbl-prof-nome">A carregar...</span>
@@ -341,8 +320,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
         </button>
         <span class="header-title" id="page-title">Adaptação (DUA)</span>
       </div>
-      
-      <!-- BOTÃO DE TEMA E USUÁRIO -->
       <div class="header-right">
         <button class="btn-tema" onclick="alternarTema()" title="Mudar Tema">
           <span class="material-symbols-outlined" id="icone-tema">dark_mode</span>
@@ -463,7 +440,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
         </div>
       </section>
 
-      <!-- LISTA DE SUGESTÕES COMPARTILHADA (DATALIST) -->
       <datalist id="lista-alunos-geral"></datalist>
 
       <!-- ABA 5: AJUSTES -->
@@ -474,16 +450,9 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <h2 class="card-title">Configurações e Integração</h2>
           </div>
           <p style="font-size:14px; color:var(--text-sub); line-height:1.6; margin-bottom: 20px;">
-            Gerencie o seu ambiente de trabalho e a conexão segura com a Inteligência Artificial. Para redigir planos e aceder ao histórico, siga os passos abaixo.
+            Gerencie o seu ambiente de trabalho e a conexão segura com a Inteligência Artificial.
           </p>
           
-          <div style="background: var(--primary-light); padding: 16px; border-radius: 8px; margin-bottom: 20px; font-size: 13px;">
-            <strong>Passo 1: A Pasta dos Estudantes</strong><br>
-            Crie uma pasta no seu Google Drive (ex: "Meus Alunos AEE") e dentro dela crie uma pasta para cada estudante. Cole o link da pasta principal abaixo.<br><br>
-            <strong>Passo 2: A Chave Mágica (Gemini)</strong><br>
-            Aceda ao <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--primary); font-weight:bold;">Google AI Studio</a> com o seu e-mail, clique em "Create API Key" e cole o código gerado abaixo.
-          </div>
-
           <div class="form-group">
             <label>Sua Turma / Escola:</label>
             <input type="text" id="config-escola" placeholder="Ex: Escola Municipal...">
@@ -497,7 +466,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <input type="password" id="config-chave" placeholder="AIzaSy...">
           </div>
           
-          <!-- BOTÕES DE GUARDAR E SINCRONIZAR COM CONTADOR -->
           <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px;">
             <button class="btn-primary" onclick="salvarConfiguracoes()">
               <span class="material-symbols-outlined">save</span> Guardar Configurações
@@ -514,8 +482,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <div style="flex: 1; min-width: 200px;">
               <h3 style="font-size: 14px; margin: 0 0 4px 0; color: var(--text);">Privacidade e Segurança</h3>
               <p style="font-size: 13px; color: var(--text-sub); margin: 0; line-height: 1.4;">
-                Ao encerrar a sessão, removemos o cache local. Recomendado se estiver usando um computador partilhado.<br>
-                <a href="#" onclick="abrirTermos()" style="color: var(--primary); font-weight: bold; text-decoration: none;">Ler Termos e LGPD completos</a>
+                Ao encerrar a sessão, removemos o cache local e descartamos o Token do Google Drive.<br>
               </p>
             </div>
             <button class="btn-primary" style="background:var(--danger); white-space: nowrap;" onclick="sairEApagarTudo()">
@@ -531,15 +498,89 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
 </div>
 
 <script>
+// Mantém a API original
 const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuWu0SZyD6BEUdEb3IV73dHK-A6_qNppzDs0ZhB5xXage_k/exec";
+const CLIENT_ID = "400634410081-usp328ku7tm6aeu9pmu494k0te0h4h7r.apps.googleusercontent.com";
 
 var dadosUsuarioAtivo = null;
 var listaEstudantesCache = [];
+var tokenClient;
 
 window.onload = function() {
   verificarSessaoAtiva();
   atualizarIconeTema();
+  
+  // INICIALIZA O NOVO CLIENTE OAUTH 2.0
+  if (window.google && google.accounts && google.accounts.oauth2) {
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+      callback: (resposta) => {
+        if (resposta.error !== undefined) {
+          document.getElementById('msg-login').innerText = "Autorização cancelada ou bloqueada.";
+          document.getElementById('login-screen').style.pointerEvents = 'auto';
+          return;
+        }
+        processarNovoTokenOAuth(resposta.access_token);
+      }
+    });
+  }
 };
+
+// ACIONADO PELO NOVO BOTÃO
+function iniciarLoginDrive() {
+  document.getElementById('msg-login').innerText = "A aguardar a sua autorização no Google...";
+  document.getElementById('login-screen').style.pointerEvents = 'none';
+  tokenClient.requestAccessToken({prompt: 'consent'});
+}
+
+// LIDA COM O RESULTADO DA AUTORIZAÇÃO
+async function processarNovoTokenOAuth(accessToken) {
+  try {
+    document.getElementById('msg-login').innerText = "A validar o seu perfil...";
+    
+    // Obter os dados (email/nome) do usuário logado usando o Token Mestre
+    const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    const userInfo = await userInfoRes.json();
+    
+    const emailGoogle = userInfo.email;
+    const nomeGoogle = userInfo.name;
+    const isPartilhado = document.getElementById('chk-partilhado').checked;
+    const storage = isPartilhado ? sessionStorage : localStorage;
+    
+    // GUARDAR A CHAVE MESTRA DO DRIVE NO NAVEGADOR
+    storage.setItem('drive_token', accessToken);
+    
+    // Passar a bola para o seu backend antigo para criar ou carregar o utilizador
+    const res = await chamarAPI("fazerLogin", { email: emailGoogle });
+    
+    if (res && res.sucesso) {
+      storage.setItem('user_auth_email', res.dados.email);
+      storage.setItem('user_auth_dados', JSON.stringify(res.dados));
+      iniciarAplicacao(res.dados);
+    } 
+    else if (res && res.isNovoUsuario) {
+      document.getElementById('msg-login').innerText = "A preparar a sua nova área de trabalho...";
+      const resCad = await chamarAPI("cadastrarUsuario", {
+         email: emailGoogle, nome: nomeGoogle || "Professor(a)", perfil: "AEE", escola: "", chave: "", pasta: ""
+      });
+      if(resCad.sucesso) {
+         storage.setItem('user_auth_email', resCad.dados.email);
+         storage.setItem('user_auth_dados', JSON.stringify(resCad.dados));
+         iniciarAplicacao(resCad.dados);
+         mostrarModal("Bem-vindo(a) ao Inclusão Conectada!", "O seu acesso direto ao Drive foi autorizado com sucesso.");
+      }
+    } else {
+      document.getElementById('msg-login').innerText = res.mensagem || "Falha na validação.";
+      document.getElementById('login-screen').style.pointerEvents = 'auto';
+    }
+  } catch (err) {
+    document.getElementById('msg-login').innerText = "Falha ao comunicar com o Google Drive.";
+    document.getElementById('login-screen').style.pointerEvents = 'auto';
+  }
+}
 
 function alternarTema() {
   document.body.classList.toggle('dark-theme');
@@ -551,157 +592,20 @@ function alternarTema() {
 function atualizarIconeTema() {
   const isDark = document.body.classList.contains('dark-theme');
   const icone = document.getElementById('icone-tema');
-  if (icone) {
-    icone.innerText = isDark ? 'light_mode' : 'dark_mode';
-  }
+  if (icone) icone.innerText = isDark ? 'light_mode' : 'dark_mode';
 }
 
-function abrirTermos() {
-  document.getElementById('termos-modal').style.display = 'flex';
-}
-function fecharTermos() {
-  document.getElementById('termos-modal').style.display = 'none';
-}
-
-function decodificarJWT(token) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-  return JSON.parse(jsonPayload);
-}
-
-async function lidarComLoginGoogle(response) {
-  try {
-    const payload = decodificarJWT(response.credential);
-    const emailGoogle = payload.email;
-    const nomeGoogle = payload.name;
-    const isPartilhado = document.getElementById('chk-partilhado').checked;
-    
-    document.getElementById('msg-login').innerText = "A entrar no sistema...";
-    document.getElementById('login-screen').style.pointerEvents = 'none';
-
-    const res = await chamarAPI("fazerLogin", { email: emailGoogle });
-    
-    if (res && res.sucesso) {
-      const storage = isPartilhado ? sessionStorage : localStorage;
-      storage.setItem('user_auth_email', res.dados.email);
-      storage.setItem('user_auth_dados', JSON.stringify(res.dados));
-      iniciarAplicacao(res.dados);
-    } 
-    else if (res && res.isNovoUsuario) {
-      document.getElementById('msg-login').innerText = "A preparar a sua nova área de trabalho...";
-      const resCad = await chamarAPI("cadastrarUsuario", {
-         email: emailGoogle, nome: nomeGoogle || "Professor(a)", perfil: "AEE", escola: "", chave: "", pasta: ""
-      });
-      
-      if(resCad.sucesso) {
-         const storage = isPartilhado ? sessionStorage : localStorage;
-         storage.setItem('user_auth_email', resCad.dados.email);
-         storage.setItem('user_auth_dados', JSON.stringify(resCad.dados));
-         
-         iniciarAplicacao(resCad.dados);
-         mostrarModal("Bem-vindo(a) ao Inclusão Conectada!", "A sua conta foi criada com sucesso.\nExplore a interface à vontade! Quando quiser usar a Inteligência Artificial, vá à aba 'Ajustes' para configurar o seu acesso.");
-      }
-    } else {
-      document.getElementById('msg-login').innerText = res.mensagem || "Falha na validação.";
-      document.getElementById('login-screen').style.pointerEvents = 'auto';
-    }
-  } catch (err) {
-    document.getElementById('msg-login').innerText = "Falha ao processar login.";
-    document.getElementById('login-screen').style.pointerEvents = 'auto';
-  }
-}
-
-async function salvarConfiguracoes() {
-  const escola = document.getElementById('config-escola').value.trim();
-  const pasta = document.getElementById('config-pasta').value.trim();
-  const chave = document.getElementById('config-chave').value.trim();
-  
-  if (!pasta && !chave && !escola) {
-    return mostrarModal("Aviso", "Não preencheu nenhum dado para atualizar.");
-  }
-
-  let mensagemFinal = "Configurações guardadas com sucesso!";
-  if (pasta && !chave) {
-    mensagemFinal = "A sua Pasta foi configurada! Lembre-se de adicionar a Chave Gemini mais tarde para conseguir gerar os planos DUA e Cartões de Apoio.";
-  } else if (chave && !pasta) {
-    mensagemFinal = "A sua Chave de IA foi guardada, mas atenção: precisa configurar o Link da Pasta do Drive para que a IA consiga ler o contexto dos alunos e criar os relatórios.";
-  } else if (pasta && chave) {
-    mensagemFinal = "Sucesso! A Inteligência Artificial está totalmente configurada e pronta a usar.";
-  }
-  
-  mostrarLoading("A atualizar o seu perfil...");
-  const res = await chamarAPI("atualizarUsuario", {
-    escola: escola, pasta: pasta, chave: chave
-  });
-  esconderLoading();
-  
-  if(res && res.sucesso) {
-    if(dadosUsuarioAtivo) {
-       dadosUsuarioAtivo.escola = escola;
-       dadosUsuarioAtivo.pastaRaiz = pasta;
-       dadosUsuarioAtivo.chave = chave;
-       
-       const isPartilhado = document.getElementById('chk-partilhado') ? document.getElementById('chk-partilhado').checked : false;
-       const storage = isPartilhado ? sessionStorage : localStorage;
-       storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
-       
-       document.getElementById('lbl-prof-escola').innerText = escola || "AEE";
-       if (pasta) carregarAlunos(pasta);
-    }
-    mostrarModal("Sucesso", mensagemFinal);
-  } else {
-    mostrarModal("Erro", res.mensagem || "Não foi possível atualizar.");
-  }
-}
-
-function verificarSessaoAtiva() {
-  const dadosSalvos = sessionStorage.getItem('user_auth_dados') || localStorage.getItem('user_auth_dados');
-  if (dadosSalvos) {
-    iniciarAplicacao(JSON.parse(dadosSalvos));
-  } else {
-    document.getElementById('login-screen').style.display = 'flex';
-  }
-}
-
-function iniciarAplicacao(dados) {
-  dadosUsuarioAtivo = dados;
-  document.getElementById('login-screen').style.display = 'none';
-  
-  document.getElementById('lbl-prof-nome').innerText = dados.nome || dados.email;
-  document.getElementById('lbl-prof-escola').innerText = dados.escola || dados.perfil || "AEE";
-  document.getElementById('badge-usuario').innerText = (dados.nome ? dados.nome.split(' ')[0] : "Utilizador");
-  
-  if(document.getElementById('config-escola')) document.getElementById('config-escola').value = dados.escola || "";
-  if(document.getElementById('config-pasta')) document.getElementById('config-pasta').value = dados.pastaRaiz || "";
-  if(document.getElementById('config-chave')) document.getElementById('config-chave').value = dados.chave || "";
-  
-  if (dados.pastaRaiz) {
-      carregarAlunos(dados.pastaRaiz);
-  }
-}
-
-function sairEApagarTudo() {
-  mostrarConfirmacao(
-    "Deseja realmente sair? As credenciais e dados temporários serão removidos deste dispositivo.",
-    () => {
-      sessionStorage.clear();
-      localStorage.clear();
-      if (window.google && google.accounts && google.accounts.id) {
-        google.accounts.id.disableAutoSelect();
-      }
-      window.location.reload(true);
-    },
-    "Encerrar Sessão"
-  );
-}
+function abrirTermos() { document.getElementById('termos-modal').style.display = 'flex'; }
+function fecharTermos() { document.getElementById('termos-modal').style.display = 'none'; }
 
 async function chamarAPI(action, payload = {}) {
   try {
     const emailSessao = sessionStorage.getItem('user_auth_email') || localStorage.getItem('user_auth_email');
     if (emailSessao) payload.emailUsuario = emailSessao;
+    
+    // AGORA ENVIAMOS SEMPRE A CHAVE MESTRA PARA O BACKEND USAR SE PRECISAR
+    const driveToken = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
+    if (driveToken) payload.tokenDrive = driveToken;
 
     const corpo = JSON.stringify({ action: action, ...payload });
     const resposta = await fetch(API_URL, {
@@ -716,24 +620,76 @@ async function chamarAPI(action, payload = {}) {
   }
 }
 
-// ATUALIZADO: Mostra o contador de alunos carregados
+async function salvarConfiguracoes() {
+  const escola = document.getElementById('config-escola').value.trim();
+  const pasta = document.getElementById('config-pasta').value.trim();
+  const chave = document.getElementById('config-chave').value.trim();
+  
+  if (!pasta && !chave && !escola) return mostrarModal("Aviso", "Não preencheu nenhum dado para atualizar.");
+
+  mostrarLoading("A atualizar o seu perfil...");
+  const res = await chamarAPI("atualizarUsuario", { escola: escola, pasta: pasta, chave: chave });
+  esconderLoading();
+  
+  if(res && res.sucesso) {
+    if(dadosUsuarioAtivo) {
+       dadosUsuarioAtivo.escola = escola;
+       dadosUsuarioAtivo.pastaRaiz = pasta;
+       dadosUsuarioAtivo.chave = chave;
+       const isPartilhado = document.getElementById('chk-partilhado') ? document.getElementById('chk-partilhado').checked : false;
+       const storage = isPartilhado ? sessionStorage : localStorage;
+       storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
+       document.getElementById('lbl-prof-escola').innerText = escola || "AEE";
+       if (pasta) carregarAlunos(pasta);
+    }
+    mostrarModal("Sucesso", "Configurações guardadas com sucesso!");
+  } else {
+    mostrarModal("Erro", res.mensagem || "Não foi possível atualizar.");
+  }
+}
+
+function verificarSessaoAtiva() {
+  const dadosSalvos = sessionStorage.getItem('user_auth_dados') || localStorage.getItem('user_auth_dados');
+  if (dadosSalvos) iniciarAplicacao(JSON.parse(dadosSalvos));
+  else document.getElementById('login-screen').style.display = 'flex';
+}
+
+function iniciarAplicacao(dados) {
+  dadosUsuarioAtivo = dados;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('lbl-prof-nome').innerText = dados.nome || dados.email;
+  document.getElementById('lbl-prof-escola').innerText = dados.escola || dados.perfil || "AEE";
+  document.getElementById('badge-usuario').innerText = (dados.nome ? dados.nome.split(' ')[0] : "Utilizador");
+  
+  if(document.getElementById('config-escola')) document.getElementById('config-escola').value = dados.escola || "";
+  if(document.getElementById('config-pasta')) document.getElementById('config-pasta').value = dados.pastaRaiz || "";
+  if(document.getElementById('config-chave')) document.getElementById('config-chave').value = dados.chave || "";
+  
+  if (dados.pastaRaiz) carregarAlunos(dados.pastaRaiz);
+}
+
+function sairEApagarTudo() {
+  mostrarConfirmacao("Deseja realmente sair? As credenciais e dados temporários serão removidos.", () => {
+      sessionStorage.clear();
+      localStorage.clear();
+      window.location.reload(true);
+  }, "Encerrar Sessão");
+}
+
 async function carregarAlunos(pastaId) {
   const contadorEl = document.getElementById('contador-alunos');
   if (contadorEl) contadorEl.style.display = 'none';
-
   const res = await chamarAPI("listarAlunos", { linkPasta: pastaId });
   
   if (res && res.sucesso) {
     listaEstudantesCache = res.lista;
     popularDatalistAlunos(res.lista);
-    
     if (contadorEl) {
       contadorEl.style.display = 'flex';
       contadorEl.style.color = 'var(--success)';
       contadorEl.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">check_circle</span> ${res.lista.length} aluno(s) sincronizado(s)`;
     }
   } else {
-    console.log("Pasta vazia ou erro:", res.mensagem);
     if (contadorEl) {
       contadorEl.style.display = 'flex';
       contadorEl.style.color = 'var(--danger)';
@@ -742,12 +698,9 @@ async function carregarAlunos(pastaId) {
   }
 }
 
-// NOVA FUNÇÃO: Sincronização manual via botão
 async function sincronizarAlunosManual() {
   const pasta = document.getElementById('config-pasta').value.trim();
-  if (!pasta) {
-    return mostrarModal("Aviso", "Insira o link da pasta do Drive antes de tentar sincronizar.");
-  }
+  if (!pasta) return mostrarModal("Aviso", "Insira o link da pasta do Drive antes de tentar sincronizar.");
   mostrarLoading("A sincronizar as pastas dos alunos...");
   await carregarAlunos(pasta);
   esconderLoading();
@@ -767,7 +720,6 @@ function popularDatalistAlunos(alunos) {
 function obterIdAlunoPorNome(inputId) {
   const nomeDigitado = document.getElementById(inputId).value.trim();
   if (!nomeDigitado) return null;
-  
   const alunoEncontrado = listaEstudantesCache.find(a => a.nome.toLowerCase() === nomeDigitado.toLowerCase());
   return alunoEncontrado ? alunoEncontrado.id : null;
 }
@@ -775,13 +727,11 @@ function obterIdAlunoPorNome(inputId) {
 async function executarDUA() {
   const idPasta = obterIdAlunoPorNome('input-aluno-dua');
   const plano = document.getElementById('txt-plano-aula').value.trim();
-  
   if (!idPasta || !plano) return mostrarModal("Atenção", "Selecione um estudante válido da lista e informe a aula proposta.");
   
   mostrarLoading("Gerando adaptação sob princípios DUA...");
   const res = await chamarAPI("adaptarPlanoDUA", { idPasta: idPasta, plano: plano });
   esconderLoading();
-
   if (res && res.sucesso) {
     const box = document.getElementById('res-dua');
     box.style.display = "block";
@@ -797,12 +747,8 @@ async function executarCartao() {
   if (!idPasta) return mostrarModal("Atenção", "Selecione um estudante válido da lista.");
   
   mostrarLoading("Compilando dados de regulação...");
-  const res = await chamarAPI("gerarCartao", {
-    idPasta: idPasta,
-    nomeAluno: inputEl.value
-  });
+  const res = await chamarAPI("gerarCartao", { idPasta: idPasta, nomeAluno: inputEl.value });
   esconderLoading();
-
   if (res && res.sucesso) {
     const box = document.getElementById('res-acolher');
     box.style.display = "block";
@@ -823,13 +769,8 @@ async function executarCarta() {
   if (!idPasta) return mostrarModal("Atenção", "Selecione um estudante válido da lista.");
 
   mostrarLoading("Redigindo carta à família...");
-  const res = await chamarAPI("gerarCarta", {
-    idPasta: idPasta,
-    nomeAluno: inputEl.value,
-    familia: familia
-  });
+  const res = await chamarAPI("gerarCarta", { idPasta: idPasta, nomeAluno: inputEl.value, familia: familia });
   esconderLoading();
-
   if (res && res.sucesso) {
     const box = document.getElementById('res-acolher');
     box.style.display = "block";
@@ -847,16 +788,8 @@ async function executarSalvarDiario() {
   if (!idPasta || !obs) return mostrarModal("Atenção", "Selecione um estudante válido e preencha a observação.");
 
   mostrarLoading("Registando atendimento...");
-  const res = await chamarAPI("salvarDiario", {
-    dados: {
-      idPasta: idPasta,
-      nomeAluno: inputEl.value,
-      categoria: cat,
-      observacao: obs
-    }
-  });
+  const res = await chamarAPI("salvarDiario", { dados: { idPasta: idPasta, nomeAluno: inputEl.value, categoria: cat, observacao: obs } });
   esconderLoading();
-
   if (res && res.sucesso) {
     mostrarModal("Sucesso", res.mensagem || "Registo concluído!");
     document.getElementById('txt-diario-obs').value = "";
@@ -871,12 +804,8 @@ async function executarEstudo() {
   if (!idPasta) return mostrarModal("Atenção", "Selecione um estudante válido da lista.");
 
   mostrarLoading("Analisando histórico pedagógico...");
-  const res = await chamarAPI("gerarEstudo", {
-    idPasta: idPasta,
-    nomeAluno: inputEl.value
-  });
+  const res = await chamarAPI("gerarEstudo", { idPasta: idPasta, nomeAluno: inputEl.value });
   esconderLoading();
-
   if (res && res.sucesso) {
     const box = document.getElementById('res-estudo');
     box.style.display = "block";
@@ -889,34 +818,23 @@ async function executarEstudo() {
 function trocarAba(tabId) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  
   const target = document.getElementById(tabId);
   if (target) target.classList.add('active');
-  
-  const navMap = {
-    'tab-dua': 0, 'tab-acolher': 1, 'tab-diario': 2, 'tab-estudo': 3, 'tab-ajustes': 4
-  };
+  const navMap = { 'tab-dua': 0, 'tab-acolher': 1, 'tab-diario': 2, 'tab-estudo': 3, 'tab-ajustes': 4 };
   const titles = {
-    'tab-dua': 'Adaptação (DUA)',
-    'tab-acolher': 'Cartão de Apoio & Carta à Família',
-    'tab-diario': 'Diário de Bordo',
-    'tab-estudo': 'Estudo de Caso Integrado',
-    'tab-ajustes': 'Configurações e Integração'
+    'tab-dua': 'Adaptação (DUA)', 'tab-acolher': 'Cartão de Apoio & Carta à Família',
+    'tab-diario': 'Diário de Bordo', 'tab-estudo': 'Estudo de Caso Integrado', 'tab-ajustes': 'Configurações e Integração'
   };
-  
   const navItems = document.querySelectorAll('.nav-item');
   if (navItems[navMap[tabId]]) navItems[navMap[tabId]].classList.add('active');
   document.getElementById('page-title').innerText = titles[tabId];
-
   if (window.innerWidth <= 768) toggleSidebar();
 }
 
 function toggleSidebar() {
   const sidebar = document.getElementById('app-sidebar');
   sidebar.classList.toggle('open');
-  
   let overlay = document.getElementById('sidebar-overlay');
-  
   if (!overlay) {
     overlay = document.createElement('div');
     overlay.id = 'sidebar-overlay';
@@ -924,7 +842,6 @@ function toggleSidebar() {
     overlay.onclick = () => toggleSidebar();
     document.body.appendChild(overlay);
   }
-  
   overlay.style.display = sidebar.classList.contains('open') ? 'block' : 'none';
 }
 
@@ -932,10 +849,7 @@ function mostrarLoading(txt) {
   document.getElementById('loading-texto').innerText = txt;
   document.getElementById('loading-overlay').style.display = 'flex';
 }
-
-function esconderLoading() {
-  document.getElementById('loading-overlay').style.display = 'none';
-}
+function esconderLoading() { document.getElementById('loading-overlay').style.display = 'none'; }
 
 function mostrarModal(titulo, msg) {
   const m = document.getElementById('custom-modal');
@@ -952,15 +866,10 @@ function mostrarConfirmacao(msg, onConfirm, labelBtn = "Confirmar") {
   document.getElementById('modal-mensagem').innerText = msg;
   const btnCancel = document.getElementById('modal-btn-cancelar');
   const btnOk = document.getElementById('modal-btn-confirmar');
-  
   btnCancel.style.display = 'inline-block';
   btnCancel.onclick = () => m.style.display = 'none';
-  
   btnOk.innerText = labelBtn;
-  btnOk.onclick = () => {
-    m.style.display = 'none';
-    onConfirm();
-  };
+  btnOk.onclick = () => { m.style.display = 'none'; onConfirm(); };
   m.style.display = 'flex';
 }
 </script>
