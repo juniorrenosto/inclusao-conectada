@@ -164,7 +164,7 @@ textarea { resize: vertical; min-height: 100px; }
 }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
 
-/* MODAL DE TERMOS LGPD - MAIOR */
+/* MODAL DE TERMOS LGPD */
 .modal-termos-box {
   background: var(--card-bg); border-radius: 16px; padding: 30px; max-width: 600px;
   width: 100%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border);
@@ -230,7 +230,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
     
     <p id="msg-login" style="color: var(--danger); font-size: 13px; margin-top: 16px; font-weight: bold;"></p>
     
-    <!-- LINK PARA TERMOS DE USO -->
     <div style="margin-top: 24px; font-size: 12px; color: var(--text-sub);">
       Ao entrar, você concorda com os nossos 
       <a href="#" onclick="abrirTermos()" style="color: var(--primary); text-decoration: none; font-weight: 600;">Termos de Uso e LGPD</a>.
@@ -509,9 +508,6 @@ window.onload = function() {
   verificarSessaoAtiva();
 };
 
-// ==========================================
-// ABERTURA DOS TERMOS LGPD
-// ==========================================
 function abrirTermos() {
   document.getElementById('termos-modal').style.display = 'flex';
 }
@@ -519,9 +515,6 @@ function fecharTermos() {
   document.getElementById('termos-modal').style.display = 'none';
 }
 
-// ==========================================
-// AUTENTICAÇÃO GOOGLE E CONTROLE DE SESSÃO
-// ==========================================
 function decodificarJWT(token) {
   var base64Url = token.split('.')[1];
   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -573,7 +566,6 @@ async function lidarComLoginGoogle(response) {
   }
 }
 
-// === SALVAR AJUSTES ===
 async function salvarConfiguracoes() {
   const escola = document.getElementById('config-escola').value.trim();
   const pasta = document.getElementById('config-pasta').value.trim();
@@ -658,9 +650,6 @@ function sairEApagarTudo() {
   );
 }
 
-// ==========================================
-// COMUNICAÇÃO COM A API E OPERAÇÕES
-// ==========================================
 async function chamarAPI(action, payload = {}) {
   try {
     const emailSessao = sessionStorage.getItem('user_auth_email') || localStorage.getItem('user_auth_email');
