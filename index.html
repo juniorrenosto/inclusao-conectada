@@ -337,12 +337,12 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             <span class="material-symbols-outlined">school</span>
             <div>
               <h2 class="card-title">Adaptação (Desenho Universal para a Aprendizagem)</h2>
-              <div class="card-desc">O DUA é uma abordagem que ajuda a eliminar barreiras no ensino. Selecione o estudante para transformar o seu plano de aula regular em uma proposta acessível, oferecendo diferentes formas de engajamento, representação e expressão.</div>
+              <div class="card-desc">O DUA é uma abordagem que ajuda a eliminar barreiras no ensino. Digite ou selecione o estudante para transformar o seu plano de aula regular em uma proposta acessível.</div>
             </div>
           </div>
           <div class="form-group">
-            <label>Estudante:</label>
-            <select id="sel-aluno-dua"><option value="">A carregar estudantes...</option></select>
+            <label>Estudante (Digite para pesquisar):</label>
+            <input type="text" id="input-aluno-dua" list="lista-alunos-geral" placeholder="Ex: Ana Maria...">
           </div>
           <div class="form-group">
             <label>Plano de Aula / Conteúdo Proposto:</label>
@@ -366,8 +366,8 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             </div>
           </div>
           <div class="form-group">
-            <label>Estudante:</label>
-            <select id="sel-aluno-acolher"><option value="">A carregar estudantes...</option></select>
+            <label>Estudante (Digite para pesquisar):</label>
+            <input type="text" id="input-aluno-acolher" list="lista-alunos-geral" placeholder="Ex: João Pedro...">
           </div>
           <div class="form-group">
             <label>Nome da Família / Responsável (opcional):</label>
@@ -396,8 +396,8 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             </div>
           </div>
           <div class="form-group">
-            <label>Estudante:</label>
-            <select id="sel-aluno-diario"><option value="">A carregar estudantes...</option></select>
+            <label>Estudante (Digite para pesquisar):</label>
+            <input type="text" id="input-aluno-diario" list="lista-alunos-geral" placeholder="Ex: Lucas Silva...">
           </div>
           <div class="form-group">
             <label>Dimensão / Categoria:</label>
@@ -430,8 +430,8 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
             </div>
           </div>
           <div class="form-group">
-            <label>Estudante:</label>
-            <select id="sel-aluno-estudo"><option value="">A carregar estudantes...</option></select>
+            <label>Estudante (Digite para pesquisar):</label>
+            <input type="text" id="input-aluno-estudo" list="lista-alunos-geral" placeholder="Ex: Beatriz Lima...">
           </div>
           <button class="btn-primary" onclick="executarEstudo()">
             <span class="material-symbols-outlined">summarize</span> Consolidar Estudo de Caso
@@ -439,6 +439,9 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
           <div id="res-estudo" class="result-box" style="display:none;"></div>
         </div>
       </section>
+
+      <!-- LISTA DE SUGESTÕES COMPARTILHADA (DATALIST) -->
+      <datalist id="lista-alunos-geral"></datalist>
 
       <!-- ABA 5: AJUSTES -->
       <section id="tab-ajustes" class="tab-content">
@@ -498,7 +501,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
 </div>
 
 <script>
-// CONFIGURAÇÃO DO BACKEND INTEGRADO
 const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuWu0SZyD6BEUdEb3IV73dHK-A6_qNppzDs0ZhB5xXage_k/exec";
 
 var dadosUsuarioAtivo = null;
@@ -672,34 +674,41 @@ async function carregarAlunos(pastaId) {
   const res = await chamarAPI("listarAlunos", { linkPasta: pastaId });
   if (res && res.sucesso) {
     listaEstudantesCache = res.lista;
-    popularSelectsAlunos(res.lista);
+    popularDatalistAlunos(res.lista);
   } else {
     console.log("Pasta vazia ou erro:", res.mensagem);
   }
 }
 
-function popularSelectsAlunos(alunos) {
-  const selects = ['sel-aluno-dua', 'sel-aluno-acolher', 'sel-aluno-diario', 'sel-aluno-estudo'];
-  selects.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = '<option value="">Selecione um estudante...</option>';
-    alunos.forEach(a => {
-      const opt = document.createElement('option');
-      opt.value = a.id;
-      opt.text = a.nome;
-      el.appendChild(opt);
-    });
+// Preenche o datalist global com o nome dos estudantes
+function popularDatalistAlunos(alunos) {
+  const datalist = document.getElementById('lista-alunos-geral');
+  if (!datalist) return;
+  datalist.innerHTML = '';
+  alunos.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a.nome; // O que aparece e é digitado
+    datalist.appendChild(opt);
   });
 }
 
+// Função auxiliar inteligente para descobrir o ID do aluno pelo nome digitado no campo de texto
+function obterIdAlunoPorNome(inputId) {
+  const nomeDigitado = document.getElementById(inputId).value.trim();
+  if (!nomeDigitado) return null;
+  
+  const alunoEncontrado = listaEstudantesCache.find(a => a.nome.toLowerCase() === nomeDigitado.toLowerCase());
+  return alunoEncontrado ? alunoEncontrado.id : null;
+}
+
 async function executarDUA() {
-  const sel = document.getElementById('sel-aluno-dua');
+  const idPasta = obterIdAlunoPorNome('input-aluno-dua');
   const plano = document.getElementById('txt-plano-aula').value.trim();
-  if (!sel.value || !plano) return mostrarModal("Atenção", "Selecione o estudante e informe a aula proposta.");
+  
+  if (!idPasta || !plano) return mostrarModal("Atenção", "Selecione um estudante válido da lista e informe a aula proposta.");
   
   mostrarLoading("Gerando adaptação sob princípios DUA...");
-  const res = await chamarAPI("adaptarPlanoDUA", { idPasta: sel.value, plano: plano });
+  const res = await chamarAPI("adaptarPlanoDUA", { idPasta: idPasta, plano: plano });
   esconderLoading();
 
   if (res && res.sucesso) {
@@ -712,13 +721,14 @@ async function executarDUA() {
 }
 
 async function executarCartao() {
-  const sel = document.getElementById('sel-aluno-acolher');
-  if (!sel.value) return mostrarModal("Atenção", "Selecione um estudante.");
+  const idPasta = obterIdAlunoPorNome('input-aluno-acolher');
+  const inputEl = document.getElementById('input-aluno-acolher');
+  if (!idPasta) return mostrarModal("Atenção", "Selecione um estudante válido da lista.");
   
   mostrarLoading("Compilando dados de regulação...");
   const res = await chamarAPI("gerarCartao", {
-    idPasta: sel.value,
-    nomeAluno: sel.options[sel.selectedIndex].text
+    idPasta: idPasta,
+    nomeAluno: inputEl.value
   });
   esconderLoading();
 
@@ -736,14 +746,15 @@ async function executarCartao() {
 }
 
 async function executarCarta() {
-  const sel = document.getElementById('sel-aluno-acolher');
+  const idPasta = obterIdAlunoPorNome('input-aluno-acolher');
+  const inputEl = document.getElementById('input-aluno-acolher');
   const familia = document.getElementById('txt-familia-nome').value.trim();
-  if (!sel.value) return mostrarModal("Atenção", "Selecione um estudante.");
+  if (!idPasta) return mostrarModal("Atenção", "Selecione um estudante válido da lista.");
 
   mostrarLoading("Redigindo carta à família...");
   const res = await chamarAPI("gerarCarta", {
-    idPasta: sel.value,
-    nomeAluno: sel.options[sel.selectedIndex].text,
+    idPasta: idPasta,
+    nomeAluno: inputEl.value,
     familia: familia
   });
   esconderLoading();
@@ -758,16 +769,17 @@ async function executarCarta() {
 }
 
 async function executarSalvarDiario() {
-  const sel = document.getElementById('sel-aluno-diario');
+  const idPasta = obterIdAlunoPorNome('input-aluno-diario');
+  const inputEl = document.getElementById('input-aluno-diario');
   const obs = document.getElementById('txt-diario-obs').value.trim();
   const cat = document.getElementById('sel-diario-categoria').value;
-  if (!sel.value || !obs) return mostrarModal("Atenção", "Preencha a observação e selecione o estudante.");
+  if (!idPasta || !obs) return mostrarModal("Atenção", "Selecione um estudante válido e preencha a observação.");
 
   mostrarLoading("Registando atendimento...");
   const res = await chamarAPI("salvarDiario", {
     dados: {
-      idPasta: sel.value,
-      nomeAluno: sel.options[sel.selectedIndex].text,
+      idPasta: idPasta,
+      nomeAluno: inputEl.value,
       categoria: cat,
       observacao: obs
     }
@@ -783,13 +795,14 @@ async function executarSalvarDiario() {
 }
 
 async function executarEstudo() {
-  const sel = document.getElementById('sel-aluno-estudo');
-  if (!sel.value) return mostrarModal("Atenção", "Selecione um estudante.");
+  const idPasta = obterIdAlunoPorNome('input-aluno-estudo');
+  const inputEl = document.getElementById('input-aluno-estudo');
+  if (!idPasta) return mostrarModal("Atenção", "Selecione um estudante válido da lista.");
 
   mostrarLoading("Analisando histórico pedagógico...");
   const res = await chamarAPI("gerarEstudo", {
-    idPasta: sel.value,
-    nomeAluno: sel.options[sel.selectedIndex].text
+    idPasta: idPasta,
+    nomeAluno: inputEl.value
   });
   esconderLoading();
 
