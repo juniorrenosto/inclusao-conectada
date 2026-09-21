@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Inclusão Conectada</title>
 
-<!-- CONEXÃO DO MANIFEST E SERVICE WORKER -->
 <link rel="manifest" href="./manifest.json">
 <script>
   if ('serviceWorker' in navigator) {
@@ -15,26 +14,19 @@
   }
 </script>
 
-<!-- METATAGS -->
 <meta name="theme-color" content="#0b57d0">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Inclusão Conectada">
-<meta name="application-name" content="Inclusão Conectada">
-
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAABlBMVEUAC3f///8A1s4OAAAAAXRSTlMAQObYZgAAAFBJREFUeNrtzTERAAAIAzCS/s0+Bg9uIAVa8pIuLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy9fdT8BbwB9WdYFbwAAAABJRU5ErkJggg==">
-
-<!-- ÍCONES PROFISSIONAIS (GOOGLE MATERIAL SYMBOLS) -->
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+<!-- BIBLIOTECA OFICIAL DO GOOGLE IDENTITY SERVICES -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
 :root {
-  /* CORES MODO CLARO PADRÃO */
   --primary: #0b57d0;
   --primary-hover: #0842a0;
   --primary-light: #e8f0fe;
-  --surface: #f0f2f5; 
+  --surface: #f8fafd;
   --card-bg: #ffffff;
   --border: #dadce0;
   --text: #1f1f1f;
@@ -43,476 +35,496 @@
   --success-light: #e6f4ea;
   --danger: #d93025;
   --danger-light: #fce8e6;
-  --sidebar-w: 240px;
+  --sidebar-w: 250px;
 }
 
-/* CLASSE DE MODO ESCURO CONTROLADA PELO UTILIZADOR */
 body.dark-theme {
-  --surface: #121212;
-  --card-bg: #1e1e1e;
-  --border: #333333;
-  --text: #e8eaed;
+  --surface: #131314;
+  --card-bg: #1e1f20;
+  --border: #3c4043;
+  --text: #e3e3e3;
   --text-sub: #9aa0a6;
-  --primary: #8ab4f8; 
+  --primary: #8ab4f8;
   --primary-hover: #aecbfa;
   --primary-light: rgba(138, 180, 248, 0.15);
-  --success-light: rgba(15, 157, 88, 0.15);
-  --danger-light: rgba(217, 48, 37, 0.15);
 }
 
-body.dark-theme .form-input, body.dark-theme .student-bar select { background: #202124 !important; color: #e8eaed !important; border-color: #5f6368 !important; }
-body.dark-theme .app-bottombar { background: #1e1e1e !important; border-top-color: #333333 !important; }
-body.dark-theme .loading-card, body.dark-theme .modal-box { background: #1e1e1e !important; }
-body.dark-theme .passo-item { background-color: #202124 !important; }
-body.dark-theme .cartao-guia { background-color: rgba(138, 180, 248, 0.1) !important; border-left-color: var(--primary) !important; }
-body.dark-theme .passo-item code { background-color: #303134 !important; color: #f28b82 !important; }
-body.dark-theme .sec-sinais { background: rgba(74, 144, 226, 0.1) !important; }
-body.dark-theme .sec-acalma { background: rgba(245, 166, 35, 0.1) !important; }
-body.dark-theme .sec-evitar { background: rgba(217, 83, 79, 0.1) !important; }
-body.dark-theme .sec-interesses { background: rgba(92, 184, 92, 0.1) !important; }
-body.dark-theme .card-desk-box { background: #202124 !important; border-color: #333 !important; }
-body.dark-theme .card-desk-text { color: #e8eaed !important; }
+* { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+body { margin: 0; background: var(--surface); color: var(--text); height: 100vh; overflow: hidden; }
 
-* { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-body { margin: 0; background: var(--surface); color: var(--text); overflow: hidden; height: 100vh; transition: background 0.3s, color 0.3s; }
+/* ECRÃ DE LOGIN / BLOQUEIO */
+#login-screen {
+  position: fixed; inset: 0; background: var(--surface);
+  z-index: 9999; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 24px; text-align: center;
+}
+.login-card {
+  background: var(--card-bg); padding: 36px 28px; border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08); max-width: 420px; width: 100%;
+  border: 1px solid var(--border);
+}
+.login-logo { font-size: 52px; color: var(--primary); margin-bottom: 12px; }
+.login-title { font-size: 22px; font-weight: 700; margin: 0 0 8px 0; color: var(--text); }
+.login-sub { font-size: 14px; color: var(--text-sub); margin-bottom: 24px; line-height: 1.5; }
+.security-check {
+  display: flex; align-items: flex-start; gap: 10px; font-size: 13px;
+  color: var(--text); margin-bottom: 24px; background: var(--primary-light);
+  padding: 12px 14px; border-radius: 10px; text-align: left;
+}
+.security-check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--primary); cursor: pointer; }
 
-/* CONFIGURAÇÃO DOS ÍCONES MATERIAL */
-.material-symbols-outlined { font-size: 24px; vertical-align: middle; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-
+/* ESTRUTURA PRINCIPAL */
 .app-container { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
+.app-sidebar {
+  width: var(--sidebar-w); background: var(--card-bg); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: space-between; padding: 16px 12px;
+  transition: transform 0.25s ease;
+}
+.brand { display: flex; align-items: center; gap: 10px; padding: 8px 12px; margin-bottom: 20px; }
+.brand-icon { color: var(--primary); font-size: 28px; }
+.brand-title { font-weight: 700; font-size: 18px; color: var(--text); }
 
-/* SIDEBAR */
-.app-sidebar { display: none; width: var(--sidebar-w); background: var(--card-bg); border-right: 1px solid var(--border); flex-direction: column; padding: 20px 12px; z-index: 10; transition: background 0.3s, border-color 0.3s; }
-.brand-header { padding: 0 12px 20px 12px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
-.brand-title { margin: 0; color: var(--primary); font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-.brand-subtitle { font-size: 11px; color: var(--text-sub); }
-.sidebar-nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.sidebar-btn { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 24px; border: none; background: transparent; color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; text-align: left; }
-.sidebar-btn:hover { background: var(--primary-light); }
-.sidebar-btn.active { background: var(--primary-light); color: var(--primary); font-weight: 700; }
-.sidebar-icon { font-size: 22px; width: 24px; text-align: center; }
+.nav-menu { display: flex; flex-direction: column; gap: 4px; }
+.nav-item {
+  display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+  border-radius: 24px; color: var(--text-sub); text-decoration: none;
+  font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+}
+.nav-item:hover { background: var(--surface); color: var(--text); }
+.nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+.nav-item .material-symbols-outlined { font-size: 22px; }
 
-/* ÁREA PRINCIPAL */
-.main-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; position: relative; background: var(--surface); transition: background 0.3s; }
-.app-topbar { background: var(--card-bg); padding: 12px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; transition: background 0.3s, border-color 0.3s; }
-.badge-user { font-size: 12px; background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 16px; font-weight: 600; }
+.user-profile-widget {
+  padding: 12px; border-top: 1px solid var(--border); display: flex;
+  flex-direction: column; gap: 10px;
+}
+.user-info { display: flex; flex-direction: column; gap: 2px; }
+.user-name { font-size: 14px; font-weight: 600; }
+.user-sub { font-size: 11px; color: var(--text-sub); }
+.btn-logout {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 8px; border-radius: 8px; background: var(--danger-light);
+  color: var(--danger); border: none; font-size: 13px; font-weight: 600;
+  cursor: pointer; width: 100%; transition: opacity 0.2s;
+}
+.btn-logout:hover { opacity: 0.85; }
 
-.student-bar { background: var(--card-bg); padding: 10px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; transition: background 0.3s, border-color 0.3s; }
-.student-bar label { font-size: 13px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; gap: 6px; }
-.student-bar select { max-width: 400px; flex: 1; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: #fff; font-size: 14px; font-weight: 600; color: var(--text); outline: none; }
-.student-bar select:focus { border-color: var(--primary); }
+/* ÁREA CENTRAL */
+.main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); }
+.app-header {
+  height: 64px; border-bottom: 1px solid var(--border); background: var(--card-bg);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.btn-menu-mobile { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); }
+.header-title { font-size: 18px; font-weight: 600; }
+.content-body { flex: 1; overflow-y: auto; padding: 24px; }
 
-.app-content { flex: 1; overflow-y: auto; padding: 24px; display: flex; justify-content: center; }
-.content-inner { width: 100%; max-width: 900px; }
-
-.tab-panel { display: none; }
-.tab-panel.active { display: block; animation: fadeIn 0.2s ease-in-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: background 0.3s, border-color 0.3s; }
+/* CARTÕES E FORMULÁRIOS */
+.tab-content { display: none; max-width: 900px; margin: 0 auto; }
+.tab-content.active { display: block; }
+.card {
+  background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border);
+  padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.card-header .material-symbols-outlined { color: var(--primary); }
+.card-title { font-size: 16px; font-weight: 600; margin: 0; }
+.card-desc { font-size: 13px; color: var(--text-sub); margin-top: 4px; }
 
 .form-group { margin-bottom: 16px; }
-.form-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-input { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #fff; outline: none; transition: border-color 0.2s, background 0.3s, color 0.3s; }
-.form-input:focus { border-color: var(--primary); }
-textarea.form-input { min-height: 110px; resize: vertical; line-height: 1.5; }
+label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-sub); }
+input[type="text"], select, textarea {
+  width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--card-bg); color: var(--text); font-size: 14px; outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+textarea { resize: vertical; min-height: 100px; }
 
-/* GUIAS E MENSAGENS */
-.cartao-guia { background-color: #e8f0fe; border-left: 5px solid var(--primary); padding: 16px; margin-bottom: 24px; border-radius: 8px; }
-.titulo-guia { color: var(--primary); margin: 0 0 8px 0; font-size: 16px; display: flex; align-items: center; gap: 8px; }
-.passo-item { background-color: #ffffff; padding: 12px; margin-top: 12px; border-radius: 6px; border: 1px solid var(--border); }
-.passo-item h4 { margin: 0 0 8px 0; color: var(--text); font-size: 14px; display: flex; align-items: center; gap: 6px; }
-.passo-item ul { margin: 0; padding-left: 0; list-style: none; color: var(--text-sub); font-size: 13px; line-height: 1.5; }
-.passo-item ul li { margin-bottom: 6px; display: flex; align-items: flex-start; gap: 6px; }
-.passo-item code { background-color: #f1f3f4; padding: 2px 4px; border-radius: 4px; color: var(--danger); font-weight: bold; word-break: break-all; }
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--primary); color: #fff; border: none; padding: 12px 20px;
+  border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--primary-hover); }
 
-.btn { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.2s; display: inline-flex; justify-content: center; align-items: center; gap: 8px; }
-.btn:hover { background: var(--primary-hover); }
-.btn:disabled { opacity: 0.6; cursor: not-allowed; }
-.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-.btn-secondary:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
-.btn-whats { background: #25d366; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: none; }
-.btn-doc { background: #0f9d58; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+/* SISTEMA DE RESULTADOS */
+.result-box {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px; margin-top: 16px; white-space: pre-wrap; font-size: 14px; line-height: 1.6;
+}
 
-.doc-status-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; font-size: 12px; color: var(--text-sub); display: flex; justify-content: space-between; align-items: center; transition: background 0.3s; }
-.doc-status-box a { color: var(--primary); font-weight: 700; text-decoration: none; }
+/* MODAL E LOADING */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none;
+  align-items: center; justify-content: center; z-index: 10000; padding: 20px;
+}
+.modal-box {
+  background: var(--card-bg); border-radius: 16px; padding: 24px; max-width: 420px;
+  width: 100%; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 
-.card-desk-box { background: #faf6ee; border: 1px solid #e8dec8; border-radius: 16px; padding: 20px; margin-top: 16px; text-align: center; }
-.pill-header { display: inline-block; background: #388e3c; color: white; font-size: 11px; font-weight: 800; padding: 4px 14px; border-radius: 20px; margin-bottom: 8px; }
-.card-desk-meta { font-size: 12px; color: #555; margin-bottom: 16px; font-weight: 600; }
-.card-desk-sec { border-radius: 12px; padding: 12px 16px; margin-bottom: 12px; text-align: center; }
-.pill-badge { display: inline-block; color: white; font-size: 11px; padding: 4px 12px; border-radius: 12px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; }
-.sec-sinais { background: #eaf2fd; } .sec-sinais .pill-badge { background: #4a90e2; }
-.sec-acalma { background: #fef8eb; } .sec-acalma .pill-badge { background: #f5a623; }
-.sec-evitar { background: #fdeeee; } .sec-evitar .pill-badge { background: #d9534f; }
-.sec-interesses { background: #eef7ee; } .sec-interesses .pill-badge { background: #5cb85c; }
-.card-desk-text { font-size: 14px; line-height: 1.5; color: #2c3e50; }
+#loading-overlay {
+  position: fixed; inset: 0; background: rgba(255,255,255,0.7); display: none;
+  align-items: center; justify-content: center; flex-direction: column; z-index: 10001;
+}
+body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
+.spinner {
+  width: 44px; height: 44px; border: 4px solid var(--border);
+  border-top-color: var(--primary); border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-.msg-card { padding: 12px 16px; border-radius: 8px; font-size: 13px; display: none; margin-bottom: 16px; }
-.msg-sucesso { background: var(--success-light); color: var(--success); border: 1px solid var(--success-light); }
-.msg-erro { background: var(--danger-light); color: var(--danger); border: 1px solid var(--danger-light); }
-
-#loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 999; }
-.loading-card { background: white; padding: 24px 36px; border-radius: 16px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
-.spinner { font-size: 28px; animation: spin 1.5s infinite linear; margin-bottom: 12px; }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-/* SISTEMA DE CAIXAS CUSTOMIZADAS (MODAIS) */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
-.modal-box { background: var(--card-bg); width: 90%; max-width: 380px; border-radius: 16px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.25); text-align: center; animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-@keyframes modalPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.modal-title { color: var(--primary); font-size: 18px; font-weight: 700; margin: 0 0 12px 0; }
-.modal-text { color: var(--text); font-size: 15px; line-height: 1.5; margin-bottom: 24px; white-space: pre-wrap; }
-.modal-buttons { display: flex; gap: 12px; justify-content: center; }
-.modal-btn { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 14px; }
-.modal-btn-primary { background: var(--primary); color: #fff; }
-.modal-btn-primary:hover { background: var(--primary-hover); }
-.modal-btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-.modal-btn-danger { background: var(--danger); color: #fff; }
-
-.app-bottombar { display: flex; width: 100%; height: 64px; border-top: 1px solid var(--border); background: #ffffff; position: absolute; bottom: 0; left: 0; z-index: 100; transition: background 0.3s, border-color 0.3s; }
-.nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 11px; }
-.nav-item.active { color: var(--primary); font-weight: 700; }
-.nav-icon { font-size: 22px; padding: 4px 16px; border-radius: 16px; }
-.nav-item.active .nav-icon { background: var(--primary-light); }
-
-@media (min-width: 768px) {
-  .app-sidebar { display: flex; }
-  .app-bottombar { display: none; }
-  .app-content { padding-bottom: 24px; }
+@media(max-width: 768px) {
+  .app-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 500; transform: translateX(-100%); }
+  .app-sidebar.open { transform: translateX(0); }
+  .btn-menu-mobile { display: block; }
 }
 </style>
 </head>
 <body>
 
-<!-- SISTEMA MODAL HTML -->
+<!-- TELA DE LOGIN OAUTH 2.0 -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="material-symbols-outlined login-logo">psychology</div>
+    <h1 class="login-title">Inclusão Conectada</h1>
+    <p class="login-sub">Ambiente restrito de Gestão e Adaptação Pedagógica (AEE). Autentique-se com a sua conta autorizada.</p>
+    
+    <div class="security-check">
+      <input type="checkbox" id="chk-partilhado">
+      <label for="chk-partilhado">
+        <b>Computador da Escola / Compartilhado</b><br>
+        <span style="font-size:11px; color:var(--text-sub);">Encerra a sessão e descarta credenciais temporárias automaticamente ao fechar o navegador.</span>
+      </label>
+    </div>
+
+    <!-- BOTÃO OFICIAL DO GOOGLE -->
+    <div id="g_id_onload"
+         data-client_id="400634410081-usp328ku7tm6aeu9pmu494k0te0h4h7r.apps.googleusercontent.com"
+         data-context="signin"
+         data-ux_mode="popup"
+         data-callback="lidarComLoginGoogle"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-shape="rectangular"
+         data-theme="outline"
+         data-text="signin_with"
+         data-size="large"
+         data-logo_alignment="center"
+         data-width="320">
+    </div>
+    
+    <p id="msg-login" style="color: var(--danger); font-size: 13px; margin-top: 16px; font-weight: bold;"></p>
+  </div>
+</div>
+
+<!-- ESTRUTURA MODAL DE DIÁLOGO -->
 <div id="custom-modal" class="modal-overlay">
   <div class="modal-box">
-    <h3 id="modal-title" class="modal-title">Aviso</h3>
-    <p id="modal-text" class="modal-text">Mensagem</p>
-    <div id="modal-actions" class="modal-buttons"></div>
+    <h3 id="modal-titulo" style="margin-top:0;">Aviso</h3>
+    <p id="modal-mensagem" style="color:var(--text-sub); line-height:1.5; font-size:14px;"></p>
+    <div class="modal-actions">
+      <button id="modal-btn-cancelar" class="btn-secondary">Cancelar</button>
+      <button id="modal-btn-confirmar" class="btn-primary">OK</button>
+    </div>
   </div>
 </div>
 
 <div id="loading-overlay">
-  <div class="loading-card">
-    <div class="spinner">⏳</div>
-    <h3 style="margin:0; color:var(--primary); font-size: 15px;" id="load-title">Carregando...</h3>
-  </div>
+  <div class="spinner"></div>
+  <p id="loading-texto" style="margin-top:16px; font-weight:500; font-size:14px;">Carregando...</p>
 </div>
 
+<!-- APLICAÇÃO -->
 <div class="app-container">
+  
+  <!-- BARRA LATERAL -->
+  <aside class="app-sidebar" id="app-sidebar">
+    <div>
+      <div class="brand">
+        <span class="material-symbols-outlined brand-icon">diversity_3</span>
+        <span class="brand-title">Inclusão</span>
+      </div>
 
-  <!-- BARRA LATERAL (Desktop) COM NOVOS ÍCONES -->
-  <aside class="app-sidebar">
-    <div class="brand-header">
-      <h3 class="brand-title"><span class="material-symbols-outlined">extension</span> Inclusão</h3>
-      <span class="brand-subtitle">Conectada • Esteio/RS</span>
+      <nav class="nav-menu">
+        <a class="nav-item active" onclick="trocarAba('tab-dua')">
+          <span class="material-symbols-outlined">auto_fix_high</span> DUA (Adaptação)
+        </a>
+        <a class="nav-item" onclick="trocarAba('tab-acolher')">
+          <span class="material-symbols-outlined">favorite</span> Cartão & Carta
+        </a>
+        <a class="nav-item" onclick="trocarAba('tab-diario')">
+          <span class="material-symbols-outlined">edit_note</span> Diário de Bordo
+        </a>
+        <a class="nav-item" onclick="trocarAba('tab-estudo')">
+          <span class="material-symbols-outlined">assignment</span> Estudo de Caso
+        </a>
+        <a class="nav-item" onclick="trocarAba('tab-ajustes')">
+          <span class="material-symbols-outlined">settings</span> Ajustes
+        </a>
+      </nav>
     </div>
-    <nav class="sidebar-nav">
-      <button class="sidebar-btn active" onclick="trocarAba('aba-dua', this)"><span class="sidebar-icon material-symbols-outlined">extension</span> DUA</button>
-      <button class="sidebar-btn" onclick="trocarAba('aba-acolher', this)"><span class="sidebar-icon material-symbols-outlined">volunteer_activism</span> Acolher</button>
-      <button class="sidebar-btn" onclick="trocarAba('aba-diario', this)"><span class="sidebar-icon material-symbols-outlined">history_edu</span> Diário de Bordo</button>
-      <button class="sidebar-btn" onclick="trocarAba('aba-estudo', this)"><span class="sidebar-icon material-symbols-outlined">psychology</span> Estudo de Caso</button>
-      <button class="sidebar-btn" onclick="trocarAba('aba-ajustes', this)"><span class="sidebar-icon material-symbols-outlined">manage_accounts</span> Ajustes & Pasta</button>
-    </nav>
+
+    <!-- WIDGET DE USUÁRIO -->
+    <div class="user-profile-widget">
+      <div class="user-info">
+        <span class="user-name" id="lbl-prof-nome">Carregando...</span>
+        <span class="user-sub" id="lbl-prof-escola">Carregando...</span>
+      </div>
+      <button class="btn-logout" onclick="sairEApagarTudo()">
+        <span class="material-symbols-outlined" style="font-size:18px;">logout</span> Sair
+      </button>
+    </div>
   </aside>
 
-  <!-- ÁREA PRINCIPAL -->
+  <!-- PAINEL PRINCIPAL -->
   <div class="main-wrapper">
-    
-    <!-- CABEÇALHO EM 3 NÍVEIS -->
-    <header class="app-topbar">
-      <div>
-        <h3 style="margin:0; font-size: 16px; color: var(--primary);">Inclusão Conectada</h3>
-        <span style="font-size: 11px; color: var(--text-sub); display: block;">Sala de Recursos Multifuncionais - AEE</span>
-        <span id="badge-escola" style="font-size: 12px; font-weight: 700; color: var(--text); display: none; margin-top: 3px;"></span>
+    <header class="app-header">
+      <div class="header-left">
+        <button class="btn-menu-mobile" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <span class="header-title" id="page-title">Adaptação de Aula (DUA)</span>
       </div>
-      <div id="badge-usuario" class="badge-user">Conectando...</div>
+      <div style="font-size:13px; font-weight:600; color:var(--primary);" id="badge-usuario"></div>
     </header>
 
-    <div class="student-bar">
-      <label><span class="material-symbols-outlined" style="font-size:18px;">person</span> Estudante:</label>
-      <select id="sel-global-aluno" onchange="aoTrocarAlunoGlobal(this.value)">
-        <option value="">Carregando lista...</option>
-      </select>
-    </div>
-
-    <main class="app-content">
-      <div class="content-inner">
-
-        <!-- ABA DUA -->
-        <div id="aba-dua" class="tab-panel active">
-          <div id="status-box-dua" class="doc-status-box"><span>ℹ️ Nenhuma adaptação registrada</span></div>
-          <div class="card">
-            <div class="form-group">
-              <label class="form-label">Plano de Aula Proposto</label>
-              <textarea id="txt-plano-aula" class="form-input" placeholder="Cole o plano da aula regular para adaptarmos com os 3 princípios do DUA..."></textarea>
+    <main class="content-body">
+      
+      <!-- ABA 1: DUA -->
+      <section id="tab-dua" class="tab-content active">
+        <div class="card">
+          <div class="card-header">
+            <span class="material-symbols-outlined">school</span>
+            <div>
+              <h2 class="card-title">Adaptação sob Desenho Universal para a Aprendizagem</h2>
+              <div class="card-desc">Selecione o estudante para recuperar o histórico e contextualizar a proposta.</div>
             </div>
-            <button class="btn" onclick="gerarDUA()"><span class="material-symbols-outlined">extension</span> Adaptar com DUA</button>
           </div>
-          <div id="msg-dua" class="msg-card"></div>
-          <div id="res-dua" class="card" style="display:none; white-space:pre-wrap; line-height: 1.6; font-size: 14px;"></div>
+          <div class="form-group">
+            <label>Estudante:</label>
+            <select id="sel-aluno-dua"><option value="">A carregar estudantes...</option></select>
+          </div>
+          <div class="form-group">
+            <label>Plano de Aula / Conteúdo Proposto:</label>
+            <textarea id="txt-plano-aula" placeholder="Descreva os objetivos, recursos e etapas da aula regular..."></textarea>
+          </div>
+          <button class="btn-primary" onclick="executarDUA()">
+            <span class="material-symbols-outlined">auto_awesome</span> Gerar Adaptação DUA
+          </button>
+          <div id="res-dua" class="result-box" style="display:none;"></div>
         </div>
+      </section>
 
-        <!-- ABA ACOLHER -->
-        <div id="aba-acolher" class="tab-panel">
-          <div id="status-box-cartao" class="doc-status-box"><span>ℹ️ Cartão de apoio: Não gerado</span></div>
-          <div id="status-box-carta" class="doc-status-box"><span>ℹ️ Carta à regente: Não gerada</span></div>
-
-          <div class="card">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
-              <button class="btn" style="background:var(--success);" onclick="gerarCartaoAction()"><span class="material-symbols-outlined">contact_page</span> Gerar Cartão</button>
-              <button class="btn" onclick="gerarCartaAction()"><span class="material-symbols-outlined">mail</span> Carta à Regente</button>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nome do(a) Professor(a) Regente (opcional)</label>
-              <input type="text" id="txt-nome-regente" class="form-input" placeholder="Ex: Profa. Juliana">
+      <!-- ABA 2: ACOLHER -->
+      <section id="tab-acolher" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <span class="material-symbols-outlined">badge</span>
+            <div>
+              <h2 class="card-title">Cartão de Apoio Rápido & Apresentação</h2>
+              <div class="card-desc">Síntese de autorregulação e carta de apresentação ao professor regente.</div>
             </div>
           </div>
-          <div id="msg-acolhimento" class="msg-card"></div>
-
-          <div id="res-cartao" style="display:none;">
-            <div class="card-desk-box">
-              <div class="pill-header">ACOLHER & CONECTAR</div>
-              <h3 style="margin:4px 0 2px 0; color:var(--text); font-size:18px;">Cartão de Apoio ao Aluno</h3>
-              <div id="lbl-cartao-meta" class="card-desk-meta">Aluno: - • Escola: -</div>
-
-              <div class="card-desk-sec sec-sinais"><div class="pill-badge">Primeiros Sinais</div><div id="cartao-sinais" class="card-desk-text">-</div></div>
-              <div class="card-desk-sec sec-acalma"><div class="pill-badge">O que Acalma</div><div id="cartao-acalma" class="card-desk-text">-</div></div>
-              <div class="card-desk-sec sec-evitar"><div class="pill-badge">O que Evitar</div><div id="cartao-evitar" class="card-desk-text">-</div></div>
-              <div class="card-desk-sec sec-interesses"><div class="pill-badge">Interesses Favoritos</div><div id="cartao-interesses" class="card-desk-text">-</div></div>
-              <div style="font-size:12px; color:var(--text-sub); margin-top:12px;"><span id="cartao-apoio-status">Sem profissional de apoio na escola</span><br><i>Com carinho, Família e Equipe AEE</i></div>
-            </div>
-            <div style="margin-top:16px; display: flex; gap: 8px;">
-              <a id="link-doc-cartao-btn" class="btn-doc" target="_blank"><span class="material-symbols-outlined" style="font-size:18px;">description</span> Abrir Docs</a>
-              <a id="btn-whats-cartao" class="btn-whats" target="_blank"><span class="material-symbols-outlined" style="font-size:18px;">send</span> Enviar WhatsApp</a>
-            </div>
+          <div class="form-group">
+            <label>Estudante:</label>
+            <select id="sel-aluno-acolher"><option value="">A carregar estudantes...</option></select>
           </div>
-
-          <div id="res-carta" style="display:none; margin-top:16px;">
-            <div class="card">
-              <h3 style="margin:0 0 12px 0; color:var(--text); font-size:16px;"><span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle;">mail</span> Carta à Regente</h3>
-              <div id="txt-carta" style="font-size:14px; white-space:pre-wrap; line-height:1.6;"></div>
-            </div>
-            <div style="margin-top:12px; display: flex; gap: 8px;">
-              <a id="link-doc-carta-btn" class="btn-doc" target="_blank"><span class="material-symbols-outlined" style="font-size:18px;">description</span> Abrir Docs</a>
-              <button class="btn-whats" onclick="compartilharWhatsApp('txt-carta')"><span class="material-symbols-outlined" style="font-size:18px;">send</span> Enviar WhatsApp</button>
-            </div>
+          <div class="form-group">
+            <label>Nome do Professor Regente (opcional):</label>
+            <input type="text" id="txt-regente-nome" placeholder="Ex: Profa. Juliana">
           </div>
-        </div>
-
-        <!-- ABA DIÁRIO -->
-        <div id="aba-diario" class="tab-panel">
-          <div class="card">
-            <div class="form-group">
-              <label class="form-label">Categoria do Registro</label>
-              <select id="sel-categoria" class="form-input">
-                <option>Avanço de Aprendizagem</option>
-                <option>Recusa de Atividade</option>
-                <option>Desregulação Sensorial/Emocional</option>
-                <option>Mediação / Intervenção SRM</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Relato do Atendimento</label>
-              <textarea id="txt-obs" class="form-input" placeholder="Descreva os fatos ocorridos no atendimento de hoje..."></textarea>
-            </div>
-            <button class="btn" onclick="salvarDiario()"><span class="material-symbols-outlined">history_edu</span> Gravar no Diário de Bordo</button>
-          </div>
-          <div id="msg-diario" class="msg-card"></div>
-        </div>
-
-        <!-- ABA ESTUDO -->
-        <div id="aba-estudo" class="tab-panel">
-          <div id="status-box-estudo" class="doc-status-box"><span>ℹ️ Estudo de Caso: Não gerado</span></div>
-          <div class="card">
-            <button class="btn" onclick="gerarEstudo()"><span class="material-symbols-outlined">psychology</span> Gerar Estudo de Caso</button>
-          </div>
-          <div id="msg-estudo" class="msg-card"></div>
-          <div id="res-estudo" class="card" style="display:none; font-size:14px; line-height: 1.6; white-space:pre-wrap;"></div>
-        </div>
-
-        <!-- ABA AJUSTES -->
-        <div id="aba-ajustes" class="tab-panel">
-          
-          <!-- ECRÃ DE PERFIL JÁ CONFIGURADO -->
-          <div id="box-perfil-bloqueado" class="card" style="display:none;">
-            <div style="display:inline-block; background:var(--success-light); color:var(--success); font-size:12px; font-weight:700; padding:4px 12px; border-radius:16px; margin-bottom:14px;">✅ Perfil Cadastrado</div>
-            <div style="margin-bottom:10px;"><b>Professor(a):</b> <span id="lbl-prof-nome">-</span></div>
-            <div style="margin-bottom:10px;"><b>Função:</b> <span id="lbl-prof-perfil">-</span></div>
-            <div style="margin-bottom:10px;"><b>Escola:</b> <span id="lbl-prof-escola">-</span></div>
-            <div style="margin-bottom:14px;"><b>Pasta Raiz:</b> <span id="lbl-prof-pasta" style="font-family:monospace; color:var(--primary);">-</span></div>
-            
-            <button class="btn" style="background:var(--success);" onclick="sincronizarPasta()"><span class="material-symbols-outlined">sync</span> Sincronizar Alunos da Pasta</button>
-            <div id="msg-sync" class="msg-card" style="margin-top:12px;"></div>
-            
-            <button class="btn btn-secondary" style="margin-top:10px;" onclick="destravarEdicaoPerfil()"><span class="material-symbols-outlined">edit</span> Editar Dados / Pasta</button>
-            
-            <!-- CAIXA DE SELEÇÃO DE TEMA (MODO ESCURO/CLARO) -->
-            <div class="form-group" style="margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px;">
-              <label class="form-label">🎨 Aparência do Aplicativo</label>
-              <select id="sel-tema" class="form-input" onchange="mudarTema(this.value)">
-                <option value="auto">Automático (Segue o Celular)</option>
-                <option value="light">Modo Claro</option>
-                <option value="dark">Modo Escuro</option>
-              </select>
-            </div>
-
-            <!-- BOTÕES DE DESTRUIÇÃO E SUPORTE -->
-            <hr style="border:0; border-top:1px solid var(--border); margin: 24px 0;">
-            <p style="font-size: 13px; color: var(--text-sub); text-align: center; margin-bottom: 12px;">Precisa de assistência com o sistema?</p>
-            <button class="btn btn-whats" style="width: 100%; justify-content: center; margin-bottom: 16px;" onclick="abrirHelpDesk()">
-              <span class="material-symbols-outlined">support_agent</span> Help Desk - Falar com o Suporte
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn-primary" onclick="executarCartao()">
+              <span class="material-symbols-outlined">contact_emergency</span> Gerar Cartão
             </button>
-            <button class="btn" style="background:var(--danger);" onclick="sairEApagarTudo()"><span class="material-symbols-outlined">delete_forever</span> Sair e Apagar Todos os Dados</button>
-          </div>
-
-          <!-- ECRÃ DE CADASTRO -->
-          <div id="box-perfil-formulario" style="display:none;">
-            <div class="cartao-guia">
-              <h3 class="titulo-guia"><span class="material-symbols-outlined">build</span> Como Conectar o seu Sistema</h3>
-              <p style="font-size: 13px; color: var(--text-sub); margin-top: 0; margin-bottom: 8px;">Siga os passos abaixo antes de salvar o seu perfil:</p>
-
-              <div class="passo-item">
-                <h4><span class="material-symbols-outlined" style="font-size:18px;">key</span> Passo 1: Chave da IA (Google AI Studio)</h4>
-                <ul>
-                  <li><span>1.</span> <span>Acesse o <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.</span></li>
-                  <li><span>2.</span> <span>Faça login e clique em <strong>"Get API key"</strong> no menu.</span></li>
-                  <li><span>3.</span> <span>Clique no botão <strong>"Create API key"</strong>.</span></li>
-                  <li><span>4.</span> <span>Copie o código gerado e cole no último campo abaixo.</span></li>
-                </ul>
-              </div>
-
-              <div class="passo-item">
-                <h4><span class="material-symbols-outlined" style="font-size:18px;">folder</span> Passo 2: ID da Pasta (Google Drive)</h4>
-                <ul>
-                  <li><span>1.</span> <span>Crie uma pasta para os alunos no <a href="https://drive.google.com/" target="_blank">Google Drive</a>.</span></li>
-                  <li><span>2.</span> <span>Abra essa pasta e olhe o link no topo do navegador.</span></li>
-                  <li><span>3.</span> <span>Copie <strong>apenas a mistura final de letras e números</strong>.</span></li>
-                  <li><span>4.</span> <span>Cole esse código no campo "Pasta Raiz" abaixo.</span></li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="form-group">
-                <label class="form-label">Nome Completo</label>
-                <input type="text" id="prof-nome" class="form-input" placeholder="Seu nome">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Função Principal</label>
-                <select id="prof-perfil" class="form-input">
-                  <option value="AEE">Professor(a) de AEE / SRM</option>
-                  <option value="Regente">Professor(a) de Sala Comum (Regente)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Unidade Escolar</label>
-                <input type="text" id="prof-escola" class="form-input" placeholder="Nome da escola municipal">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Link ou ID da Pasta Raiz no Google Drive</label>
-                <input type="text" id="txt-pasta-raiz" class="form-input" placeholder="Cole o link ou ID da pasta onde estão os alunos">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Chave de IA (Gemini API Key)</label>
-                <input type="password" id="prof-chave" class="form-input" placeholder="AIzaSy...">
-              </div>
-              <button class="btn" onclick="salvarPerfil()"><span class="material-symbols-outlined">save</span> Salvar Perfil & Configurações</button>
-              <div id="msg-ajustes" class="msg-card" style="margin-top:12px;"></div>
-            </div>
-            
-            <button class="btn btn-whats" style="width: 100%; justify-content: center; margin-bottom: 20px;" onclick="abrirHelpDesk()">
-              <span class="material-symbols-outlined">support_agent</span> Dificuldade para conectar? Fale com o Suporte
+            <button class="btn-primary" onclick="executarCarta()">
+              <span class="material-symbols-outlined">mail</span> Gerar Carta à Docência
             </button>
-            
+          </div>
+          <div id="res-acolher" class="result-box" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- ABA 3: DIÁRIO DE BORDO -->
+      <section id="tab-diario" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <span class="material-symbols-outlined">history_edu</span>
+            <div>
+              <h2 class="card-title">Registro de Atendimento e Evolução</h2>
+              <div class="card-desc">Salva o relato na aba "Diario" e anexa um arquivo .txt na pasta do estudante no Drive.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Estudante:</label>
+            <select id="sel-aluno-diario"><option value="">A carregar estudantes...</option></select>
+          </div>
+          <div class="form-group">
+            <label>Dimensão / Categoria:</label>
+            <select id="sel-diario-categoria">
+              <option value="Comunicação e Interação">Comunicação e Interação</option>
+              <option value="Cognitivo e Atenção">Cognitivo e Atenção</option>
+              <option value="Sensorial e Motor">Sensorial e Motor</option>
+              <option value="Autorregulação e Emoções">Autorregulação e Emoções</option>
+              <option value="Adaptação Curricular">Adaptação Curricular</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Observação Pedagógica:</label>
+            <textarea id="txt-diario-obs" placeholder="Descreva os avanços, barreiras identificadas ou mediações realizadas..."></textarea>
+          </div>
+          <button class="btn-primary" onclick="executarSalvarDiario()">
+            <span class="material-symbols-outlined">save</span> Registrar Atendimento
+          </button>
+        </div>
+      </section>
+
+      <!-- ABA 4: ESTUDO DE CASO -->
+      <section id="tab-estudo" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <span class="material-symbols-outlined">psychology_alt</span>
+            <div>
+              <h2 class="card-title">Estudo de Caso Integrado</h2>
+              <div class="card-desc">Gera um relatório fundamentado analisando os diários e documentos anteriores.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Estudante:</label>
+            <select id="sel-aluno-estudo"><option value="">A carregar estudantes...</option></select>
+          </div>
+          <button class="btn-primary" onclick="executarEstudo()">
+            <span class="material-symbols-outlined">summarize</span> Consolidar Estudo de Caso
+          </button>
+          <div id="res-estudo" class="result-box" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- ABA 5: AJUSTES -->
+      <section id="tab-ajustes" class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            <span class="material-symbols-outlined">tune</span>
+            <h2 class="card-title">Configurações do Ambiente</h2>
+          </div>
+          <p style="font-size:14px; color:var(--text-sub); line-height:1.6;">
+            Os seus dados e credenciais de Inteligência Artificial são sincronizados centralmente a partir da sua conta Google e da base de dados administrativa.
+          </p>
+          <div style="margin-top:20px;">
+            <button class="btn-primary" style="background:var(--danger);" onclick="sairEApagarTudo()">
+              <span class="material-symbols-outlined">delete_forever</span> Encerrar Sessão e Limpar Cache Local
+            </button>
           </div>
         </div>
+      </section>
 
-      </div>
     </main>
-
-    <!-- BARRA INFERIOR (Mobile) COM NOVOS ÍCONES -->
-    <nav class="app-bottombar">
-      <button class="nav-item active" onclick="trocarAba('aba-dua', this)"><div class="nav-icon material-symbols-outlined">extension</div><div>DUA</div></button>
-      <button class="nav-item" onclick="trocarAba('aba-acolher', this)"><div class="nav-icon material-symbols-outlined">volunteer_activism</div><div>Acolher</div></button>
-      <button class="nav-item" onclick="trocarAba('aba-diario', this)"><div class="nav-icon material-symbols-outlined">history_edu</div><div>Diário</div></button>
-      <button class="nav-item" onclick="trocarAba('aba-estudo', this)"><div class="nav-icon material-symbols-outlined">psychology</div><div>Estudo</div></button>
-      <button class="nav-item" onclick="trocarAba('aba-ajustes', this)"><div class="nav-icon material-symbols-outlined">manage_accounts</div><div>Ajustes</div></button>
-    </nav>
-
   </div>
 </div>
 
 <script>
+// CONFIGURAÇÃO DO BACKEND INTEGRADO
 const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuWu0SZyD6BEUdEb3IV73dHK-A6_qNppzDs0ZhB5xXage_k/exec";
 
-var cacheAlunos = {};
-var alunoAtivoId = null;
-var dadosProfessorCache = {};
+var dadosUsuarioAtivo = null;
+var listaEstudantesCache = [];
 
-// -------- SISTEMA DE MODAIS (SUBSTITUTO DOS ALERTS E CONFIRMS) --------
-function fecharModal() {
-  document.getElementById('custom-modal').style.display = 'none';
+window.onload = function() {
+  verificarSessaoAtiva();
+};
+
+// ==========================================
+// AUTENTICAÇÃO GOOGLE E CONTROLE DE SESSÃO
+// ==========================================
+function decodificarJWT(token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+  return JSON.parse(jsonPayload);
 }
 
-function mostrarAlerta(mensagem, titulo = "Inclusão Conectada") {
-  document.getElementById('modal-title').innerText = titulo;
-  document.getElementById('modal-text').innerText = mensagem;
-  const actions = document.getElementById('modal-actions');
-  actions.innerHTML = '<button class="modal-btn modal-btn-primary" onclick="fecharModal()">Entendi</button>';
-  document.getElementById('custom-modal').style.display = 'flex';
-}
+async function lidarComLoginGoogle(response) {
+  try {
+    const payload = decodificarJWT(response.credential);
+    const emailGoogle = payload.email;
+    const isPartilhado = document.getElementById('chk-partilhado').checked;
+    
+    document.getElementById('msg-login').innerText = "Validando credenciais...";
+    document.getElementById('login-screen').style.opacity = '0.7';
+    document.getElementById('login-screen').style.pointerEvents = 'none';
 
-function mostrarConfirmacao(mensagem, callbackSim, titulo = "Atenção") {
-  document.getElementById('modal-title').innerText = titulo;
-  document.getElementById('modal-text').innerText = mensagem;
-  const actions = document.getElementById('modal-actions');
-  actions.innerHTML = `
-    <button class="modal-btn modal-btn-secondary" onclick="fecharModal()">Cancelar</button>
-    <button class="modal-btn modal-btn-danger" id="btn-modal-sim">Sim, quero sair</button>
-  `;
-  document.getElementById('btn-modal-sim').onclick = () => { 
-    fecharModal(); 
-    callbackSim(); 
-  };
-  document.getElementById('custom-modal').style.display = 'flex';
-}
-// ---------------------------------------------------------------------
-
-// FUNÇÕES DE GESTÃO DO MODO ESCURO
-function inicializarTema() {
-  const temaSalvo = localStorage.getItem('inclusao_tema') || 'auto';
-  if(document.getElementById('sel-tema')) {
-    document.getElementById('sel-tema').value = temaSalvo;
+    const res = await chamarAPI("fazerLogin", { email: emailGoogle });
+    
+    if (res && res.sucesso) {
+      const storage = isPartilhado ? sessionStorage : localStorage;
+      storage.setItem('user_auth_email', res.dados.email);
+      storage.setItem('user_auth_dados', JSON.stringify(res.dados));
+      
+      iniciarAplicacao(res.dados);
+    } else {
+      document.getElementById('msg-login').innerText = res.mensagem || "Acesso negado. Verifique o cadastro na planilha.";
+      document.getElementById('login-screen').style.opacity = '1';
+      document.getElementById('login-screen').style.pointerEvents = 'auto';
+    }
+  } catch (err) {
+    document.getElementById('msg-login').innerText = "Falha ao processar credencial de autenticação.";
+    document.getElementById('login-screen').style.opacity = '1';
+    document.getElementById('login-screen').style.pointerEvents = 'auto';
   }
-  aplicarTemaCSS(temaSalvo);
 }
 
-function aplicarTemaCSS(tema) {
-  const prefereEscuro = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if (tema === 'dark' || (tema === 'auto' && prefereEscuro)) {
-    document.body.classList.add('dark-theme');
+function verificarSessaoAtiva() {
+  const dadosSalvos = sessionStorage.getItem('user_auth_dados') || localStorage.getItem('user_auth_dados');
+  if (dadosSalvos) {
+    iniciarAplicacao(JSON.parse(dadosSalvos));
   } else {
-    document.body.classList.remove('dark-theme');
+    document.getElementById('login-screen').style.display = 'flex';
   }
 }
 
-function mudarTema(novoTema) {
-  localStorage.setItem('inclusao_tema', novoTema);
-  aplicarTemaCSS(novoTema);
+function iniciarAplicacao(dados) {
+  dadosUsuarioAtivo = dados;
+  document.getElementById('login-screen').style.display = 'none';
+  
+  document.getElementById('lbl-prof-nome').innerText = dados.nome || dados.email;
+  document.getElementById('lbl-prof-escola').innerText = dados.escola || dados.perfil || "AEE";
+  document.getElementById('badge-usuario').innerText = (dados.nome ? dados.nome.split(' ')[0] : "Usuário");
+  
+  carregarAlunos(dados.pastaRaiz);
 }
 
-if(window.matchMedia) {
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-    const temaAtual = localStorage.getItem('inclusao_tema') || 'auto';
-    if(temaAtual === 'auto') aplicarTemaCSS('auto');
-  });
+function sairEApagarTudo() {
+  mostrarConfirmacao(
+    "Deseja realmente sair? As credenciais e dados temporários serão removidos deste dispositivo.",
+    () => {
+      sessionStorage.clear();
+      localStorage.clear();
+      if (window.google && google.accounts && google.accounts.id) {
+        google.accounts.id.disableAutoSelect();
+      }
+      window.location.reload(true);
+    },
+    "Encerrar Sessão"
+  );
 }
 
+// ==========================================
+// COMUNICAÇÃO COM A API (GOOGLE APPS SCRIPT)
+// ==========================================
 async function chamarAPI(action, payload = {}) {
   try {
+    const emailSessao = sessionStorage.getItem('user_auth_email') || localStorage.getItem('user_auth_email');
+    if (emailSessao) payload.emailUsuario = emailSessao;
+
     const corpo = JSON.stringify({ action: action, ...payload });
     const resposta = await fetch(API_URL, {
       method: "POST",
@@ -521,266 +533,214 @@ async function chamarAPI(action, payload = {}) {
     });
     return await resposta.json();
   } catch (erro) {
-    console.error("Erro na chamada à API:", erro);
-    return { sucesso: false, mensagem: "Erro de comunicação com o servidor. Verifique a internet." };
+    console.error("Erro na API:", erro);
+    return { sucesso: false, mensagem: "Erro de conexão com o servidor." };
   }
 }
 
-function trocarAba(idAba, el) {
-  var abas = document.querySelectorAll('.tab-panel');
-  for (var i = 0; i < abas.length; i++) abas[i].classList.remove('active');
-  var botoes = document.querySelectorAll('.nav-item, .sidebar-btn');
-  for (var j = 0; j < botoes.length; j++) botoes[j].classList.remove('active');
-
-  document.getElementById(idAba).classList.add('active');
-  var itensCorrespondentes = document.querySelectorAll("[onclick*='" + idAba + "']");
-  for (var k = 0; k < itensCorrespondentes.length; k++) itensCorrespondentes[k].classList.add('active');
+// ==========================================
+// SINCRONIZAÇÃO E OPERAÇÕES PEDAGÓGICAS
+// ==========================================
+async function carregarAlunos(pastaId) {
+  const res = await chamarAPI("listarAlunos", { linkPasta: pastaId });
+  if (res && res.sucesso) {
+    listaEstudantesCache = res.lista;
+    popularSelectsAlunos(res.lista);
+  } else {
+    mostrarModal("Aviso", "Não foi possível listar as pastas de estudantes: " + (res.mensagem || "Erro desconhecido."));
+  }
 }
 
-function load(texto) { 
-  document.getElementById('load-title').innerText = texto; 
-  document.getElementById('loading-overlay').style.display = 'flex'; 
+function popularSelectsAlunos(alunos) {
+  const selects = ['sel-aluno-dua', 'sel-aluno-acolher', 'sel-aluno-diario', 'sel-aluno-estudo'];
+  selects.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '<option value="">Selecione um estudante...</option>';
+    alunos.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.id;
+      opt.text = a.nome;
+      el.appendChild(opt);
+    });
+  });
 }
 
-function unload() { document.getElementById('loading-overlay').style.display = 'none'; }
-
-function msg(id, texto, sucesso) { 
-  var d = document.getElementById(id); 
-  d.innerText = texto; 
-  d.className = "msg-card " + (sucesso ? "msg-sucesso" : "msg-erro"); 
-  d.style.display = "block"; 
-}
-
-function limparResultadosEmTela() {
-  document.getElementById('res-dua').style.display = 'none';
-  document.getElementById('txt-plano-aula').value = '';
-  document.getElementById('res-cartao').style.display = 'none';
-  document.getElementById('res-carta').style.display = 'none';
-  document.getElementById('txt-carta').innerText = '';
-  document.getElementById('res-estudo').style.display = 'none';
-  document.getElementById('txt-obs').value = '';
-  document.getElementById('status-box-dua').innerHTML = '<span>ℹ️ Nenhuma adaptação registrada</span>';
-  document.getElementById('status-box-cartao').innerHTML = '<span>ℹ️ Cartão de apoio: Não gerado</span>';
-  document.getElementById('status-box-carta').innerHTML = '<span>ℹ️ Carta à regente: Não gerada</span>';
-  document.getElementById('status-box-estudo').innerHTML = '<span>ℹ️ Estudo de Caso: Não gerado</span>';
-}
-
-window.onload = function() {
-  inicializarTema(); 
-  carregarDadosPerfil();
-  carregarListaAlunos();
-};
-
-async function carregarListaAlunos() {
-  const res = await chamarAPI("listarAlunos");
-  var sel = document.getElementById('sel-global-aluno');
-  sel.innerHTML = '<option value="">-- Selecione o Estudante --</option>';
+async function executarDUA() {
+  const sel = document.getElementById('sel-aluno-dua');
+  const plano = document.getElementById('txt-plano-aula').value.trim();
+  if (!sel.value || !plano) return mostrarModal("Atenção", "Selecione o estudante e informe a aula proposta.");
   
-  if (res && res.sucesso && res.lista && res.lista.length > 0) {
-    for (var i = 0; i < res.lista.length; i++) {
-      cacheAlunos[res.lista[i].id] = res.lista[i];
-      var opt = document.createElement('option');
-      opt.value = res.lista[i].id;
-      opt.innerText = res.lista[i].nome;
-      sel.appendChild(opt);
-    }
-    alunoAtivoId = res.lista[0].id;
-    sel.value = alunoAtivoId;
-    carregarStatusDocumentos();
+  mostrarLoading("Gerando adaptação sob princípios DUA...");
+  const res = await chamarAPI("adaptarPlanoDUA", { idPasta: sel.value, plano: plano });
+  esconderLoading();
+
+  if (res && res.sucesso) {
+    const box = document.getElementById('res-dua');
+    box.style.display = "block";
+    box.innerText = res.adaptacao;
   } else {
-    sel.innerHTML = '<option value="">Vazio (Sincronize nos Ajustes)</option>';
+    mostrarModal("Erro", res.mensagem || "Falha na geração DUA.");
   }
 }
 
-async function carregarDadosPerfil() {
-  const res = await chamarAPI("obterDadosProfessor");
-  if (res && res.sucesso && res.dados) {
-    var u = res.dados;
-    dadosProfessorCache = u;
-    document.getElementById('badge-usuario').innerText = u.nome ? u.nome.split(' ')[0] : "Conectado";
-    
-    if (u.cadastrado && u.temChave) {
-      document.getElementById('lbl-prof-nome').innerText = u.nome;
-      document.getElementById('lbl-prof-perfil').innerText = u.perfil === "AEE" ? "Professor(a) de AEE" : "Professor(a) Regente";
-      document.getElementById('lbl-prof-escola').innerText = u.escola || "Não informada";
-      document.getElementById('lbl-prof-pasta').innerText = u.pastaRaiz ? ("Configurada (" + u.pastaRaiz.substring(0,8) + "...)") : "Pendente";
+async function executarCartao() {
+  const sel = document.getElementById('sel-aluno-acolher');
+  if (!sel.value) return mostrarModal("Atenção", "Selecione um estudante.");
+  
+  mostrarLoading("Compilando dados de regulação...");
+  const res = await chamarAPI("gerarCartao", {
+    idPasta: sel.value,
+    nomeAluno: sel.options[sel.selectedIndex].text
+  });
+  esconderLoading();
 
-      if (u.escola) {
-        document.getElementById('badge-escola').innerText = u.escola;
-        document.getElementById('badge-escola').style.display = 'block';
-      }
-
-      document.getElementById('box-perfil-bloqueado').style.display = 'block';
-      document.getElementById('box-perfil-formulario').style.display = 'none';
-    } else {
-      document.getElementById('badge-escola').style.display = 'none';
-      document.getElementById('box-perfil-bloqueado').style.display = 'none';
-      document.getElementById('box-perfil-formulario').style.display = 'block';
-    }
-
-    document.getElementById('prof-nome').value = u.nome || "";
-    document.getElementById('prof-perfil').value = u.perfil || "AEE";
-    document.getElementById('prof-escola').value = u.escola || "";
-    document.getElementById('txt-pasta-raiz').value = u.pastaRaiz || "";
+  if (res && res.sucesso) {
+    const box = document.getElementById('res-acolher');
+    box.style.display = "block";
+    box.innerHTML = `<b>Documento criado no Drive:</b> <a href="${res.urlDocumento}" target="_blank">Acessar Cartão</a><br><br>` +
+                    `<b>Primeiros Sinais:</b> ${res.cartao.primeirosSinais}<br>` +
+                    `<b>O que Acalma:</b> ${res.cartao.oQueAcalma}<br>` +
+                    `<b>O que Evitar:</b> ${res.cartao.oQueEvitar}<br>` +
+                    `<b>Interesses:</b> ${res.cartao.interessesFavoritos}`;
   } else {
-    document.getElementById('badge-usuario').innerText = "Offline";
+    mostrarModal("Erro", res.mensagem || "Falha ao gerar cartão.");
   }
 }
 
-function destravarEdicaoPerfil() {
-  document.getElementById('box-perfil-bloqueado').style.display = 'none';
-  document.getElementById('box-perfil-formulario').style.display = 'block';
+async function executarCarta() {
+  const sel = document.getElementById('sel-aluno-acolher');
+  const regente = document.getElementById('txt-regente-nome').value.trim();
+  if (!sel.value) return mostrarModal("Atenção", "Selecione um estudante.");
+
+  mostrarLoading("Redigindo carta de apresentação...");
+  const res = await chamarAPI("gerarCarta", {
+    idPasta: sel.value,
+    nomeAluno: sel.options[sel.selectedIndex].text,
+    regente: regente
+  });
+  esconderLoading();
+
+  if (res && res.sucesso) {
+    const box = document.getElementById('res-acolher');
+    box.style.display = "block";
+    box.innerHTML = `<b>Carta criada no Drive:</b> <a href="${res.urlDocumento}" target="_blank">Acessar Documento</a><br><br>${res.carta}`;
+  } else {
+    mostrarModal("Erro", res.mensagem || "Falha ao gerar carta.");
+  }
 }
 
-async function salvarPerfil() {
-  var d = {
-    nome: document.getElementById('prof-nome').value,
-    perfil: document.getElementById('prof-perfil').value,
-    escola: document.getElementById('prof-escola').value,
-    pastaRaiz: document.getElementById('txt-pasta-raiz').value,
-    chave: document.getElementById('prof-chave').value
+async function executarSalvarDiario() {
+  const sel = document.getElementById('sel-aluno-diario');
+  const obs = document.getElementById('txt-diario-obs').value.trim();
+  const cat = document.getElementById('sel-diario-categoria').value;
+  if (!sel.value || !obs) return mostrarModal("Atenção", "Preencha a observação e selecione o estudante.");
+
+  mostrarLoading("Registrando atendimento...");
+  const res = await chamarAPI("salvarDiario", {
+    dados: {
+      idPasta: sel.value,
+      nomeAluno: sel.options[sel.selectedIndex].text,
+      categoria: cat,
+      observacao: obs
+    }
+  });
+  esconderLoading();
+
+  if (res && res.sucesso) {
+    mostrarModal("Sucesso", res.mensagem || "Registro concluído!");
+    document.getElementById('txt-diario-obs').value = "";
+  } else {
+    mostrarModal("Erro", res.mensagem || "Falha ao salvar diário.");
+  }
+}
+
+async function executarEstudo() {
+  const sel = document.getElementById('sel-aluno-estudo');
+  if (!sel.value) return mostrarModal("Atenção", "Selecione um estudante.");
+
+  mostrarLoading("Analisando histórico pedagógico...");
+  const res = await chamarAPI("gerarEstudo", {
+    idPasta: sel.value,
+    nomeAluno: sel.options[sel.selectedIndex].text
+  });
+  esconderLoading();
+
+  if (res && res.sucesso) {
+    const box = document.getElementById('res-estudo');
+    box.style.display = "block";
+    box.innerHTML = `<b>Estudo de Caso Gerado:</b> <a href="${res.urlDocumento}" target="_blank">Abrir no Drive</a><br><br>${res.relatorio}`;
+  } else {
+    mostrarModal("Erro", res.mensagem || "Falha na análise.");
+  }
+}
+
+// ==========================================
+// INTERFACE E COMPONENTES MODAIS
+// ==========================================
+function trocarAba(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  
+  const target = document.getElementById(tabId);
+  if (target) target.classList.add('active');
+  
+  const navMap = {
+    'tab-dua': 0, 'tab-acolher': 1, 'tab-diario': 2, 'tab-estudo': 3, 'tab-ajustes': 4
+  };
+  const titles = {
+    'tab-dua': 'Adaptação de Aula (DUA)',
+    'tab-acolher': 'Cartão de Apoio & Carta Regente',
+    'tab-diario': 'Diário de Bordo',
+    'tab-estudo': 'Estudo de Caso Integrado',
+    'tab-ajustes': 'Configurações do Ambiente'
   };
   
-  if (!d.nome.trim()) { mostrarAlerta("Por favor, digite o seu Nome Completo.", "Falta informação"); return; }
-  if (!d.escola.trim()) { mostrarAlerta("Por favor, digite o nome da Unidade Escolar.", "Falta informação"); return; }
-  if (!d.pastaRaiz.trim()) { mostrarAlerta("Por favor, cole o ID ou Link da Pasta do Drive (Passo 2).", "Falta informação"); return; }
-  if (!d.chave.trim()) { mostrarAlerta("Por favor, cole a sua Chave de IA (Passo 1).", "Falta informação"); return; }
+  const navItems = document.querySelectorAll('.nav-item');
+  if (navItems[navMap[tabId]]) navItems[navMap[tabId]].classList.add('active');
+  document.getElementById('page-title').innerText = titles[tabId];
 
-  load("Salvando Ajustes...");
-  const res = await chamarAPI("salvarCadastroProfessor", { dados: d });
-  unload();
-  msg('msg-ajustes', res.mensagem, res.sucesso);
-  carregarDadosPerfil();
+  if (window.innerWidth <= 768) toggleSidebar();
 }
 
-async function sincronizarPasta() {
-  var link = document.getElementById('txt-pasta-raiz').value;
-  if (!link.trim()) { mostrarAlerta("Cole o link da pasta antes de sincronizar.", "Sincronização"); return; }
+function toggleSidebar() {
+  document.getElementById('app-sidebar').classList.toggle('open');
+}
+
+function mostrarLoading(txt) {
+  document.getElementById('loading-texto').innerText = txt;
+  document.getElementById('loading-overlay').style.display = 'flex';
+}
+
+function esconderLoading() {
+  document.getElementById('loading-overlay').style.display = 'none';
+}
+
+function mostrarModal(titulo, msg) {
+  const m = document.getElementById('custom-modal');
+  document.getElementById('modal-titulo').innerText = titulo;
+  document.getElementById('modal-mensagem').innerText = msg;
+  document.getElementById('modal-btn-cancelar').style.display = 'none';
+  document.getElementById('modal-btn-confirmar').onclick = () => m.style.display = 'none';
+  m.style.display = 'flex';
+}
+
+function mostrarConfirmacao(msg, onConfirm, labelBtn = "Confirmar") {
+  const m = document.getElementById('custom-modal');
+  document.getElementById('modal-titulo').innerText = "Confirmação";
+  document.getElementById('modal-mensagem').innerText = msg;
+  const btnCancel = document.getElementById('modal-btn-cancelar');
+  const btnOk = document.getElementById('modal-btn-confirmar');
   
-  load("Sincronizando Alunos...");
-  const res = await chamarAPI("sincronizarPasta", { linkPasta: link });
-  unload();
-  msg('msg-ajustes', res.mensagem, res.sucesso);
-  msg('msg-sync', res.mensagem, res.sucesso);
-  if (res.sucesso) { carregarDadosPerfil(); carregarListaAlunos(); }
-}
-
-function aoTrocarAlunoGlobal(id) {
-  alunoAtivoId = id;
-  limparResultadosEmTela();
-  carregarStatusDocumentos();
-}
-
-async function carregarStatusDocumentos() {
-  if (!alunoAtivoId) return;
-  const res = await chamarAPI("obterUltimosDocumentos", { idAluno: alunoAtivoId });
-  if (!res || !res.sucesso || !res.documentos) return;
-  var docs = res.documentos;
-
-  var sDua = document.getElementById('status-box-dua');
-  if (docs.dua) sDua.innerHTML = '<span>✅ Última adaptação em <b>' + docs.dua.dataHora + '</b></span>';
-
-  var sCartao = document.getElementById('status-box-cartao');
-  if (docs.cartao && docs.cartao.url) sCartao.innerHTML = '<span>✅ Cartão gerado em <b>' + docs.cartao.dataHora + '</b></span> <a href="' + docs.cartao.url + '" target="_blank">Abrir Docs ➔</a>';
-
-  var sCarta = document.getElementById('status-box-carta');
-  if (docs.carta && docs.carta.url) sCarta.innerHTML = '<span>✅ Carta gerada em <b>' + docs.carta.dataHora + '</b></span> <a href="' + docs.carta.url + '" target="_blank">Abrir Carta ➔</a>';
-
-  var sEstudo = document.getElementById('status-box-estudo');
-  if (docs.estudo && docs.estudo.url) sEstudo.innerHTML = '<span>✅ Estudo emitido em <b>' + docs.estudo.dataHora + '</b></span> <a href="' + docs.estudo.url + '" target="_blank">Abrir Estudo ➔</a>';
-}
-
-async function gerarDUA() {
-  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante na barra superior antes de adaptar.", "Selecione um Aluno"); return; }
-  load("Aplicando DUA...");
-  const res = await chamarAPI("adaptarPlanoDUA", { idAluno: alunoAtivoId, idPasta: cacheAlunos[alunoAtivoId].idPasta, plano: document.getElementById('txt-plano-aula').value });
-  unload();
-  if (res.sucesso) { document.getElementById('res-dua').innerText = res.adaptacao; document.getElementById('res-dua').style.display = 'block'; carregarStatusDocumentos(); } 
-  else msg('msg-dua', res.mensagem, false);
-}
-
-async function gerarCartaoAction() {
-  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante antes de continuar.", "Selecione um Aluno"); return; }
-  var a = cacheAlunos[alunoAtivoId];
-  load("Gerando Cartão de Apoio...");
-  document.getElementById('res-carta').style.display = 'none'; document.getElementById('res-cartao').style.display = 'none';
-  const res = await chamarAPI("gerarCartao", { idAluno: alunoAtivoId, nomeAluno: a.nome, idPasta: a.idPasta });
-  unload();
-
-  if (res.sucesso) {
-    document.getElementById('lbl-cartao-meta').innerText = "Aluno: " + a.nome + " • Turma: " + (a.turma || "AEE") + " • Escola: " + (dadosProfessorCache.escola || "Rede de Esteio");
-    document.getElementById('cartao-sinais').innerText = res.cartao.primeirosSinais;
-    document.getElementById('cartao-acalma').innerText = res.cartao.oQueAcalma;
-    document.getElementById('cartao-evitar').innerText = res.cartao.oQueEvitar;
-    document.getElementById('cartao-interesses').innerText = res.cartao.interessesFavoritos;
-    document.getElementById('link-doc-cartao-btn').href = res.urlDocumento;
-    var zap = "https://api.whatsapp.com/send?text=" + encodeURIComponent("📇 *CARTÃO DE APOIO AO ALUNO*\n*Estudante:* " + a.nome + "\n\n🔵 *PRIMEIROS SINAIS:*\n" + res.cartao.primeirosSinais + "\n\n🟡 *O QUE ACALMA:*\n" + res.cartao.oQueAcalma + "\n\n🔴 *O QUE EVITAR:*\n" + res.cartao.oQueEvitar + "\n\n🟢 *INTERESSES FAVORITOS:*\n" + res.cartao.interessesFavoritos);
-    document.getElementById('btn-whats-cartao').href = zap;
-    document.getElementById('res-cartao').style.display = 'block';
-    carregarStatusDocumentos();
-  } else msg('msg-acolhimento', res.mensagem, false);
-}
-
-async function gerarCartaAction() {
-  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante antes de continuar.", "Selecione um Aluno"); return; }
-  var a = cacheAlunos[alunoAtivoId];
-  load("Redigindo Carta à Regente...");
-  document.getElementById('res-cartao').style.display = 'none'; document.getElementById('res-carta').style.display = 'none';
-  const res = await chamarAPI("gerarCarta", { idAluno: alunoAtivoId, nomeAluno: a.nome, idPasta: a.idPasta, regente: document.getElementById('txt-nome-regente').value });
-  unload();
-
-  if (res.sucesso) {
-    document.getElementById('txt-carta').innerText = res.carta;
-    document.getElementById('link-doc-carta-btn').href = res.urlDocumento;
-    document.getElementById('res-carta').style.display = 'block';
-    carregarStatusDocumentos();
-  } else msg('msg-acolhimento', res.mensagem, false);
-}
-
-async function gerarEstudo() {
-  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante antes de continuar.", "Selecione um Aluno"); return; }
-  load("Gerando Estudo de Caso...");
-  const res = await chamarAPI("gerarEstudo", { idAluno: alunoAtivoId, nomeAluno: cacheAlunos[alunoAtivoId].nome, idPasta: cacheAlunos[alunoAtivoId].idPasta });
-  unload();
-  if (res.sucesso) { document.getElementById('res-estudo').innerText = res.relatorio; document.getElementById('res-estudo').style.display = 'block'; carregarStatusDocumentos(); } 
-  else msg('msg-estudo', res.mensagem, false);
-}
-
-async function salvarDiario() {
-  if (!alunoAtivoId) { mostrarAlerta("Por favor, selecione um estudante antes de gravar no diário.", "Selecione um Aluno"); return; }
-  load("Gravando no Diário...");
-  const res = await chamarAPI("salvarDiario", { dados: { idAluno: alunoAtivoId, nomeAluno: cacheAlunos[alunoAtivoId].nome, idPasta: cacheAlunos[alunoAtivoId].idPasta, categoria: document.getElementById('sel-categoria').value, observacao: document.getElementById('txt-obs').value } });
-  unload();
-  msg('msg-diario', res.mensagem, res.sucesso);
-  if (res.sucesso) document.getElementById('txt-obs').value = '';
-}
-
-function compartilharWhatsApp(idTexto) {
-  var txt = document.getElementById(idTexto).innerText;
-  window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(txt), '_blank');
-}
-
-function abrirHelpDesk() {
-  const numero = "5551984031031"; 
-  const mensagem = "Olá! Preciso de ajuda com o aplicativo Inclusão Conectada.";
-  window.open(`https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`, '_blank');
-}
-
-function sairEApagarTudo() {
-  mostrarConfirmacao(
-    "Tem a certeza que deseja sair e desconectar?\n\nIsto irá limpar completamente a memória e o cache do aplicativo neste aparelho. Todos os dados não salvos na nuvem serão perdidos.", 
-    async () => {
-      load("Limpando Memória...");
-      localStorage.clear(); sessionStorage.clear();
-      if ('caches' in window) { try { const ns = await caches.keys(); for (let n of ns) await caches.delete(n); } catch (e) {} }
-      if ('serviceWorker' in navigator) { try { const rs = await navigator.serviceWorker.getRegistrations(); for(let r of rs) await r.unregister(); } catch (e) {} }
-      
-      unload();
-      mostrarAlerta("Memória do aplicativo apagada com sucesso! O ecrã vai recarregar automaticamente.", "Limpeza Concluída");
-      setTimeout(() => { window.location.reload(true); }, 2500);
-    }, 
-    "Sair e Apagar Tudo"
-  );
+  btnCancel.style.display = 'inline-block';
+  btnCancel.onclick = () => m.style.display = 'none';
+  
+  btnOk.innerText = labelBtn;
+  btnOk.onclick = () => {
+    m.style.display = 'none';
+    onConfirm();
+  };
+  m.style.display = 'flex';
 }
 </script>
 </body>
