@@ -531,11 +531,26 @@ async function lidarComLoginGoogle(response) {
   }
 }
 
-// === SALVAR AJUSTES ===
+// === SALVAR AJUSTES (COM MENSAGENS INTELIGENTES) ===
 async function salvarConfiguracoes() {
   const escola = document.getElementById('config-escola').value.trim();
   const pasta = document.getElementById('config-pasta').value.trim();
   const chave = document.getElementById('config-chave').value.trim();
+  
+  // 1. Verifica se tentou guardar tudo em branco
+  if (!pasta && !chave && !escola) {
+    return mostrarModal("Aviso", "Não preencheu nenhum dado para atualizar.");
+  }
+
+  // 2. Avisos amigáveis para campos incompletos
+  let mensagemFinal = "Configurações guardadas com sucesso!";
+  if (pasta && !chave) {
+    mensagemFinal = "A sua Pasta foi configurada! Lembre-se de adicionar a Chave Gemini mais tarde para conseguir gerar os planos DUA e Cartões de Apoio.";
+  } else if (chave && !pasta) {
+    mensagemFinal = "A sua Chave de IA foi guardada, mas atenção: precisa configurar o Link da Pasta do Drive para que a IA consiga ler o contexto dos alunos e criar os relatórios.";
+  } else if (pasta && chave) {
+    mensagemFinal = "Sucesso! A Inteligência Artificial está totalmente configurada e pronta a usar.";
+  }
   
   mostrarLoading("A atualizar o seu perfil...");
   const res = await chamarAPI("atualizarUsuario", {
@@ -556,7 +571,7 @@ async function salvarConfiguracoes() {
        document.getElementById('lbl-prof-escola').innerText = escola || "AEE";
        if (pasta) carregarAlunos(pasta);
     }
-    mostrarModal("Sucesso", "Configurações guardadas! A Inteligência Artificial já está pronta a usar.");
+    mostrarModal("Sucesso", mensagemFinal);
   } else {
     mostrarModal("Erro", res.mensagem || "Não foi possível atualizar.");
   }
