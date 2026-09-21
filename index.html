@@ -407,7 +407,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
         </div>
       </section>
 
-      <!-- ABA 5: AJUSTES COM INSTRUÇÕES -->
+      <!-- ABA 5: AJUSTES COM INSTRUÇÕES E BOTÃO MELHORADO -->
       <section id="tab-ajustes" class="tab-content">
         <div class="card">
           <div class="card-header">
@@ -444,9 +444,20 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.7); }
 
           <hr style="border:0; border-top:1px solid var(--border); margin: 30px 0 20px 0;">
           
-          <button class="btn-primary" style="background:var(--danger);" onclick="sairEApagarTudo()">
-            <span class="material-symbols-outlined">logout</span> Encerrar Sessão Segura
-          </button>
+          <!-- NOVO BLOCO EXPLICATIVO DO BOTÃO DE SAÍDA -->
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; background: var(--surface); padding: 16px; border-radius: 8px; border: 1px solid var(--border);">
+            <div style="flex: 1; min-width: 200px;">
+              <h3 style="font-size: 14px; margin: 0 0 4px 0; color: var(--text);">Privacidade e Segurança</h3>
+              <p style="font-size: 13px; color: var(--text-sub); margin: 0; line-height: 1.4;">
+                Ao encerrar a sessão, removemos o cache local e desconectamos a sua conta Google deste dispositivo. 
+                Recomendado se estiver a aceder através de um computador partilhado.
+              </p>
+            </div>
+            <button class="btn-primary" style="background:var(--danger); white-space: nowrap;" onclick="sairEApagarTudo()">
+              <span class="material-symbols-outlined">logout</span> Encerrar Sessão Segura
+            </button>
+          </div>
+
         </div>
       </section>
 
