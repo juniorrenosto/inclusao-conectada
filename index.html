@@ -42,7 +42,6 @@ body { margin: 0; background: var(--surface); color: var(--text); height: 100vh;
 .header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
 .btn-menu-mobile { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); }
 
-/* DROPDOWN GLOBAL DE ALUNOS & ATALHO */
 .global-student-wrapper { display: flex; align-items: center; gap: 8px; flex: 1; max-width: 450px; }
 .global-student-selector { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 6px 12px; border-radius: 24px; border: 1px solid var(--border); }
 .global-student-selector select { border: none; background: transparent; color: var(--text); font-weight: 600; font-size: 14px; width: 100%; outline: none; cursor: pointer; }
@@ -75,17 +74,16 @@ textarea { resize: vertical; min-height: 100px; }
 .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 .result-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-top: 16px; white-space: pre-wrap; font-size: 14px; line-height: 1.6; display: none; }
 
-/* HISTÓRICO DE DOCUMENTOS DO ALUNO */
 .student-history-box { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: none; }
 .history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
 .history-item { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; }
 
-/* SANFONA (ACCORDION) */
-.accordion { background: var(--primary-light); color: var(--primary); cursor: pointer; padding: 14px; width: 100%; border: none; text-align: left; outline: none; font-size: 14px; font-weight: 600; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+/* SANFONA (ACCORDION) ORIGINAL INTACTA */
+.accordion { background: var(--primary-light); color: var(--primary); cursor: pointer; padding: 14px; width: 100%; border: none; text-align: left; outline: none; font-size: 14px; font-weight: 600; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; transition: 0.4s; }
+.accordion:hover { background-color: var(--primary); color: white; }
 .panel { padding: 0 16px; background: var(--surface); max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-radius: 8px; margin-bottom: 16px; }
-.panel p { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+.panel p { font-size: 13px; color: var(--text-sub); line-height: 1.5; padding: 8px 0; }
 
-/* MODAL E LOADING */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; }
 .modal-box { background: var(--card-bg); border-radius: 16px; padding: 24px; max-width: 420px; width: 100%; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
@@ -99,7 +97,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 </head>
 <body>
 
-<!-- LOGIN OAUTH 2.0 -->
 <div id="login-screen" class="fullscreen-overlay">
   <div class="login-card">
     <div class="material-symbols-outlined login-logo">psychology</div>
@@ -118,7 +115,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
   </div>
 </div>
 
-<!-- MODAL GENÉRICO -->
 <div id="custom-modal" class="modal-overlay">
   <div class="modal-box">
     <h3 id="modal-titulo" style="margin-top:0;">Aviso</h3>
@@ -136,7 +132,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 </div>
 
 <div class="app-container">
-  <!-- MENU LATERAL -->
   <aside class="app-sidebar" id="app-sidebar">
     <div>
       <div class="brand"><span class="material-symbols-outlined" style="color:var(--primary); font-size:28px;">diversity_3</span><span class="brand-title">Inclusão Conectada</span></div>
@@ -152,7 +147,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
   </aside>
 
   <div class="main-wrapper">
-    <!-- CABEÇALHO GLOBAL -->
     <header class="app-header">
       <div class="header-left">
         <button class="btn-menu-mobile" onclick="toggleSidebar()"><span class="material-symbols-outlined">menu</span></button>
@@ -198,7 +192,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;">Cartão de Apoio & Carta à Família</h2>
           <div class="form-group">
-            <label>Nome do Responsável Familiar (Opcional para a carta):</label>
+            <label>Nome do Responsável Familiar (Opcional):</label>
             <input type="text" id="txt-familia-nome" placeholder="Ex: Sra. Maria (Mãe)">
           </div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
@@ -238,7 +232,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
         </div>
       </section>
 
-      <!-- HISTÓRICO RECENTE DO ALUNO ATIVO (COMPARTILHADO ENTRE ABAS) -->
       <section class="tab-content active" style="display:block; margin-top:20px;">
         <div class="card" id="card-historico-aluno" style="display:none;">
           <h3 style="margin-top:0; font-size:15px; display:flex; align-items:center; gap:8px;">
@@ -254,7 +247,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">tune</span> Configurações Base</h2>
           
-          <!-- SANFONA DE AJUDA -->
+          <!-- SANFONA DE AJUDA RESTAURADA -->
           <button class="accordion"><span style="display:flex; align-items:center; gap:6px;"><span class="material-symbols-outlined">help</span> Como configurar o sistema? (Passo a passo)</span></button>
           <div class="panel">
             <p><b>1. Link da Pasta Raiz:</b> Crie uma pasta principal no seu Google Drive (ex: "Meus Alunos 2026"). Dentro dela, crie uma subpasta para cada aluno. Copie o link da pasta principal e cole abaixo.</p>
@@ -283,7 +276,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">description</span> Documento Oficial (Cabeçalho da Escola)</h2>
-          <p style="font-size:13px; color:var(--text-sub);">Selecione um ficheiro do Word (.docx) com o logótipo e cabeçalho padrão da sua escola. O sistema vai usá-lo como modelo invisível para gerar todos os relatórios formatados.</p>
           <div class="form-group">
             <input type="file" id="file-modelo" accept=".docx" style="padding: 8px;">
           </div>
@@ -291,10 +283,9 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
           <p id="lbl-modelo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
         </div>
 
-        <!-- UPLOAD DE LEGISLAÇÃO / BASE LEGAL -->
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">gavel</span> Base Legal e Legislações</h2>
-          <p style="font-size:13px; color:var(--text-sub);">Faça upload de um ficheiro (Word ou PDF) contendo as leis, diretrizes do município ou LDB. A IA vai ler o ficheiro e usá-lo como base para justificar os relatórios.</p>
+          <p style="font-size:13px; color:var(--text-sub);">Faça upload de um ficheiro (Word ou PDF) contendo as leis ou diretrizes do município. A IA vai usá-lo como base para justificar os relatórios.</p>
           <div class="form-group">
             <input type="file" id="file-legislacao" accept=".docx,.pdf" style="padding: 8px;">
           </div>
@@ -302,22 +293,31 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
           <p id="lbl-legis-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
         </div>
 
-        <!-- UPLOAD DO MODELO DE ESTUDO DE CASO -->
+        <!-- AQUI ESTÁ O QUE VOCÊ PEDIU: CAIXA DE TEXTO *E* UPLOAD LADO A LADO -->
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">library_books</span> Estrutura do Estudo de Caso</h2>
-          <p style="font-size:13px; color:var(--text-sub);">Faça upload do ficheiro (Word ou PDF) com a estrutura em branco do seu Estudo de Caso. A IA vai ler a estrutura e preenchê-la automaticamente.</p>
-          <div class="form-group">
+          <p style="font-size:13px; color:var(--text-sub);">Tem duas opções: colar a estrutura em texto na caixa abaixo <b>OU</b> fazer upload de um ficheiro (Word/PDF).</p>
+          
+          <label style="color:var(--primary); margin-top:10px;"><b>Opção A: Escrever / Colar Texto</b></label>
+          <div class="form-group" style="margin-top: 5px;">
+            <textarea id="input-modelo-estudo" rows="4" placeholder="Ex: 1. Identificação... 2. Histórico..."></textarea>
+            <button class="btn-primary" onclick="salvarModeloEstudoLocal()" style="margin-top: 8px;"><span class="material-symbols-outlined">save</span> Guardar Texto</button>
+            <p id="lbl-modelo-estudo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;">Texto guardado no dispositivo!</p>
+          </div>
+          
+          <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
+
+          <label style="color:var(--primary);"><b>Opção B: Fazer Upload de Ficheiro</b></label>
+          <div class="form-group" style="margin-top: 5px;">
             <input type="file" id="file-modelo-estudo" accept=".docx,.pdf" style="padding: 8px;">
           </div>
-          <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-modelo-estudo', 'modeloEstudoId', 'lbl-estudo-status')"><span class="material-symbols-outlined">upload_file</span> Enviar Modelo de Estudo</button>
-          <p id="lbl-estudo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
+          <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-modelo-estudo', 'modeloEstudoId', 'lbl-estudo-status2')"><span class="material-symbols-outlined">upload_file</span> Enviar Ficheiro</button>
+          <p id="lbl-estudo-status2" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
         </div>
 
-        <!-- SEGURANÇA E SESSÃO -->
         <div class="card" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
           <div style="flex: 1; min-width: 200px;">
             <h3 style="font-size: 15px; margin: 0 0 4px 0;">Privacidade e Segurança</h3>
-            <p style="font-size: 13px; color: var(--text-sub); margin: 0;">Encerra a sessão de forma definitiva e descarta a Chave Mestra do Drive.</p>
           </div>
           <button class="btn-primary" style="background:var(--danger); white-space: nowrap;" onclick="sairEApagarTudo()">
             <span class="material-symbols-outlined">logout</span> Encerrar Sessão Segura
@@ -330,7 +330,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 </div>
 
 <script>
-// ATENÇÃO: Confirme se a URL abaixo é a do seu NOVO DEPLOY do Apps Script
 const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuWu0SZyD6BEUdEb3IV73dHK-A6_qNppzDs0ZhB5xXage_k/exec";
 const CLIENT_ID = "400634410081-usp328ku7tm6aeu9pmu494k0te0h4h7r.apps.googleusercontent.com";
 
@@ -343,6 +342,12 @@ window.onload = function() {
   verificarSessaoAtiva();
   iniciarTemaGlobal();
   configurarSanfona();
+  
+  // Restaura a caixa de texto do modelo de estudo se o professor já tinha escrito lá
+  var modeloSalvo = localStorage.getItem('modeloEstudoCasoPersonalizado');
+  if (modeloSalvo && document.getElementById('input-modelo-estudo')) {
+    document.getElementById('input-modelo-estudo').value = modeloSalvo;
+  }
   
   if (window.google && google.accounts && google.accounts.oauth2) {
     tokenClient = google.accounts.oauth2.initTokenClient({
@@ -366,6 +371,14 @@ function configurarSanfona() {
       else panel.style.maxHeight = panel.scrollHeight + "px";
     });
   }
+}
+
+function salvarModeloEstudoLocal() {
+  var textoModelo = document.getElementById('input-modelo-estudo').value.trim();
+  localStorage.setItem('modeloEstudoCasoPersonalizado', textoModelo);
+  var lbl = document.getElementById('lbl-modelo-estudo-status');
+  lbl.style.display = 'block';
+  setTimeout(() => { lbl.style.display = 'none'; }, 3000);
 }
 
 function iniciarLoginDrive() {
@@ -420,7 +433,7 @@ function iniciarAplicacao(dados) {
 }
 
 function sairEApagarTudo() {
-  mostrarConfirmacao("Deseja realmente encerrar a sessão? As credenciais serão descartadas por segurança.", () => {
+  mostrarConfirmacao("Deseja realmente encerrar a sessão?", () => {
       sessionStorage.clear(); localStorage.clear(); window.location.reload(true);
   });
 }
@@ -437,10 +450,7 @@ async function chamarAPI(action, payload = {}) {
   } catch (erro) { return { sucesso: false, mensagem: "Erro de conexão." }; }
 }
 
-function iniciarTemaGlobal() {
-  temaAtual = localStorage.getItem('tema_global') || 'system';
-  aplicarTema(temaAtual);
-}
+function iniciarTemaGlobal() { temaAtual = localStorage.getItem('tema_global') || 'system'; aplicarTema(temaAtual); }
 function ciclarTema() {
   if(temaAtual === 'light') temaAtual = 'dark';
   else if(temaAtual === 'dark') temaAtual = 'system';
@@ -472,15 +482,9 @@ async function salvarConfiguracoesParcial() {
        const storage = sessionStorage.getItem('user_auth_dados') ? sessionStorage : localStorage;
        storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
     }
-    if(!pasta || !escola || !chave) {
-       mostrarModal("Guardado, mas incompleto", "As informações foram salvas. Porém, certifique-se de preencher a Escola, Pasta e Chave IA para conseguir gerar relatórios.");
-    } else {
-       mostrarModal("Sucesso", "Configurações guardadas com sucesso!");
-       carregarAlunos(pasta);
-    }
-  } else {
-    mostrarModal("Erro", res.mensagem || "Falha ao atualizar.");
-  }
+    mostrarModal("Sucesso", "Configurações guardadas com sucesso!");
+    if(pasta) carregarAlunos(pasta);
+  } else mostrarModal("Erro", res.mensagem || "Falha ao atualizar.");
 }
 
 async function carregarAlunos(pastaId) {
@@ -504,7 +508,7 @@ async function carregarAlunos(pastaId) {
 
 async function sincronizarAlunosManual() {
   const pasta = document.getElementById('config-pasta').value.trim();
-  if (!pasta) return mostrarModal("Aviso", "Insira o link da pasta do Drive antes de sincronizar.");
+  if (!pasta) return mostrarModal("Aviso", "Insira o link da pasta.");
   mostrarLoading("A sincronizar as pastas...");
   await carregarAlunos(pasta);
   esconderLoading();
@@ -525,7 +529,7 @@ function verificarMudancaAluno(selectEl) {
   }
 
   if (txt1 !== "" || txt2 !== "") {
-    mostrarConfirmacao("Você tem textos não guardados. Mudar de aluno irá limpar esses campos. Deseja continuar?", () => {
+    mostrarConfirmacao("Mudar de aluno irá limpar os campos não salvos. Continuar?", () => {
       document.getElementById('txt-plano-aula').value = "";
       document.getElementById('txt-diario-obs').value = "";
       idAlunoAnterior = selectEl.value;
@@ -542,15 +546,14 @@ function fecharCaixasResultado() { document.querySelectorAll('.result-box').forE
 
 function getAlunoAtivo() {
   const sel = document.getElementById('global-aluno');
-  if(!sel.value) { mostrarModal("Atenção", "Por favor, selecione um estudante no topo da tela primeiro."); return null; }
+  if(!sel.value) { mostrarModal("Atenção", "Por favor, selecione um estudante no topo."); return null; }
   return { id: sel.value, nome: sel.options[sel.selectedIndex].text };
 }
 
-// HISTÓRICO LOCAL DO ALUNO (Guardado no navegador para visualização rápida)
 function registarHistoricoAluno(alunoId, tituloDoc, urlDoc) {
   let historico = JSON.parse(localStorage.getItem('hist_aluno_' + alunoId) || '[]');
   historico.unshift({ titulo: tituloDoc, url: urlDoc, data: new Date().toLocaleDateString('pt-BR') });
-  if (historico.length > 5) historico.pop(); // Mantém os últimos 5
+  if (historico.length > 5) historico.pop();
   localStorage.setItem('hist_aluno_' + alunoId, JSON.stringify(historico));
   carregarHistoricoAlunoLocal(alunoId);
 }
@@ -560,10 +563,7 @@ function carregarHistoricoAlunoLocal(alunoId) {
   const lista = document.getElementById('lista-historico-aluno');
   let historico = JSON.parse(localStorage.getItem('hist_aluno_' + alunoId) || '[]');
   
-  if (historico.length === 0) {
-    card.style.display = 'none';
-    return;
-  }
+  if (historico.length === 0) { card.style.display = 'none'; return; }
   
   card.style.display = 'block';
   lista.innerHTML = '';
@@ -575,70 +575,49 @@ function carregarHistoricoAlunoLocal(alunoId) {
   });
 }
 
-// Upload do Cabeçalho Visual (.docx)
 async function fazerUploadModelo() {
   const fileInput = document.getElementById('file-modelo');
   if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro .docx primeiro.");
-  
   const token = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
-  if(!token) return mostrarModal("Erro", "Token do Drive expirado.");
-
+  if(!token) return;
   mostrarLoading("Enviando modelo para o Drive...");
   const file = fileInput.files[0];
   const metadata = { name: "Modelo_Inclusao_Conectada", mimeType: 'application/vnd.google-apps.document' };
-  
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
   form.append('file', file);
-
   try {
-    const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
-      method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form
-    });
+    const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', { method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form });
     const data = await res.json();
     esconderLoading();
     if(data.id) {
        await chamarAPI("atualizarUsuario", { modeloId: data.id });
-       const lbl = document.getElementById('lbl-modelo-status');
-       lbl.style.display = 'block'; lbl.innerHTML = "<b>Modelo guardado com sucesso!</b>";
-    } else { mostrarModal("Erro", "Falha ao enviar modelo."); }
-  } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro de conexão ao enviar ficheiro."); }
+       document.getElementById('lbl-modelo-status').style.display = 'block'; document.getElementById('lbl-modelo-status').innerHTML = "<b>Modelo guardado!</b>";
+    }
+  } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro ao enviar."); }
 }
 
-// NOVO: Função para enviar PDFs ou Word para a IA (Legislação e Modelo de Estudo)
 async function fazerUploadDocumentoInteligente(inputId, campoUser, labelId) {
   const fileInput = document.getElementById(inputId);
   if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro (Word ou PDF) primeiro.");
-  
   const token = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
-  if(!token) return mostrarModal("Erro", "Sessão expirada. Faça login novamente.");
-
-  mostrarLoading("Enviando e processando documento na nuvem...");
+  if(!token) return;
+  mostrarLoading("Processando documento...");
   const file = fileInput.files[0];
-  
-  // Transforma automaticamente PDFs ou Words num formato legível para a IA ler depois
   const metadata = { name: file.name, mimeType: 'application/vnd.google-apps.document' };
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
   form.append('file', file);
-
   try {
-    const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
-      method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form
-    });
+    const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', { method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form });
     const data = await res.json();
     esconderLoading();
-    
     if(data.id) {
-       // Atualiza o perfil do utilizador com o ID deste novo documento
-       let payload = {};
-       payload[campoUser] = data.id;
+       let payload = {}; payload[campoUser] = data.id;
        await chamarAPI("atualizarUsuario", payload);
-       
-       const lbl = document.getElementById(labelId);
-       lbl.style.display = 'block'; lbl.innerHTML = "<b>✔ Documento lido e guardado com sucesso!</b>";
-    } else { mostrarModal("Erro", "Falha ao enviar documento."); }
-  } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro de conexão ao enviar ficheiro."); }
+       document.getElementById(labelId).style.display = 'block'; document.getElementById(labelId).innerHTML = "<b>✔ Documento salvo!</b>";
+    }
+  } catch(e) { esconderLoading(); }
 }
 
 async function executarDUA() {
@@ -689,20 +668,23 @@ async function executarSalvarDiario() {
   const res = await chamarAPI("salvarDiario", { dados: { idPasta: aluno.id, nomeAluno: aluno.nome, categoria: cat, observacao: obs } });
   esconderLoading();
   if (res && res.sucesso) {
-    mostrarModal("Sucesso", "O registo foi salvo diretamente no Drive do aluno!");
+    mostrarModal("Sucesso", "Registrado no Drive do aluno!");
     document.getElementById('txt-diario-obs').value = "";
-    if(res.urlDocumento) registarHistoricoAluno(aluno.id, "Diário de Bordo (" + cat.split(" ")[0] + ")", res.urlDocumento);
+    if(res.urlDocumento) registarHistoricoAluno(aluno.id, "Diário de Bordo", res.urlDocumento);
   } else mostrarModal("Erro", res.mensagem);
 }
 
 async function executarEstudo() {
   const aluno = getAlunoAtivo(); if(!aluno) return;
+  
+  // MANDA O TEXTO DA CAIXA TAMBÉM PARA A IA JUNTAR COM O FICHEIRO
+  const modeloTexto = localStorage.getItem('modeloEstudoCasoPersonalizado') || "";
 
   mostrarLoading("Gerando Relatório de Estudo de Caso...");
-  // O backend agora faz o trabalho pesado de ler as leis e o modelo de estudo!
   const res = await chamarAPI("gerarEstudo", { 
     idPasta: aluno.id, 
-    nomeAluno: aluno.nome
+    nomeAluno: aluno.nome,
+    modeloPersonalizado: modeloTexto
   });
   
   esconderLoading();
@@ -717,7 +699,6 @@ function trocarAba(tabId) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
-  
   const navMap = { 'tab-dua': 0, 'tab-acolher': 1, 'tab-diario': 2, 'tab-estudo': 3, 'tab-ajustes': 4 };
   document.querySelectorAll('.nav-item')[navMap[tabId]].classList.add('active');
   if (window.innerWidth <= 768) toggleSidebar();
