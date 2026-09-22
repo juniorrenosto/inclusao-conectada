@@ -42,16 +42,16 @@ body { margin: 0; background: var(--surface); color: var(--text); height: 100vh;
 .header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
 .btn-menu-mobile { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); }
 
-/* DROPDOWN GLOBAL DE ALUNOS */
-.global-student-selector { flex: 1; max-width: 350px; display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 6px 12px; border-radius: 24px; border: 1px solid var(--border); }
+/* DROPDOWN GLOBAL DE ALUNOS & ATALHO */
+.global-student-wrapper { display: flex; align-items: center; gap: 8px; flex: 1; max-width: 450px; }
+.global-student-selector { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 6px 12px; border-radius: 24px; border: 1px solid var(--border); }
 .global-student-selector select { border: none; background: transparent; color: var(--text); font-weight: 600; font-size: 14px; width: 100%; outline: none; cursor: pointer; }
-.global-student-selector select:focus { outline: none; }
+.btn-folder-shortcut { display: none; align-items: center; justify-content: center; background: var(--primary-light); color: var(--primary); border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+.btn-folder-shortcut:hover { background: var(--primary); color: #fff; }
 
 .header-right { display: flex; align-items: center; gap: 8px; }
 .btn-icon { background: none; border: none; color: var(--text-sub); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; transition: background 0.2s; }
 .btn-icon:hover { background: var(--surface); color: var(--text); }
-.btn-logout-header { color: var(--danger); }
-.btn-logout-header:hover { background: var(--danger-light); }
 
 .brand { display: flex; align-items: center; gap: 10px; padding: 8px 12px; margin-bottom: 20px; }
 .brand-title { font-weight: 700; font-size: 17px; color: var(--text); }
@@ -75,6 +75,11 @@ textarea { resize: vertical; min-height: 100px; }
 .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 .result-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-top: 16px; white-space: pre-wrap; font-size: 14px; line-height: 1.6; display: none; }
 
+/* HISTÓRICO DE DOCUMENTOS DO ALUNO */
+.student-history-box { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: none; }
+.history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.history-item { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; }
+
 /* SANFONA (ACCORDION) */
 .accordion { background: var(--primary-light); color: var(--primary); cursor: pointer; padding: 14px; width: 100%; border: none; text-align: left; outline: none; font-size: 14px; font-weight: 600; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .panel { padding: 0 16px; background: var(--surface); max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-radius: 8px; margin-bottom: 16px; }
@@ -89,7 +94,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 .spinner { width: 44px; height: 44px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-@media(max-width: 768px) { .app-sidebar { position: fixed; inset: 0 auto 0 0; transform: translateX(-100%); } .app-sidebar.open { transform: translateX(0); } .btn-menu-mobile { display: block; } .header-left { max-width: calc(100% - 100px); } }
+@media(max-width: 768px) { .app-sidebar { position: fixed; inset: 0 auto 0 0; transform: translateX(-100%); } .app-sidebar.open { transform: translateX(0); } .btn-menu-mobile { display: block; } .header-left { max-width: calc(100% - 90px); } }
 </style>
 </head>
 <body>
@@ -151,19 +156,24 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
     <header class="app-header">
       <div class="header-left">
         <button class="btn-menu-mobile" onclick="toggleSidebar()"><span class="material-symbols-outlined">menu</span></button>
-        <div class="global-student-selector">
-          <span class="material-symbols-outlined" style="color:var(--primary);">person_search</span>
-          <select id="global-aluno" onchange="verificarMudancaAluno(this)">
-            <option value="">Nenhum aluno sincronizado...</option>
-          </select>
+        <div class="global-student-wrapper">
+          <div class="global-student-selector">
+            <span class="material-symbols-outlined" style="color:var(--primary);">person_search</span>
+            <select id="global-aluno" onchange="verificarMudancaAluno(this)">
+              <option value="">Nenhum aluno sincronizado...</option>
+            </select>
+          </div>
+          <a id="btn-atalho-pasta" class="btn-folder-shortcut" href="#" target="_blank" title="Abrir pasta do aluno no Google Drive" style="display:none;">
+            <span class="material-symbols-outlined">folder_open</span>
+          </a>
         </div>
       </div>
       <div class="header-right">
         <button class="btn-icon" onclick="ciclarTema()" title="Alterar Tema">
           <span class="material-symbols-outlined" id="icone-tema">brightness_medium</span>
         </button>
-        <button class="btn-icon btn-logout-header" onclick="sairEApagarTudo()" title="Encerrar Sessão">
-          <span class="material-symbols-outlined">logout</span>
+        <button class="btn-icon" onclick="iniciarLoginDrive()" title="Trocar Conta / Sair">
+          <span class="material-symbols-outlined">manage_accounts</span>
         </button>
       </div>
     </header>
@@ -228,6 +238,17 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
         </div>
       </section>
 
+      <!-- HISTÓRICO RECENTE DO ALUNO ATIVO (COMPARTILHADO ENTRE ABAS) -->
+      <section class="tab-content active" style="display:block; margin-top:20px;">
+        <div class="card" id="card-historico-aluno" style="display:none;">
+          <h3 style="margin-top:0; font-size:15px; display:flex; align-items:center; gap:8px;">
+            <span class="material-symbols-outlined" style="color:var(--primary);">history</span> 
+            Documentos Gerados para este Estudante
+          </h3>
+          <div class="history-list" id="lista-historico-aluno"></div>
+        </div>
+      </section>
+
       <!-- ABA 5: AJUSTES INTELIGENTES -->
       <section id="tab-ajustes" class="tab-content">
         <div class="card">
@@ -269,6 +290,17 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
           <button class="btn-secondary" onclick="fazerUploadModelo()"><span class="material-symbols-outlined">upload_file</span> Enviar Modelo para o Drive</button>
           <p id="lbl-modelo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
         </div>
+
+        <!-- SEGURANÇA E SESSÃO -->
+        <div class="card" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 200px;">
+            <h3 style="font-size: 15px; margin: 0 0 4px 0;">Privacidade e Segurança</h3>
+            <p style="font-size: 13px; color: var(--text-sub); margin: 0;">Encerra a sessão de forma definitiva e descarta a Chave Mestra do Drive.</p>
+          </div>
+          <button class="btn-primary" style="background:var(--danger); white-space: nowrap;" onclick="sairEApagarTudo()">
+            <span class="material-symbols-outlined">logout</span> Encerrar Sessão Segura
+          </button>
+        </div>
       </section>
 
     </main>
@@ -281,10 +313,9 @@ const CLIENT_ID = "400634410081-usp328ku7tm6aeu9pmu494k0te0h4h7r.apps.googleuser
 
 var dadosUsuarioAtivo = null;
 var tokenClient;
-var temaAtual = 'system'; // light, dark, system
+var temaAtual = 'system';
 var idAlunoAnterior = "";
 
-// INICIALIZAÇÃO
 window.onload = function() {
   verificarSessaoAtiva();
   iniciarTemaGlobal();
@@ -302,7 +333,6 @@ window.onload = function() {
   }
 };
 
-// ACORDEÃO (SANFONA)
 function configurarSanfona() {
   var acc = document.getElementsByClassName("accordion");
   for (var i = 0; i < acc.length; i++) {
@@ -315,7 +345,6 @@ function configurarSanfona() {
   }
 }
 
-// LOGIN E OAUTH
 function iniciarLoginDrive() {
   document.getElementById('msg-login').innerText = "A aguardar a autorização do Google...";
   document.getElementById('login-screen').style.pointerEvents = 'none';
@@ -368,12 +397,11 @@ function iniciarAplicacao(dados) {
 }
 
 function sairEApagarTudo() {
-  mostrarConfirmacao("Deseja realmente sair? As suas credenciais temporárias do Google serão descartadas por segurança.", () => {
+  mostrarConfirmacao("Deseja realmente encerrar a sessão? As credenciais serão descartadas por segurança.", () => {
       sessionStorage.clear(); localStorage.clear(); window.location.reload(true);
   });
 }
 
-// API GERAL
 async function chamarAPI(action, payload = {}) {
   try {
     const email = sessionStorage.getItem('user_auth_email') || localStorage.getItem('user_auth_email');
@@ -386,7 +414,6 @@ async function chamarAPI(action, payload = {}) {
   } catch (erro) { return { sucesso: false, mensagem: "Erro de conexão." }; }
 }
 
-// TEMA VISUAL (3 ESTADOS)
 function iniciarTemaGlobal() {
   temaAtual = localStorage.getItem('tema_global') || 'system';
   aplicarTema(temaAtual);
@@ -401,15 +428,12 @@ function ciclarTema() {
 function aplicarTema(tema) {
   const isDarkSystem = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const setDark = tema === 'dark' || (tema === 'system' && isDarkSystem);
-  
   if(setDark) document.body.classList.add('dark-theme');
   else document.body.classList.remove('dark-theme');
-  
   const iconMap = { 'light': 'light_mode', 'dark': 'dark_mode', 'system': 'brightness_medium' };
   document.getElementById('icone-tema').innerText = iconMap[tema];
 }
 
-// SALVAMENTO PARCIAL INTELIGENTE
 async function salvarConfiguracoesParcial() {
   const escola = document.getElementById('config-escola').value.trim();
   const pasta = document.getElementById('config-pasta').value.trim();
@@ -425,8 +449,6 @@ async function salvarConfiguracoesParcial() {
        const storage = sessionStorage.getItem('user_auth_dados') ? sessionStorage : localStorage;
        storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
     }
-    
-    // Alertas inteligentes
     if(!pasta || !escola || !chave) {
        mostrarModal("Guardado, mas incompleto", "As informações foram salvas. Porém, certifique-se de preencher a Escola, Pasta e Chave IA para conseguir gerar relatórios.");
     } else {
@@ -438,7 +460,6 @@ async function salvarConfiguracoesParcial() {
   }
 }
 
-// SINCRONIZAÇÃO E ESTUDANTE ATIVO
 async function carregarAlunos(pastaId) {
   const contador = document.getElementById('contador-alunos');
   contador.style.display = 'none';
@@ -470,20 +491,30 @@ function verificarMudancaAluno(selectEl) {
   const txt1 = document.getElementById('txt-plano-aula').value.trim();
   const txt2 = document.getElementById('txt-diario-obs').value.trim();
   
+  const atalhoPasta = document.getElementById('btn-atalho-pasta');
+  if (selectEl.value) {
+    atalhoPasta.style.display = 'flex';
+    atalhoPasta.href = "https://drive.google.com/drive/folders/" + selectEl.value;
+    carregarHistoricoAlunoLocal(selectEl.value);
+  } else {
+    atalhoPasta.style.display = 'none';
+    document.getElementById('card-historico-aluno').style.display = 'none';
+  }
+
   if (txt1 !== "" || txt2 !== "") {
-    mostrarConfirmacao("Você tem textos não guardados nas abas. Mudar de aluno agora irá limpar esses textos. Tem a certeza?", () => {
+    mostrarConfirmacao("Você tem textos não guardados. Mudar de aluno irá limpar esses campos. Deseja continuar?", () => {
       document.getElementById('txt-plano-aula').value = "";
       document.getElementById('txt-diario-obs').value = "";
       idAlunoAnterior = selectEl.value;
       fecharCaixasResultado();
     });
-    // Reverter dropdown se cancelar (handled by modal architecture if needed, mas por simplicidade limpamos ao aceitar)
-    selectEl.value = idAlunoAnterior; // Reverte visualmente até confirmação
+    selectEl.value = idAlunoAnterior;
   } else {
     idAlunoAnterior = selectEl.value;
     fecharCaixasResultado();
   }
 }
+
 function fecharCaixasResultado() { document.querySelectorAll('.result-box').forEach(b => b.style.display = 'none'); }
 
 function getAlunoAtivo() {
@@ -492,7 +523,35 @@ function getAlunoAtivo() {
   return { id: sel.value, nome: sel.options[sel.selectedIndex].text };
 }
 
-// UPLOAD DE DOCUMENTO MODELO DIRETO PARA O DRIVE
+// HISTÓRICO LOCAL DO ALUNO (Guardado no navegador para visualização rápida)
+function registarHistoricoAluno(alunoId, tituloDoc, urlDoc) {
+  let historico = JSON.parse(localStorage.getItem('hist_aluno_' + alunoId) || '[]');
+  historico.unshift({ titulo: tituloDoc, url: urlDoc, data: new Date().toLocaleDateString('pt-BR') });
+  if (historico.length > 5) historico.pop(); // Mantém os últimos 5
+  localStorage.setItem('hist_aluno_' + alunoId, JSON.stringify(historico));
+  carregarHistoricoAlunoLocal(alunoId);
+}
+
+function carregarHistoricoAlunoLocal(alunoId) {
+  const card = document.getElementById('card-historico-aluno');
+  const lista = document.getElementById('lista-historico-aluno');
+  let historico = JSON.parse(localStorage.getItem('hist_aluno_' + alunoId) || '[]');
+  
+  if (historico.length === 0) {
+    card.style.display = 'none';
+    return;
+  }
+  
+  card.style.display = 'block';
+  lista.innerHTML = '';
+  historico.forEach(h => {
+    lista.innerHTML += `<div class="history-item">
+      <span><b>${h.titulo}</b> <span style="color:var(--text-sub); font-size:11px;">(${h.data})</span></span>
+      <a href="${h.url}" target="_blank" class="btn-secondary" style="padding:4px 10px; font-size:12px; text-decoration:none;">Abrir Doc</a>
+    </div>`;
+  });
+}
+
 async function fazerUploadModelo() {
   const fileInput = document.getElementById('file-modelo');
   if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro .docx primeiro.");
@@ -515,15 +574,13 @@ async function fazerUploadModelo() {
     const data = await res.json();
     esconderLoading();
     if(data.id) {
-       // Guarda o ID do modelo no banco de dados do utilizador
        await chamarAPI("atualizarUsuario", { modeloId: data.id });
        const lbl = document.getElementById('lbl-modelo-status');
-       lbl.style.display = 'block'; lbl.innerHTML = "<b>Modelo guardado com sucesso!</b> (O sistema usará este cabeçalho nos próximos documentos).";
+       lbl.style.display = 'block'; lbl.innerHTML = "<b>Modelo guardado com sucesso!</b>";
     } else { mostrarModal("Erro", "Falha ao enviar modelo."); }
   } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro de conexão ao enviar ficheiro."); }
 }
 
-// EXECUÇÕES COM O ESTUDANTE GLOBAL
 async function executarDUA() {
   const aluno = getAlunoAtivo(); if(!aluno) return;
   const plano = document.getElementById('txt-plano-aula').value.trim();
@@ -545,6 +602,7 @@ async function executarCartao() {
   if (res && res.sucesso) {
     const box = document.getElementById('res-acolher'); box.style.display = "block";
     box.innerHTML = `<b>Salvo na pasta do aluno:</b> <a href="${res.urlDocumento}" target="_blank">Abrir Cartão</a><br><br>${res.cartao.primeirosSinais}`;
+    registarHistoricoAluno(aluno.id, "Cartão de Apoio", res.urlDocumento);
   } else mostrarModal("Erro", res.mensagem);
 }
 
@@ -556,7 +614,8 @@ async function executarCarta() {
   esconderLoading();
   if (res && res.sucesso) {
     const box = document.getElementById('res-acolher'); box.style.display = "block";
-    box.innerHTML = `<b>Salva na pasta do aluno:</b> <a href="${res.urlDocumento}" target="_blank">Abrir Carta</a><br><br>Concluído.`;
+    box.innerHTML = `<b>Salva na pasta do aluno:</b> <a href="${res.urlDocumento}" target="_blank">Abrir Carta</a>`;
+    registarHistoricoAluno(aluno.id, "Carta à Família", res.urlDocumento);
   } else mostrarModal("Erro", res.mensagem);
 }
 
@@ -572,6 +631,7 @@ async function executarSalvarDiario() {
   if (res && res.sucesso) {
     mostrarModal("Sucesso", "O registo foi salvo diretamente no Drive do aluno!");
     document.getElementById('txt-diario-obs').value = "";
+    if(res.urlDocumento) registarHistoricoAluno(aluno.id, "Diário de Bordo (" + cat.split(" ")[0] + ")", res.urlDocumento);
   } else mostrarModal("Erro", res.mensagem);
 }
 
@@ -583,10 +643,10 @@ async function executarEstudo() {
   if (res && res.sucesso) {
     const box = document.getElementById('res-estudo'); box.style.display = "block";
     box.innerHTML = `<b>Relatório gerado e salvo:</b> <a href="${res.urlDocumento}" target="_blank">Abrir Relatório Oficial</a>`;
+    registarHistoricoAluno(aluno.id, "Estudo de Caso", res.urlDocumento);
   } else mostrarModal("Erro", res.mensagem);
 }
 
-// NAVEGAÇÃO
 function trocarAba(tabId) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
