@@ -232,7 +232,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
       <section id="tab-estudo" class="tab-content">
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;">Estudo de Caso Integrado</h2>
-          <p style="font-size:13px; color:var(--text-sub);">Gera um relatório base diretamente na pasta do estudante.</p>
+          <p style="font-size:13px; color:var(--text-sub);">Gera um relatório base diretamente na pasta do estudante, utilizando as legislações e o modelo estrutural configurados.</p>
           <button class="btn-primary" onclick="executarEstudo()"><span class="material-symbols-outlined">summarize</span> Criar Estudo de Caso</button>
           <div id="res-estudo" class="result-box"></div>
         </div>
@@ -291,15 +291,26 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
           <p id="lbl-modelo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
         </div>
 
-        <!-- BLOCO DE MODELO DE ESTUDO DE CASO -->
+        <!-- UPLOAD DE LEGISLAÇÃO / BASE LEGAL -->
         <div class="card">
-          <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">library_books</span> Modelo Personalizado de Estudo de Caso</h2>
-          <p style="font-size:13px; color:var(--text-sub);">Cole aqui a estrutura de tópicos exigida pela sua instituição. A IA utilizará obrigatoriamente este formato ao redigir os relatórios.</p>
+          <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">gavel</span> Base Legal e Legislações</h2>
+          <p style="font-size:13px; color:var(--text-sub);">Faça upload de um ficheiro (Word ou PDF) contendo as leis, diretrizes do município ou LDB. A IA vai ler o ficheiro e usá-lo como base para justificar os relatórios.</p>
           <div class="form-group">
-            <textarea id="input-modelo-estudo" rows="6" placeholder="Ex: 1. Identificação do Aluno... 2. Histórico Clínico/Escolar..."></textarea>
+            <input type="file" id="file-legislacao" accept=".docx,.pdf" style="padding: 8px;">
           </div>
-          <button class="btn-primary" onclick="salvarModeloEstudoLocal()"><span class="material-symbols-outlined">save</span> Guardar Modelo de Estudo</button>
-          <p id="lbl-modelo-estudo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;">Modelo guardado com sucesso no dispositivo!</p>
+          <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-legislacao', 'legislacaoId', 'lbl-legis-status')"><span class="material-symbols-outlined">upload_file</span> Enviar Documento Legal</button>
+          <p id="lbl-legis-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
+        </div>
+
+        <!-- UPLOAD DO MODELO DE ESTUDO DE CASO -->
+        <div class="card">
+          <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">library_books</span> Estrutura do Estudo de Caso</h2>
+          <p style="font-size:13px; color:var(--text-sub);">Faça upload do ficheiro (Word ou PDF) com a estrutura em branco do seu Estudo de Caso. A IA vai ler a estrutura e preenchê-la automaticamente.</p>
+          <div class="form-group">
+            <input type="file" id="file-modelo-estudo" accept=".docx,.pdf" style="padding: 8px;">
+          </div>
+          <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-modelo-estudo', 'modeloEstudoId', 'lbl-estudo-status')"><span class="material-symbols-outlined">upload_file</span> Enviar Modelo de Estudo</button>
+          <p id="lbl-estudo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
         </div>
 
         <!-- SEGURANÇA E SESSÃO -->
@@ -319,6 +330,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 </div>
 
 <script>
+// ATENÇÃO: Confirme se a URL abaixo é a do seu NOVO DEPLOY do Apps Script
 const API_URL = "https://script.google.com/macros/s/AKfycbxxUJOiP3axNvIsu21qytuWu0SZyD6BEUdEb3IV73dHK-A6_qNppzDs0ZhB5xXage_k/exec";
 const CLIENT_ID = "400634410081-usp328ku7tm6aeu9pmu494k0te0h4h7r.apps.googleusercontent.com";
 
@@ -343,22 +355,6 @@ window.onload = function() {
     });
   }
 };
-
-// Carrega o modelo salvo assim que a página abre
-document.addEventListener("DOMContentLoaded", function() {
-  var modeloSalvo = localStorage.getItem('modeloEstudoCasoPersonalizado');
-  if (modeloSalvo && document.getElementById('input-modelo-estudo')) {
-    document.getElementById('input-modelo-estudo').value = modeloSalvo;
-  }
-});
-
-function salvarModeloEstudoLocal() {
-  var textoModelo = document.getElementById('input-modelo-estudo').value.trim();
-  localStorage.setItem('modeloEstudoCasoPersonalizado', textoModelo);
-  var lbl = document.getElementById('lbl-modelo-estudo-status');
-  lbl.style.display = 'block';
-  setTimeout(() => { lbl.style.display = 'none'; }, 3000);
-}
 
 function configurarSanfona() {
   var acc = document.getElementsByClassName("accordion");
@@ -579,6 +575,7 @@ function carregarHistoricoAlunoLocal(alunoId) {
   });
 }
 
+// Upload do Cabeçalho Visual (.docx)
 async function fazerUploadModelo() {
   const fileInput = document.getElementById('file-modelo');
   if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro .docx primeiro.");
@@ -605,6 +602,42 @@ async function fazerUploadModelo() {
        const lbl = document.getElementById('lbl-modelo-status');
        lbl.style.display = 'block'; lbl.innerHTML = "<b>Modelo guardado com sucesso!</b>";
     } else { mostrarModal("Erro", "Falha ao enviar modelo."); }
+  } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro de conexão ao enviar ficheiro."); }
+}
+
+// NOVO: Função para enviar PDFs ou Word para a IA (Legislação e Modelo de Estudo)
+async function fazerUploadDocumentoInteligente(inputId, campoUser, labelId) {
+  const fileInput = document.getElementById(inputId);
+  if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro (Word ou PDF) primeiro.");
+  
+  const token = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
+  if(!token) return mostrarModal("Erro", "Sessão expirada. Faça login novamente.");
+
+  mostrarLoading("Enviando e processando documento na nuvem...");
+  const file = fileInput.files[0];
+  
+  // Transforma automaticamente PDFs ou Words num formato legível para a IA ler depois
+  const metadata = { name: file.name, mimeType: 'application/vnd.google-apps.document' };
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
+  form.append('file', file);
+
+  try {
+    const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+      method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form
+    });
+    const data = await res.json();
+    esconderLoading();
+    
+    if(data.id) {
+       // Atualiza o perfil do utilizador com o ID deste novo documento
+       let payload = {};
+       payload[campoUser] = data.id;
+       await chamarAPI("atualizarUsuario", payload);
+       
+       const lbl = document.getElementById(labelId);
+       lbl.style.display = 'block'; lbl.innerHTML = "<b>✔ Documento lido e guardado com sucesso!</b>";
+    } else { mostrarModal("Erro", "Falha ao enviar documento."); }
   } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro de conexão ao enviar ficheiro."); }
 }
 
@@ -664,14 +697,12 @@ async function executarSalvarDiario() {
 
 async function executarEstudo() {
   const aluno = getAlunoAtivo(); if(!aluno) return;
-  
-  const modeloPersonalizado = localStorage.getItem('modeloEstudoCasoPersonalizado') || "";
 
   mostrarLoading("Gerando Relatório de Estudo de Caso...");
+  // O backend agora faz o trabalho pesado de ler as leis e o modelo de estudo!
   const res = await chamarAPI("gerarEstudo", { 
     idPasta: aluno.id, 
-    nomeAluno: aluno.nome,
-    modeloPersonalizado: modeloPersonalizado
+    nomeAluno: aluno.nome
   });
   
   esconderLoading();
