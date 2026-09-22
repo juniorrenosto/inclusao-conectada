@@ -291,6 +291,17 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
           <p id="lbl-modelo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
         </div>
 
+        <!-- BLOCO DE MODELO DE ESTUDO DE CASO -->
+        <div class="card">
+          <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">library_books</span> Modelo Personalizado de Estudo de Caso</h2>
+          <p style="font-size:13px; color:var(--text-sub);">Cole aqui a estrutura de tópicos exigida pela sua instituição. A IA utilizará obrigatoriamente este formato ao redigir os relatórios.</p>
+          <div class="form-group">
+            <textarea id="input-modelo-estudo" rows="6" placeholder="Ex: 1. Identificação do Aluno... 2. Histórico Clínico/Escolar..."></textarea>
+          </div>
+          <button class="btn-primary" onclick="salvarModeloEstudoLocal()"><span class="material-symbols-outlined">save</span> Guardar Modelo de Estudo</button>
+          <p id="lbl-modelo-estudo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;">Modelo guardado com sucesso no dispositivo!</p>
+        </div>
+
         <!-- SEGURANÇA E SESSÃO -->
         <div class="card" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
           <div style="flex: 1; min-width: 200px;">
@@ -332,6 +343,22 @@ window.onload = function() {
     });
   }
 };
+
+// Carrega o modelo salvo assim que a página abre
+document.addEventListener("DOMContentLoaded", function() {
+  var modeloSalvo = localStorage.getItem('modeloEstudoCasoPersonalizado');
+  if (modeloSalvo && document.getElementById('input-modelo-estudo')) {
+    document.getElementById('input-modelo-estudo').value = modeloSalvo;
+  }
+});
+
+function salvarModeloEstudoLocal() {
+  var textoModelo = document.getElementById('input-modelo-estudo').value.trim();
+  localStorage.setItem('modeloEstudoCasoPersonalizado', textoModelo);
+  var lbl = document.getElementById('lbl-modelo-estudo-status');
+  lbl.style.display = 'block';
+  setTimeout(() => { lbl.style.display = 'none'; }, 3000);
+}
 
 function configurarSanfona() {
   var acc = document.getElementsByClassName("accordion");
@@ -637,8 +664,16 @@ async function executarSalvarDiario() {
 
 async function executarEstudo() {
   const aluno = getAlunoAtivo(); if(!aluno) return;
+  
+  const modeloPersonalizado = localStorage.getItem('modeloEstudoCasoPersonalizado') || "";
+
   mostrarLoading("Gerando Relatório de Estudo de Caso...");
-  const res = await chamarAPI("gerarEstudo", { idPasta: aluno.id, nomeAluno: aluno.nome });
+  const res = await chamarAPI("gerarEstudo", { 
+    idPasta: aluno.id, 
+    nomeAluno: aluno.nome,
+    modeloPersonalizado: modeloPersonalizado
+  });
+  
   esconderLoading();
   if (res && res.sucesso) {
     const box = document.getElementById('res-estudo'); box.style.display = "block";
