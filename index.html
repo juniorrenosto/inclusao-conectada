@@ -580,9 +580,18 @@ async function fazerUploadModelo() {
   if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro .docx primeiro.");
   const token = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
   if(!token) return;
+  
+  mostrarLoading("Organizando pastas no Drive...");
+  const pastaRes = await chamarAPI("obterPastaBase", {});
+  const idPasta = (pastaRes && pastaRes.sucesso) ? pastaRes.idPasta : null;
+
   mostrarLoading("Enviando modelo para o Drive...");
   const file = fileInput.files[0];
-  const metadata = { name: "Modelo_Inclusao_Conectada", mimeType: 'application/vnd.google-apps.document' };
+  const metadata = { name: "Modelo_Cabeçalho_" + file.name, mimeType: 'application/vnd.google-apps.document' };
+  
+  // A MÁGICA ACONTECE AQUI: Associa o ficheiro à pasta criada
+  if (idPasta) metadata.parents = [idPasta];
+  
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
   form.append('file', file);
@@ -592,7 +601,7 @@ async function fazerUploadModelo() {
     esconderLoading();
     if(data.id) {
        await chamarAPI("atualizarUsuario", { modeloId: data.id });
-       document.getElementById('lbl-modelo-status').style.display = 'block'; document.getElementById('lbl-modelo-status').innerHTML = "<b>Modelo guardado!</b>";
+       document.getElementById('lbl-modelo-status').style.display = 'block'; document.getElementById('lbl-modelo-status').innerHTML = "<b>Modelo salvo na pasta Modelos!</b>";
     }
   } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro ao enviar."); }
 }
@@ -602,9 +611,18 @@ async function fazerUploadDocumentoInteligente(inputId, campoUser, labelId) {
   if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro (Word ou PDF) primeiro.");
   const token = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
   if(!token) return;
+
+  mostrarLoading("Organizando pastas no Drive...");
+  const pastaRes = await chamarAPI("obterPastaBase", {});
+  const idPasta = (pastaRes && pastaRes.sucesso) ? pastaRes.idPasta : null;
+
   mostrarLoading("Processando documento...");
   const file = fileInput.files[0];
   const metadata = { name: file.name, mimeType: 'application/vnd.google-apps.document' };
+  
+  // A MÁGICA ACONTECE AQUI: Associa o ficheiro à pasta criada
+  if (idPasta) metadata.parents = [idPasta];
+
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
   form.append('file', file);
@@ -615,7 +633,7 @@ async function fazerUploadDocumentoInteligente(inputId, campoUser, labelId) {
     if(data.id) {
        let payload = {}; payload[campoUser] = data.id;
        await chamarAPI("atualizarUsuario", payload);
-       document.getElementById(labelId).style.display = 'block'; document.getElementById(labelId).innerHTML = "<b>✔ Documento salvo!</b>";
+       document.getElementById(labelId).style.display = 'block'; document.getElementById(labelId).innerHTML = "<b>✔ Documento salvo na pasta Modelos!</b>";
     }
   } catch(e) { esconderLoading(); }
 }
