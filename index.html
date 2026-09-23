@@ -11,29 +11,16 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 <style>
-:root {
-  --primary: #0b57d0; --primary-hover: #0842a0; --primary-light: #e8f0fe;
-  --surface: #f8fafd; --card-bg: #ffffff; --border: #dadce0;
-  --text: #1f1f1f; --text-sub: #5f6368; --success: #0f9d58;
-  --danger: #d93025; --danger-light: #fce8e6; --sidebar-w: 260px;
-}
-
-body.dark-theme {
-  --surface: #131314; --card-bg: #1e1f20; --border: #3c4043;
-  --text: #e3e3e3; --text-sub: #9aa0a6; --primary: #8ab4f8;
-  --primary-hover: #aecbfa; --primary-light: rgba(138, 180, 248, 0.15);
-}
-
+:root { --primary: #0b57d0; --primary-hover: #0842a0; --primary-light: #e8f0fe; --surface: #f8fafd; --card-bg: #ffffff; --border: #dadce0; --text: #1f1f1f; --text-sub: #5f6368; --success: #0f9d58; --danger: #d93025; --danger-light: #fce8e6; --sidebar-w: 260px; }
+body.dark-theme { --surface: #131314; --card-bg: #1e1f20; --border: #3c4043; --text: #e3e3e3; --text-sub: #9aa0a6; --primary: #8ab4f8; --primary-hover: #aecbfa; --primary-light: rgba(138, 180, 248, 0.15); }
 * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 body { margin: 0; background: var(--surface); color: var(--text); height: 100vh; overflow: hidden; transition: background 0.3s, color 0.3s; }
 
-/* LOGIN */
 .fullscreen-overlay { position: fixed; inset: 0; background: var(--surface); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
 .login-card { background: var(--card-bg); padding: 36px 28px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); max-width: 420px; width: 100%; border: 1px solid var(--border); }
 .login-logo { font-size: 52px; color: var(--primary); margin-bottom: 12px; }
 .security-check { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text); margin-bottom: 24px; background: var(--primary-light); padding: 12px 14px; border-radius: 10px; text-align: left; }
 
-/* ESTRUTURA E CABEÇALHO GLOBAL */
 .app-container { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
 .app-sidebar { width: var(--sidebar-w); background: var(--card-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; padding: 16px 12px; transition: transform 0.25s ease; z-index: 500; }
 .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--surface); }
@@ -41,13 +28,11 @@ body { margin: 0; background: var(--surface); color: var(--text); height: 100vh;
 .app-header { height: 64px; border-bottom: 1px solid var(--border); background: var(--card-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; gap: 12px; }
 .header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
 .btn-menu-mobile { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); }
-
 .global-student-wrapper { display: flex; align-items: center; gap: 8px; flex: 1; max-width: 450px; }
 .global-student-selector { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 6px 12px; border-radius: 24px; border: 1px solid var(--border); }
 .global-student-selector select { border: none; background: transparent; color: var(--text); font-weight: 600; font-size: 14px; width: 100%; outline: none; cursor: pointer; }
 .btn-folder-shortcut { display: none; align-items: center; justify-content: center; background: var(--primary-light); color: var(--primary); border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; text-decoration: none; transition: background 0.2s; }
 .btn-folder-shortcut:hover { background: var(--primary); color: #fff; }
-
 .header-right { display: flex; align-items: center; gap: 8px; }
 .btn-icon { background: none; border: none; color: var(--text-sub); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; transition: background 0.2s; }
 .btn-icon:hover { background: var(--surface); color: var(--text); }
@@ -71,14 +56,12 @@ textarea { resize: vertical; min-height: 100px; }
 
 .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
 .btn-primary:hover { background: var(--primary-hover); }
-.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;}
 .result-box { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-top: 16px; white-space: pre-wrap; font-size: 14px; line-height: 1.6; display: none; }
-
 .student-history-box { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: none; }
 .history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
 .history-item { display: flex; align-items: center; justify-content: space-between; background: var(--surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px; }
 
-/* SANFONA (ACCORDION) ORIGINAL INTACTA */
 .accordion { background: var(--primary-light); color: var(--primary); cursor: pointer; padding: 14px; width: 100%; border: none; text-align: left; outline: none; font-size: 14px; font-weight: 600; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; transition: 0.4s; }
 .accordion:hover { background-color: var(--primary); color: white; }
 .panel { padding: 0 16px; background: var(--surface); max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; border-radius: 8px; margin-bottom: 16px; }
@@ -102,12 +85,10 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
     <div class="material-symbols-outlined login-logo">psychology</div>
     <h1 style="margin:0 0 8px 0; font-size:22px;">Inclusão Conectada</h1>
     <p style="font-size:14px; color:var(--text-sub); margin-bottom:24px;">Ambiente restrito (AEE). Autentique-se com a sua conta escolar.</p>
-    
     <div class="security-check">
       <input type="checkbox" id="chk-partilhado">
       <label for="chk-partilhado"><b>Computador Compartilhado</b><br><span style="font-size:11px;">Encerra a sessão ao fechar.</span></label>
     </div>
-
     <button class="btn-primary" style="width: 100%; border-radius: 12px; padding: 14px; margin-bottom:10px;" onclick="iniciarLoginDrive()">
       <span class="material-symbols-outlined">add_to_drive</span> Autorizar Acesso ao Drive
     </button>
@@ -126,10 +107,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
   </div>
 </div>
 
-<div id="loading-overlay">
-  <div class="spinner"></div>
-  <p id="loading-texto" style="margin-top:16px; font-weight:500;">A processar...</p>
-</div>
+<div id="loading-overlay"><div class="spinner"></div><p id="loading-texto" style="margin-top:16px; font-weight:500;">A processar...</p></div>
 
 <div class="app-container">
   <aside class="app-sidebar" id="app-sidebar">
@@ -153,48 +131,32 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
         <div class="global-student-wrapper">
           <div class="global-student-selector">
             <span class="material-symbols-outlined" style="color:var(--primary);">person_search</span>
-            <select id="global-aluno" onchange="verificarMudancaAluno(this)">
-              <option value="">Nenhum aluno sincronizado...</option>
-            </select>
+            <select id="global-aluno" onchange="verificarMudancaAluno(this)"><option value="">Nenhum aluno sincronizado...</option></select>
           </div>
-          <a id="btn-atalho-pasta" class="btn-folder-shortcut" href="#" target="_blank" title="Abrir pasta do aluno no Google Drive" style="display:none;">
-            <span class="material-symbols-outlined">folder_open</span>
-          </a>
+          <a id="btn-atalho-pasta" class="btn-folder-shortcut" href="#" target="_blank" title="Abrir pasta do aluno"><span class="material-symbols-outlined">folder_open</span></a>
         </div>
       </div>
       <div class="header-right">
-        <button class="btn-icon" onclick="ciclarTema()" title="Alterar Tema">
-          <span class="material-symbols-outlined" id="icone-tema">brightness_medium</span>
-        </button>
-        <button class="btn-icon" onclick="iniciarLoginDrive()" title="Trocar Conta / Sair">
-          <span class="material-symbols-outlined">manage_accounts</span>
-        </button>
+        <button class="btn-icon" onclick="ciclarTema()" title="Alterar Tema"><span class="material-symbols-outlined" id="icone-tema">brightness_medium</span></button>
+        <button class="btn-icon" onclick="iniciarLoginDrive()" title="Trocar Conta / Sair"><span class="material-symbols-outlined">manage_accounts</span></button>
       </div>
     </header>
 
     <main class="content-body">
-      <!-- ABA 1: DUA -->
       <section id="tab-dua" class="tab-content active">
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;">Adaptação (DUA)</h2>
           <p style="font-size:13px; color:var(--text-sub);">O sistema usará a pasta do estudante selecionado no topo.</p>
-          <div class="form-group">
-            <label>Plano de Aula / Conteúdo Proposto:</label>
-            <textarea id="txt-plano-aula" class="monitor-mudanca" placeholder="Descreva os objetivos da aula regular..."></textarea>
-          </div>
+          <div class="form-group"><label>Plano de Aula / Conteúdo Proposto:</label><textarea id="txt-plano-aula" placeholder="Descreva os objetivos da aula regular..."></textarea></div>
           <button class="btn-primary" onclick="executarDUA()"><span class="material-symbols-outlined">auto_awesome</span> Gerar Adaptação DUA</button>
           <div id="res-dua" class="result-box"></div>
         </div>
       </section>
 
-      <!-- ABA 2: ACOLHER -->
       <section id="tab-acolher" class="tab-content">
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;">Cartão de Apoio & Carta à Família</h2>
-          <div class="form-group">
-            <label>Nome do Responsável Familiar (Opcional):</label>
-            <input type="text" id="txt-familia-nome" placeholder="Ex: Sra. Maria (Mãe)">
-          </div>
+          <div class="form-group"><label>Nome do Responsável Familiar (Opcional):</label><input type="text" id="txt-familia-nome" placeholder="Ex: Sra. Maria (Mãe)"></div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
             <button class="btn-primary" onclick="executarCartao()"><span class="material-symbols-outlined">contact_emergency</span> Gerar Cartão</button>
             <button class="btn-primary" onclick="executarCarta()"><span class="material-symbols-outlined">mail</span> Gerar Carta</button>
@@ -203,26 +165,18 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
         </div>
       </section>
 
-      <!-- ABA 3: DIÁRIO DE BORDO -->
       <section id="tab-diario" class="tab-content">
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;">Diário de Bordo</h2>
           <div class="form-group">
             <label>Categoria:</label>
-            <select id="sel-diario-categoria">
-              <option>Comunicação e Interação</option><option>Cognitivo e Atenção</option>
-              <option>Sensorial e Motor</option><option>Adaptação Curricular</option>
-            </select>
+            <select id="sel-diario-categoria"><option>Comunicação e Interação</option><option>Cognitivo e Atenção</option><option>Sensorial e Motor</option><option>Adaptação Curricular</option></select>
           </div>
-          <div class="form-group">
-            <label>Observação Pedagógica:</label>
-            <textarea id="txt-diario-obs" class="monitor-mudanca" placeholder="Descreva os avanços ou barreiras..."></textarea>
-          </div>
+          <div class="form-group"><label>Observação Pedagógica:</label><textarea id="txt-diario-obs" placeholder="Descreva os avanços ou barreiras..."></textarea></div>
           <button class="btn-primary" onclick="executarSalvarDiario()"><span class="material-symbols-outlined">save</span> Registrar Atendimento</button>
         </div>
       </section>
 
-      <!-- ABA 4: ESTUDO DE CASO -->
       <section id="tab-estudo" class="tab-content">
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;">Estudo de Caso Integrado</h2>
@@ -234,38 +188,22 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 
       <section class="tab-content active" style="display:block; margin-top:20px;">
         <div class="card" id="card-historico-aluno" style="display:none;">
-          <h3 style="margin-top:0; font-size:15px; display:flex; align-items:center; gap:8px;">
-            <span class="material-symbols-outlined" style="color:var(--primary);">history</span> 
-            Documentos Gerados para este Estudante
-          </h3>
+          <h3 style="margin-top:0; font-size:15px; display:flex; align-items:center; gap:8px;"><span class="material-symbols-outlined" style="color:var(--primary);">history</span> Documentos Gerados para este Estudante</h3>
           <div class="history-list" id="lista-historico-aluno"></div>
         </div>
       </section>
 
-      <!-- ABA 5: AJUSTES INTELIGENTES -->
       <section id="tab-ajustes" class="tab-content">
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">tune</span> Configurações Base</h2>
-          
-          <!-- SANFONA DE AJUDA RESTAURADA -->
           <button class="accordion"><span style="display:flex; align-items:center; gap:6px;"><span class="material-symbols-outlined">help</span> Como configurar o sistema? (Passo a passo)</span></button>
           <div class="panel">
             <p><b>1. Link da Pasta Raiz:</b> Crie uma pasta principal no seu Google Drive (ex: "Meus Alunos 2026"). Dentro dela, crie uma subpasta para cada aluno. Copie o link da pasta principal e cole abaixo.</p>
             <p><b>2. Chave API da IA (Gemini):</b> Para que o sistema pense e escreva relatórios, precisa da chave da Inteligência Artificial. <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--primary);">Clique aqui para gerar a sua chave gratuita no AI Studio</a>.</p>
           </div>
-
-          <div class="form-group">
-            <label>Sua Turma / Escola:</label>
-            <input type="text" id="config-escola" placeholder="Ex: EMEB Santo Inácio">
-          </div>
-          <div class="form-group">
-            <label>Link da Pasta do Drive (Raiz dos Alunos):</label>
-            <input type="text" id="config-pasta" placeholder="https://drive.google.com/drive/folders/...">
-          </div>
-          <div class="form-group">
-            <label>Código Secreto da IA (Gemini API):</label>
-            <input type="password" id="config-chave" placeholder="AIzaSy...">
-          </div>
+          <div class="form-group"><label>Sua Turma / Escola:</label><input type="text" id="config-escola" placeholder="Ex: EMEB Santo Inácio"></div>
+          <div class="form-group"><label>Link da Pasta do Drive (Raiz dos Alunos):</label><input type="text" id="config-pasta" placeholder="https://drive.google.com/drive/folders/..."></div>
+          <div class="form-group"><label>Código Secreto da IA (Gemini API):</label><input type="password" id="config-chave" placeholder="AIzaSy..."></div>
           
           <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
             <button class="btn-primary" onclick="salvarConfiguracoesParcial()"><span class="material-symbols-outlined">save</span> Guardar Definições</button>
@@ -276,27 +214,31 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">description</span> Documento Oficial (Cabeçalho da Escola)</h2>
-          <div class="form-group">
-            <input type="file" id="file-modelo" accept=".docx" style="padding: 8px;">
-          </div>
+          <div class="form-group"><input type="file" id="file-modelo" accept=".docx" style="padding: 8px;"></div>
           <button class="btn-secondary" onclick="fazerUploadModelo()"><span class="material-symbols-outlined">upload_file</span> Enviar Modelo para o Drive</button>
+          
+          <!-- NOVO: Etiqueta e botão de Excluir -->
           <p id="lbl-modelo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
+          <button id="btn-excluir-modelo" class="btn-secondary" style="display:none; margin-top:8px; color:var(--danger); border-color:var(--danger);" onclick="excluirArquivoConfig('modeloId','lbl-modelo-status','btn-excluir-modelo')">
+            <span class="material-symbols-outlined">delete</span> Excluir Modelo
+          </button>
         </div>
 
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">gavel</span> Base Legal e Legislações</h2>
-          <p style="font-size:13px; color:var(--text-sub);">Faça upload de um ficheiro (Word ou PDF) contendo as leis ou diretrizes do município. A IA vai usá-lo como base para justificar os relatórios.</p>
-          <div class="form-group">
-            <input type="file" id="file-legislacao" accept=".docx,.pdf" style="padding: 8px;">
-          </div>
-          <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-legislacao', 'legislacaoId', 'lbl-legis-status')"><span class="material-symbols-outlined">upload_file</span> Enviar Documento Legal</button>
+          <p style="font-size:13px; color:var(--text-sub);">Faça upload de um ficheiro (Word ou PDF) contendo as leis ou diretrizes do município.</p>
+          <div class="form-group"><input type="file" id="file-legislacao" accept=".docx,.pdf" style="padding: 8px;"></div>
+          <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-legislacao', 'legislacaoId', 'lbl-legis-status', 'btn-excluir-legis')"><span class="material-symbols-outlined">upload_file</span> Enviar Documento Legal</button>
+          
+          <!-- NOVO: Etiqueta e botão de Excluir -->
           <p id="lbl-legis-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
+          <button id="btn-excluir-legis" class="btn-secondary" style="display:none; margin-top:8px; color:var(--danger); border-color:var(--danger);" onclick="excluirArquivoConfig('legislacaoId','lbl-legis-status','btn-excluir-legis')">
+            <span class="material-symbols-outlined">delete</span> Excluir Documento
+          </button>
         </div>
 
-        <!-- AQUI ESTÁ O QUE VOCÊ PEDIU: CAIXA DE TEXTO *E* UPLOAD LADO A LADO -->
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">library_books</span> Estrutura do Estudo de Caso</h2>
-          <p style="font-size:13px; color:var(--text-sub);">Tem duas opções: colar a estrutura em texto na caixa abaixo <b>OU</b> fazer upload de um ficheiro (Word/PDF).</p>
           
           <label style="color:var(--primary); margin-top:10px;"><b>Opção A: Escrever / Colar Texto</b></label>
           <div class="form-group" style="margin-top: 5px;">
@@ -308,20 +250,19 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
           <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
 
           <label style="color:var(--primary);"><b>Opção B: Fazer Upload de Ficheiro</b></label>
-          <div class="form-group" style="margin-top: 5px;">
-            <input type="file" id="file-modelo-estudo" accept=".docx,.pdf" style="padding: 8px;">
-          </div>
-          <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-modelo-estudo', 'modeloEstudoId', 'lbl-estudo-status2')"><span class="material-symbols-outlined">upload_file</span> Enviar Ficheiro</button>
+          <div class="form-group" style="margin-top: 5px;"><input type="file" id="file-modelo-estudo" accept=".docx,.pdf" style="padding: 8px;"></div>
+          <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-modelo-estudo', 'modeloEstudoId', 'lbl-estudo-status2', 'btn-excluir-estudo')"><span class="material-symbols-outlined">upload_file</span> Enviar Ficheiro</button>
+          
+          <!-- NOVO: Etiqueta e botão de Excluir -->
           <p id="lbl-estudo-status2" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
+          <button id="btn-excluir-estudo" class="btn-secondary" style="display:none; margin-top:8px; color:var(--danger); border-color:var(--danger);" onclick="excluirArquivoConfig('modeloEstudoId','lbl-estudo-status2','btn-excluir-estudo')">
+            <span class="material-symbols-outlined">delete</span> Excluir Documento
+          </button>
         </div>
 
         <div class="card" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
-          <div style="flex: 1; min-width: 200px;">
-            <h3 style="font-size: 15px; margin: 0 0 4px 0;">Privacidade e Segurança</h3>
-          </div>
-          <button class="btn-primary" style="background:var(--danger); white-space: nowrap;" onclick="sairEApagarTudo()">
-            <span class="material-symbols-outlined">logout</span> Encerrar Sessão Segura
-          </button>
+          <div style="flex: 1; min-width: 200px;"><h3 style="font-size: 15px; margin: 0 0 4px 0;">Privacidade e Segurança</h3></div>
+          <button class="btn-primary" style="background:var(--danger); white-space: nowrap;" onclick="sairEApagarTudo()"><span class="material-symbols-outlined">logout</span> Encerrar Sessão Segura</button>
         </div>
       </section>
 
@@ -343,11 +284,8 @@ window.onload = function() {
   iniciarTemaGlobal();
   configurarSanfona();
   
-  // Restaura a caixa de texto do modelo de estudo se o professor já tinha escrito lá
   var modeloSalvo = localStorage.getItem('modeloEstudoCasoPersonalizado');
-  if (modeloSalvo && document.getElementById('input-modelo-estudo')) {
-    document.getElementById('input-modelo-estudo').value = modeloSalvo;
-  }
+  if (modeloSalvo && document.getElementById('input-modelo-estudo')) document.getElementById('input-modelo-estudo').value = modeloSalvo;
   
   if (window.google && google.accounts && google.accounts.oauth2) {
     tokenClient = google.accounts.oauth2.initTokenClient({
@@ -367,8 +305,7 @@ function configurarSanfona() {
     acc[i].addEventListener("click", function() {
       this.classList.toggle("active");
       var panel = this.nextElementSibling;
-      if (panel.style.maxHeight) panel.style.maxHeight = null;
-      else panel.style.maxHeight = panel.scrollHeight + "px";
+      if (panel.style.maxHeight) panel.style.maxHeight = null; else panel.style.maxHeight = panel.scrollHeight + "px";
     });
   }
 }
@@ -377,8 +314,7 @@ function salvarModeloEstudoLocal() {
   var textoModelo = document.getElementById('input-modelo-estudo').value.trim();
   localStorage.setItem('modeloEstudoCasoPersonalizado', textoModelo);
   var lbl = document.getElementById('lbl-modelo-estudo-status');
-  lbl.style.display = 'block';
-  setTimeout(() => { lbl.style.display = 'none'; }, 3000);
+  lbl.style.display = 'block'; setTimeout(() => { lbl.style.display = 'none'; }, 3000);
 }
 
 function iniciarLoginDrive() {
@@ -395,7 +331,6 @@ async function processarNovoTokenOAuth(accessToken) {
     
     const userInfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: `Bearer ${accessToken}` } });
     const userInfo = await userInfoRes.json();
-    
     const res = await chamarAPI("fazerLogin", { email: userInfo.email });
     
     if (res && res.sucesso) {
@@ -416,8 +351,7 @@ async function processarNovoTokenOAuth(accessToken) {
 
 function verificarSessaoAtiva() {
   const dados = sessionStorage.getItem('user_auth_dados') || localStorage.getItem('user_auth_dados');
-  if (dados) iniciarAplicacao(JSON.parse(dados));
-  else document.getElementById('login-screen').style.display = 'flex';
+  if (dados) iniciarAplicacao(JSON.parse(dados)); else document.getElementById('login-screen').style.display = 'flex';
 }
 
 function iniciarAplicacao(dados) {
@@ -430,12 +364,15 @@ function iniciarAplicacao(dados) {
   if(document.getElementById('config-chave')) document.getElementById('config-chave').value = dados.chave || "";
   
   if (dados.pastaRaiz) carregarAlunos(dados.pastaRaiz);
+
+  // NOVA INTEGRAÇÃO: Mostra status e botão de excluir caso os arquivos já existam no perfil
+  atualizarStatusArquivo('modeloId', 'lbl-modelo-status', 'btn-excluir-modelo', "<b>Modelo salvo na pasta Modelos!</b>");
+  atualizarStatusArquivo('legislacaoId', 'lbl-legis-status', 'btn-excluir-legis', "✔ Documento salvo na pasta Modelos!");
+  atualizarStatusArquivo('modeloEstudoId', 'lbl-estudo-status2', 'btn-excluir-estudo', "✔ Documento salvo na pasta Modelos!");
 }
 
 function sairEApagarTudo() {
-  mostrarConfirmacao("Deseja realmente encerrar a sessão?", () => {
-      sessionStorage.clear(); localStorage.clear(); window.location.reload(true);
-  });
+  mostrarConfirmacao("Deseja realmente encerrar a sessão?", () => { sessionStorage.clear(); localStorage.clear(); window.location.reload(true); });
 }
 
 async function chamarAPI(action, payload = {}) {
@@ -444,38 +381,25 @@ async function chamarAPI(action, payload = {}) {
     if (email) payload.emailUsuario = email;
     const driveToken = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
     if (driveToken) payload.tokenDrive = driveToken;
-
     const res = await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: action, ...payload }) });
     return await res.json();
   } catch (erro) { return { sucesso: false, mensagem: "Erro de conexão." }; }
 }
 
 function iniciarTemaGlobal() { temaAtual = localStorage.getItem('tema_global') || 'system'; aplicarTema(temaAtual); }
-function ciclarTema() {
-  if(temaAtual === 'light') temaAtual = 'dark';
-  else if(temaAtual === 'dark') temaAtual = 'system';
-  else temaAtual = 'light';
-  localStorage.setItem('tema_global', temaAtual);
-  aplicarTema(temaAtual);
-}
+function ciclarTema() { temaAtual = temaAtual === 'light' ? 'dark' : (temaAtual === 'dark' ? 'system' : 'light'); localStorage.setItem('tema_global', temaAtual); aplicarTema(temaAtual); }
 function aplicarTema(tema) {
   const isDarkSystem = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const setDark = tema === 'dark' || (tema === 'system' && isDarkSystem);
-  if(setDark) document.body.classList.add('dark-theme');
-  else document.body.classList.remove('dark-theme');
+  if(tema === 'dark' || (tema === 'system' && isDarkSystem)) document.body.classList.add('dark-theme'); else document.body.classList.remove('dark-theme');
   const iconMap = { 'light': 'light_mode', 'dark': 'dark_mode', 'system': 'brightness_medium' };
   document.getElementById('icone-tema').innerText = iconMap[tema];
 }
 
 async function salvarConfiguracoesParcial() {
-  const escola = document.getElementById('config-escola').value.trim();
-  const pasta = document.getElementById('config-pasta').value.trim();
-  const chave = document.getElementById('config-chave').value.trim();
-  
+  const escola = document.getElementById('config-escola').value.trim(); const pasta = document.getElementById('config-pasta').value.trim(); const chave = document.getElementById('config-chave').value.trim();
   mostrarLoading("A atualizar o seu perfil...");
   const res = await chamarAPI("atualizarUsuario", { escola: escola, pasta: pasta, chave: chave });
   esconderLoading();
-  
   if(res && res.sucesso) {
     if(dadosUsuarioAtivo) {
        dadosUsuarioAtivo.escola = escola; dadosUsuarioAtivo.pastaRaiz = pasta; dadosUsuarioAtivo.chave = chave;
@@ -488,110 +412,71 @@ async function salvarConfiguracoesParcial() {
 }
 
 async function carregarAlunos(pastaId) {
-  const contador = document.getElementById('contador-alunos');
-  contador.style.display = 'none';
+  const contador = document.getElementById('contador-alunos'); contador.style.display = 'none';
   const res = await chamarAPI("listarAlunos", { linkPasta: pastaId });
-  
   if (res && res.sucesso) {
-    const sel = document.getElementById('global-aluno');
-    sel.innerHTML = '<option value="">Selecione um Estudante...</option>';
-    res.lista.forEach(a => {
-      const opt = document.createElement('option');
-      opt.value = a.id; opt.innerText = a.nome; sel.appendChild(opt);
-    });
+    const sel = document.getElementById('global-aluno'); sel.innerHTML = '<option value="">Selecione um Estudante...</option>';
+    res.lista.forEach(a => { const opt = document.createElement('option'); opt.value = a.id; opt.innerText = a.nome; sel.appendChild(opt); });
     contador.style.display = 'flex'; contador.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">check_circle</span> ${res.lista.length} aluno(s) lidos`;
   } else {
-    contador.style.display = 'flex'; contador.style.color = 'var(--danger)';
-    contador.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">error</span> Erro ao carregar pastas.`;
+    contador.style.display = 'flex'; contador.style.color = 'var(--danger)'; contador.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">error</span> Erro ao carregar pastas.`;
   }
 }
 
 async function sincronizarAlunosManual() {
   const pasta = document.getElementById('config-pasta').value.trim();
   if (!pasta) return mostrarModal("Aviso", "Insira o link da pasta.");
-  mostrarLoading("A sincronizar as pastas...");
-  await carregarAlunos(pasta);
-  esconderLoading();
+  mostrarLoading("A sincronizar as pastas..."); await carregarAlunos(pasta); esconderLoading();
 }
 
 function verificarMudancaAluno(selectEl) {
-  const txt1 = document.getElementById('txt-plano-aula').value.trim();
-  const txt2 = document.getElementById('txt-diario-obs').value.trim();
-  
+  const txt1 = document.getElementById('txt-plano-aula').value.trim(); const txt2 = document.getElementById('txt-diario-obs').value.trim();
   const atalhoPasta = document.getElementById('btn-atalho-pasta');
-  if (selectEl.value) {
-    atalhoPasta.style.display = 'flex';
-    atalhoPasta.href = "https://drive.google.com/drive/folders/" + selectEl.value;
-    carregarHistoricoAlunoLocal(selectEl.value);
-  } else {
-    atalhoPasta.style.display = 'none';
-    document.getElementById('card-historico-aluno').style.display = 'none';
-  }
-
+  if (selectEl.value) { atalhoPasta.style.display = 'flex'; atalhoPasta.href = "https://drive.google.com/drive/folders/" + selectEl.value; carregarHistoricoAlunoLocal(selectEl.value); } 
+  else { atalhoPasta.style.display = 'none'; document.getElementById('card-historico-aluno').style.display = 'none'; }
   if (txt1 !== "" || txt2 !== "") {
     mostrarConfirmacao("Mudar de aluno irá limpar os campos não salvos. Continuar?", () => {
-      document.getElementById('txt-plano-aula').value = "";
-      document.getElementById('txt-diario-obs').value = "";
-      idAlunoAnterior = selectEl.value;
-      fecharCaixasResultado();
+      document.getElementById('txt-plano-aula').value = ""; document.getElementById('txt-diario-obs').value = "";
+      idAlunoAnterior = selectEl.value; fecharCaixasResultado();
     });
     selectEl.value = idAlunoAnterior;
-  } else {
-    idAlunoAnterior = selectEl.value;
-    fecharCaixasResultado();
-  }
+  } else { idAlunoAnterior = selectEl.value; fecharCaixasResultado(); }
 }
 
 function fecharCaixasResultado() { document.querySelectorAll('.result-box').forEach(b => b.style.display = 'none'); }
-
-function getAlunoAtivo() {
-  const sel = document.getElementById('global-aluno');
-  if(!sel.value) { mostrarModal("Atenção", "Por favor, selecione um estudante no topo."); return null; }
-  return { id: sel.value, nome: sel.options[sel.selectedIndex].text };
-}
+function getAlunoAtivo() { const sel = document.getElementById('global-aluno'); if(!sel.value) { mostrarModal("Atenção", "Por favor, selecione um estudante no topo."); return null; } return { id: sel.value, nome: sel.options[sel.selectedIndex].text }; }
 
 function registarHistoricoAluno(alunoId, tituloDoc, urlDoc) {
   let historico = JSON.parse(localStorage.getItem('hist_aluno_' + alunoId) || '[]');
   historico.unshift({ titulo: tituloDoc, url: urlDoc, data: new Date().toLocaleDateString('pt-BR') });
   if (historico.length > 5) historico.pop();
-  localStorage.setItem('hist_aluno_' + alunoId, JSON.stringify(historico));
-  carregarHistoricoAlunoLocal(alunoId);
+  localStorage.setItem('hist_aluno_' + alunoId, JSON.stringify(historico)); carregarHistoricoAlunoLocal(alunoId);
 }
 
 function carregarHistoricoAlunoLocal(alunoId) {
-  const card = document.getElementById('card-historico-aluno');
-  const lista = document.getElementById('lista-historico-aluno');
+  const card = document.getElementById('card-historico-aluno'); const lista = document.getElementById('lista-historico-aluno');
   let historico = JSON.parse(localStorage.getItem('hist_aluno_' + alunoId) || '[]');
-  
   if (historico.length === 0) { card.style.display = 'none'; return; }
-  
-  card.style.display = 'block';
-  lista.innerHTML = '';
-  historico.forEach(h => {
-    lista.innerHTML += `<div class="history-item">
-      <span><b>${h.titulo}</b> <span style="color:var(--text-sub); font-size:11px;">(${h.data})</span></span>
-      <a href="${h.url}" target="_blank" class="btn-secondary" style="padding:4px 10px; font-size:12px; text-decoration:none;">Abrir Doc</a>
-    </div>`;
-  });
+  card.style.display = 'block'; lista.innerHTML = '';
+  historico.forEach(h => { lista.innerHTML += `<div class="history-item"><span><b>${h.titulo}</b> <span style="color:var(--text-sub); font-size:11px;">(${h.data})</span></span><a href="${h.url}" target="_blank" class="btn-secondary" style="padding:4px 10px; font-size:12px; text-decoration:none;">Abrir Doc</a></div>`; });
 }
 
+// === UPLOADS COM PASTAS E ATUALIZAÇÃO VISUAL (CLAUDE) ===
 async function fazerUploadModelo() {
   const fileInput = document.getElementById('file-modelo');
   if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro .docx primeiro.");
   const token = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
   if(!token) return;
-  
+
   mostrarLoading("Organizando pastas no Drive...");
-  const pastaRes = await chamarAPI("obterPastaBase", {});
+  const pastaRes = await chamarAPI("obterPastaBase", { categoria: "Cabeçalho da Escola" });
   const idPasta = (pastaRes && pastaRes.sucesso) ? pastaRes.idPasta : null;
+  if (!idPasta) { esconderLoading(); return mostrarModal("Erro", pastaRes.mensagem || "Falha ao organizar pastas."); }
 
   mostrarLoading("Enviando modelo para o Drive...");
   const file = fileInput.files[0];
-  const metadata = { name: "Modelo_Cabeçalho_" + file.name, mimeType: 'application/vnd.google-apps.document' };
-  
-  // A MÁGICA ACONTECE AQUI: Associa o ficheiro à pasta criada
-  if (idPasta) metadata.parents = [idPasta];
-  
+  const metadata = { name: "Modelo_Cabeçalho_" + file.name, mimeType: 'application/vnd.google-apps.document', parents: [idPasta] };
+
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
   form.append('file', file);
@@ -601,27 +486,31 @@ async function fazerUploadModelo() {
     esconderLoading();
     if(data.id) {
        await chamarAPI("atualizarUsuario", { modeloId: data.id });
-       document.getElementById('lbl-modelo-status').style.display = 'block'; document.getElementById('lbl-modelo-status').innerHTML = "<b>Modelo salvo na pasta Modelos!</b>";
-    }
+       dadosUsuarioAtivo.modeloId = data.id;
+       const storage = sessionStorage.getItem('user_auth_dados') ? sessionStorage : localStorage;
+       storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
+       atualizarStatusArquivo('modeloId', 'lbl-modelo-status', 'btn-excluir-modelo', "<b>Modelo salvo na pasta Modelos!</b>");
+    } else { mostrarModal("Erro", "Não foi possível enviar: " + JSON.stringify(data.error || data)); }
   } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro ao enviar."); }
 }
 
-async function fazerUploadDocumentoInteligente(inputId, campoUser, labelId) {
+async function fazerUploadDocumentoInteligente(inputId, campoUser, labelId, btnId) {
   const fileInput = document.getElementById(inputId);
   if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro (Word ou PDF) primeiro.");
   const token = sessionStorage.getItem('drive_token') || localStorage.getItem('drive_token');
   if(!token) return;
 
+  const nomesCategoria = { legislacaoId: "Legislação", modeloEstudoId: "Estrutura do Estudo de Caso" };
+  const categoria = nomesCategoria[campoUser] || "Documentos";
+
   mostrarLoading("Organizando pastas no Drive...");
-  const pastaRes = await chamarAPI("obterPastaBase", {});
+  const pastaRes = await chamarAPI("obterPastaBase", { categoria: categoria });
   const idPasta = (pastaRes && pastaRes.sucesso) ? pastaRes.idPasta : null;
+  if (!idPasta) { esconderLoading(); return mostrarModal("Erro", pastaRes.mensagem || "Falha ao organizar pastas."); }
 
   mostrarLoading("Processando documento...");
   const file = fileInput.files[0];
-  const metadata = { name: file.name, mimeType: 'application/vnd.google-apps.document' };
-  
-  // A MÁGICA ACONTECE AQUI: Associa o ficheiro à pasta criada
-  if (idPasta) metadata.parents = [idPasta];
+  const metadata = { name: file.name, mimeType: 'application/vnd.google-apps.document', parents: [idPasta] };
 
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
@@ -633,22 +522,46 @@ async function fazerUploadDocumentoInteligente(inputId, campoUser, labelId) {
     if(data.id) {
        let payload = {}; payload[campoUser] = data.id;
        await chamarAPI("atualizarUsuario", payload);
-       document.getElementById(labelId).style.display = 'block'; document.getElementById(labelId).innerHTML = "<b>✔ Documento salvo na pasta Modelos!</b>";
-    }
-  } catch(e) { esconderLoading(); }
+       dadosUsuarioAtivo[campoUser] = data.id;
+       const storage = sessionStorage.getItem('user_auth_dados') ? sessionStorage : localStorage;
+       storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
+       atualizarStatusArquivo(campoUser, labelId, btnId, "✔ Documento salvo na pasta Modelos!");
+    } else { mostrarModal("Erro", "Não foi possível enviar: " + JSON.stringify(data.error || data)); }
+  } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro ao enviar."); }
+}
+
+// === EXCLUSÃO E STATUS VISUAL (CLAUDE) ===
+function atualizarStatusArquivo(campoUser, labelId, btnId, textoOk) {
+  const lbl = document.getElementById(labelId); const btn = document.getElementById(btnId);
+  if (dadosUsuarioAtivo && dadosUsuarioAtivo[campoUser]) {
+    lbl.style.display = 'block'; lbl.innerHTML = textoOk; if (btn) btn.style.display = 'inline-flex';
+  } else { lbl.style.display = 'none'; if (btn) btn.style.display = 'none'; }
+}
+
+async function excluirArquivoConfig(campoUser, labelId, btnId) {
+  mostrarConfirmacao("Deseja realmente excluir este arquivo do Drive? Essa ação não pode ser desfeita.", async () => {
+    const fileId = dadosUsuarioAtivo[campoUser];
+    if (!fileId) return;
+    mostrarLoading("Excluindo arquivo do Drive...");
+    const res = await chamarAPI("excluirArquivo", { fileId: fileId, campoUser: campoUser });
+    esconderLoading();
+    if (res && res.sucesso) {
+      dadosUsuarioAtivo[campoUser] = "";
+      const storage = sessionStorage.getItem('user_auth_dados') ? sessionStorage : localStorage;
+      storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
+      document.getElementById(labelId).style.display = 'none'; document.getElementById(btnId).style.display = 'none';
+      mostrarModal("Sucesso", "Arquivo excluído com sucesso.");
+    } else { mostrarModal("Erro", res.mensagem || "Falha ao excluir."); }
+  });
 }
 
 async function executarDUA() {
   const aluno = getAlunoAtivo(); if(!aluno) return;
-  const plano = document.getElementById('txt-plano-aula').value.trim();
-  if(!plano) return mostrarModal("Atenção", "Preencha a aula proposta.");
-  
+  const plano = document.getElementById('txt-plano-aula').value.trim(); if(!plano) return mostrarModal("Atenção", "Preencha a aula proposta.");
   mostrarLoading("Gerando adaptação DUA...");
   const res = await chamarAPI("adaptarPlanoDUA", { idPasta: aluno.id, plano: plano });
   esconderLoading();
-  if (res && res.sucesso) {
-    const box = document.getElementById('res-dua'); box.style.display = "block"; box.innerText = res.adaptacao;
-  } else { mostrarModal("Erro", res.mensagem || "Falha na geração."); }
+  if (res && res.sucesso) { const box = document.getElementById('res-dua'); box.style.display = "block"; box.innerText = res.adaptacao; } else mostrarModal("Erro", res.mensagem || "Falha na geração.");
 }
 
 async function executarCartao() {
@@ -678,33 +591,22 @@ async function executarCarta() {
 
 async function executarSalvarDiario() {
   const aluno = getAlunoAtivo(); if(!aluno) return;
-  const obs = document.getElementById('txt-diario-obs').value.trim();
-  const cat = document.getElementById('sel-diario-categoria').value;
+  const obs = document.getElementById('txt-diario-obs').value.trim(); const cat = document.getElementById('sel-diario-categoria').value;
   if (!obs) return mostrarModal("Atenção", "Preencha a observação.");
-
   mostrarLoading("Salvando na pasta do estudante...");
   const res = await chamarAPI("salvarDiario", { dados: { idPasta: aluno.id, nomeAluno: aluno.nome, categoria: cat, observacao: obs } });
   esconderLoading();
   if (res && res.sucesso) {
-    mostrarModal("Sucesso", "Registrado no Drive do aluno!");
-    document.getElementById('txt-diario-obs').value = "";
+    mostrarModal("Sucesso", "Registrado no Drive do aluno!"); document.getElementById('txt-diario-obs').value = "";
     if(res.urlDocumento) registarHistoricoAluno(aluno.id, "Diário de Bordo", res.urlDocumento);
   } else mostrarModal("Erro", res.mensagem);
 }
 
 async function executarEstudo() {
   const aluno = getAlunoAtivo(); if(!aluno) return;
-  
-  // MANDA O TEXTO DA CAIXA TAMBÉM PARA A IA JUNTAR COM O FICHEIRO
   const modeloTexto = localStorage.getItem('modeloEstudoCasoPersonalizado') || "";
-
   mostrarLoading("Gerando Relatório de Estudo de Caso...");
-  const res = await chamarAPI("gerarEstudo", { 
-    idPasta: aluno.id, 
-    nomeAluno: aluno.nome,
-    modeloPersonalizado: modeloTexto
-  });
-  
+  const res = await chamarAPI("gerarEstudo", { idPasta: aluno.id, nomeAluno: aluno.nome, modeloPersonalizado: modeloTexto });
   esconderLoading();
   if (res && res.sucesso) {
     const box = document.getElementById('res-estudo'); box.style.display = "block";
@@ -736,17 +638,13 @@ function toggleSidebar() {
 function mostrarLoading(txt) { document.getElementById('loading-texto').innerText = txt; document.getElementById('loading-overlay').style.display = 'flex'; }
 function esconderLoading() { document.getElementById('loading-overlay').style.display = 'none'; }
 function mostrarModal(titulo, msg) {
-  const m = document.getElementById('custom-modal');
-  document.getElementById('modal-titulo').innerText = titulo; document.getElementById('modal-mensagem').innerText = msg;
-  document.getElementById('modal-btn-cancelar').style.display = 'none';
-  document.getElementById('modal-btn-confirmar').onclick = () => m.style.display = 'none';
+  const m = document.getElementById('custom-modal'); document.getElementById('modal-titulo').innerText = titulo; document.getElementById('modal-mensagem').innerText = msg;
+  document.getElementById('modal-btn-cancelar').style.display = 'none'; document.getElementById('modal-btn-confirmar').onclick = () => m.style.display = 'none';
   m.style.display = 'flex';
 }
 function mostrarConfirmacao(msg, onConfirm) {
-  const m = document.getElementById('custom-modal');
-  document.getElementById('modal-titulo').innerText = "Confirmação"; document.getElementById('modal-mensagem').innerText = msg;
-  document.getElementById('modal-btn-cancelar').style.display = 'inline-block';
-  document.getElementById('modal-btn-cancelar').onclick = () => m.style.display = 'none';
+  const m = document.getElementById('custom-modal'); document.getElementById('modal-titulo').innerText = "Confirmação"; document.getElementById('modal-mensagem').innerText = msg;
+  document.getElementById('modal-btn-cancelar').style.display = 'inline-block'; document.getElementById('modal-btn-cancelar').onclick = () => m.style.display = 'none';
   document.getElementById('modal-btn-confirmar').onclick = () => { m.style.display = 'none'; onConfirm(); };
   m.style.display = 'flex';
 }
