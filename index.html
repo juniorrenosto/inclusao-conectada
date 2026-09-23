@@ -30,7 +30,6 @@ body { margin: 0; background: var(--surface); color: var(--text); height: 100vh;
 .btn-menu-mobile { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); }
 .global-student-wrapper { display: flex; align-items: center; gap: 8px; flex: 1; max-width: 450px; }
 .global-student-selector { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 6px 12px; border-radius: 24px; border: 1px solid var(--border); }
-.global-student-selector select { border: none; background: transparent; color: var(--text); font-weight: 600; font-size: 14px; width: 100%; outline: none; cursor: pointer; }
 .btn-folder-shortcut { display: none; align-items: center; justify-content: center; background: var(--primary-light); color: var(--primary); border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; text-decoration: none; transition: background 0.2s; }
 .btn-folder-shortcut:hover { background: var(--primary); color: #fff; }
 .header-right { display: flex; align-items: center; gap: 8px; }
@@ -75,7 +74,7 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 .spinner { width: 44px; height: 44px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-@media(max-width: 768px) { .app-sidebar { position: fixed; inset: 0 auto 0 0; transform: translateX(-100%); } .app-sidebar.open { transform: translateX(0); } .btn-menu-mobile { display: block; } .header-left { max-width: calc(100% - 90px); } }
+@media(max-width: 768px) { .app-sidebar { position: fixed; inset: 0 auto 0 0; transform: translateX(-100%); } .app-sidebar.open { transform: translateX(0); } .header-left { max-width: calc(100% - 90px); } }
 </style>
 </head>
 <body>
@@ -129,10 +128,17 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
       <div class="header-left">
         <button class="btn-menu-mobile" onclick="toggleSidebar()"><span class="material-symbols-outlined">menu</span></button>
         <div class="global-student-wrapper">
-          <div class="global-student-selector">
+          
+          <div class="global-student-selector" style="position:relative;">
             <span class="material-symbols-outlined" style="color:var(--primary);">person_search</span>
-            <select id="global-aluno" onchange="verificarMudancaAluno(this)"><option value="">Nenhum aluno sincronizado...</option></select>
+            <input type="text" id="busca-aluno" placeholder="Buscar aluno..." autocomplete="off"
+              style="border:none; background:transparent; color:var(--text); font-weight:600; font-size:14px; width:100%; outline:none;">
+            <select id="global-aluno" onchange="verificarMudancaAluno(this)" style="display:none;">
+              <option value="">Nenhum aluno sincronizado...</option>
+            </select>
+            <div id="lista-busca-aluno" style="display:none; position:absolute; top:100%; left:0; right:0; background:var(--card-bg); border:1px solid var(--border); border-radius:8px; max-height:220px; overflow-y:auto; z-index:600; margin-top:4px; box-shadow:0 4px 12px rgba(0,0,0,0.1);"></div>
           </div>
+          
           <a id="btn-atalho-pasta" class="btn-folder-shortcut" href="#" target="_blank" title="Abrir pasta do aluno"><span class="material-symbols-outlined">folder_open</span></a>
         </div>
       </div>
@@ -202,7 +208,9 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
             <p><b>2. Chave API da IA (Gemini):</b> Para que o sistema pense e escreva relatórios, precisa da chave da Inteligência Artificial. <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--primary);">Clique aqui para gerar a sua chave gratuita no AI Studio</a>.</p>
           </div>
           <div class="form-group"><label>Sua Turma / Escola:</label><input type="text" id="config-escola" placeholder="Ex: EMEB Santo Inácio"></div>
+          
           <div class="form-group"><label>Link da Pasta do Drive (Raiz dos Alunos):</label><input type="text" id="config-pasta" placeholder="https://drive.google.com/drive/folders/..."></div>
+          
           <div class="form-group"><label>Código Secreto da IA (Gemini API):</label><input type="password" id="config-chave" placeholder="AIzaSy..."></div>
           
           <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
@@ -216,8 +224,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">description</span> Documento Oficial (Cabeçalho da Escola)</h2>
           <div class="form-group"><input type="file" id="file-modelo" accept=".docx" style="padding: 8px;"></div>
           <button class="btn-secondary" onclick="fazerUploadModelo()"><span class="material-symbols-outlined">upload_file</span> Enviar Modelo para o Drive</button>
-          
-          <!-- NOVO: Etiqueta e botão de Excluir -->
           <p id="lbl-modelo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
           <button id="btn-excluir-modelo" class="btn-secondary" style="display:none; margin-top:8px; color:var(--danger); border-color:var(--danger);" onclick="excluirArquivoConfig('modeloId','lbl-modelo-status','btn-excluir-modelo')">
             <span class="material-symbols-outlined">delete</span> Excluir Modelo
@@ -229,8 +235,6 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
           <p style="font-size:13px; color:var(--text-sub);">Faça upload de um ficheiro (Word ou PDF) contendo as leis ou diretrizes do município.</p>
           <div class="form-group"><input type="file" id="file-legislacao" accept=".docx,.pdf" style="padding: 8px;"></div>
           <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-legislacao', 'legislacaoId', 'lbl-legis-status', 'btn-excluir-legis')"><span class="material-symbols-outlined">upload_file</span> Enviar Documento Legal</button>
-          
-          <!-- NOVO: Etiqueta e botão de Excluir -->
           <p id="lbl-legis-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
           <button id="btn-excluir-legis" class="btn-secondary" style="display:none; margin-top:8px; color:var(--danger); border-color:var(--danger);" onclick="excluirArquivoConfig('legislacaoId','lbl-legis-status','btn-excluir-legis')">
             <span class="material-symbols-outlined">delete</span> Excluir Documento
@@ -239,21 +243,16 @@ body.dark-theme #loading-overlay { background: rgba(0,0,0,0.8); }
 
         <div class="card">
           <h2 style="margin-top:0; font-size:18px;"><span class="material-symbols-outlined" style="vertical-align:bottom; color:var(--primary);">library_books</span> Estrutura do Estudo de Caso</h2>
-          
           <label style="color:var(--primary); margin-top:10px;"><b>Opção A: Escrever / Colar Texto</b></label>
           <div class="form-group" style="margin-top: 5px;">
             <textarea id="input-modelo-estudo" rows="4" placeholder="Ex: 1. Identificação... 2. Histórico..."></textarea>
             <button class="btn-primary" onclick="salvarModeloEstudoLocal()" style="margin-top: 8px;"><span class="material-symbols-outlined">save</span> Guardar Texto</button>
             <p id="lbl-modelo-estudo-status" style="font-size:12px; color:var(--success); margin-top:8px; display:none;">Texto guardado no dispositivo!</p>
           </div>
-          
           <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
-
           <label style="color:var(--primary);"><b>Opção B: Fazer Upload de Ficheiro</b></label>
           <div class="form-group" style="margin-top: 5px;"><input type="file" id="file-modelo-estudo" accept=".docx,.pdf" style="padding: 8px;"></div>
           <button class="btn-secondary" onclick="fazerUploadDocumentoInteligente('file-modelo-estudo', 'modeloEstudoId', 'lbl-estudo-status2', 'btn-excluir-estudo')"><span class="material-symbols-outlined">upload_file</span> Enviar Ficheiro</button>
-          
-          <!-- NOVO: Etiqueta e botão de Excluir -->
           <p id="lbl-estudo-status2" style="font-size:12px; color:var(--success); margin-top:8px; display:none;"></p>
           <button id="btn-excluir-estudo" class="btn-secondary" style="display:none; margin-top:8px; color:var(--danger); border-color:var(--danger);" onclick="excluirArquivoConfig('modeloEstudoId','lbl-estudo-status2','btn-excluir-estudo')">
             <span class="material-symbols-outlined">delete</span> Excluir Documento
@@ -283,6 +282,7 @@ window.onload = function() {
   verificarSessaoAtiva();
   iniciarTemaGlobal();
   configurarSanfona();
+  configurarBuscaAluno();
   
   var modeloSalvo = localStorage.getItem('modeloEstudoCasoPersonalizado');
   if (modeloSalvo && document.getElementById('input-modelo-estudo')) document.getElementById('input-modelo-estudo').value = modeloSalvo;
@@ -299,6 +299,46 @@ window.onload = function() {
   }
 };
 
+function configurarBuscaAluno() {
+  var input = document.getElementById('busca-aluno');
+  var lista = document.getElementById('lista-busca-aluno');
+  var selectOriginal = document.getElementById('global-aluno');
+
+  input.addEventListener('input', function() {
+    var termo = input.value.trim().toLowerCase();
+    lista.innerHTML = '';
+    if (!termo) { lista.style.display = 'none'; return; }
+
+    var opcoes = Array.from(selectOriginal.options).filter(function(o) {
+      return o.value && o.text.toLowerCase().indexOf(termo) !== -1;
+    });
+
+    if (opcoes.length === 0) {
+      lista.innerHTML = '<div style="padding:10px 14px; color:var(--text-sub); font-size:13px;">Nenhum aluno encontrado</div>';
+    } else {
+      opcoes.forEach(function(o) {
+        var item = document.createElement('div');
+        item.textContent = o.text;
+        item.style.cssText = 'padding:10px 14px; cursor:pointer; font-size:14px;';
+        item.onmouseenter = function() { item.style.background = 'var(--surface)'; };
+        item.onmouseleave = function() { item.style.background = 'transparent'; };
+        item.onclick = function() {
+          selectOriginal.value = o.value;
+          input.value = o.text;
+          lista.style.display = 'none';
+          selectOriginal.dispatchEvent(new Event('change'));
+        };
+        lista.appendChild(item);
+      });
+    }
+    lista.style.display = 'block';
+  });
+
+  document.addEventListener('click', function(e) {
+    if (e.target !== input) lista.style.display = 'none';
+  });
+}
+
 function configurarSanfona() {
   var acc = document.getElementsByClassName("accordion");
   for (var i = 0; i < acc.length; i++) {
@@ -314,7 +354,7 @@ function salvarModeloEstudoLocal() {
   var textoModelo = document.getElementById('input-modelo-estudo').value.trim();
   localStorage.setItem('modeloEstudoCasoPersonalizado', textoModelo);
   var lbl = document.getElementById('lbl-modelo-estudo-status');
-  lbl.style.display = 'block'; setTimeout(() => { lbl.style.display = 'none'; }, 3000);
+  if(lbl) { lbl.style.display = 'block'; setTimeout(() => { lbl.style.display = 'none'; }, 3000); }
 }
 
 function iniciarLoginDrive() {
@@ -360,12 +400,15 @@ function iniciarAplicacao(dados) {
   document.getElementById('lbl-prof-nome').innerText = "Logado como: " + (dados.nome || dados.email);
   
   if(document.getElementById('config-escola')) document.getElementById('config-escola').value = dados.escola || "";
-  if(document.getElementById('config-pasta')) document.getElementById('config-pasta').value = dados.pastaRaiz || "";
+  
+  if(document.getElementById('config-pasta')) {
+     document.getElementById('config-pasta').value = dados.pastaRaiz || "";
+  }
+  
   if(document.getElementById('config-chave')) document.getElementById('config-chave').value = dados.chave || "";
   
   if (dados.pastaRaiz) carregarAlunos(dados.pastaRaiz);
 
-  // NOVA INTEGRAÇÃO: Mostra status e botão de excluir caso os arquivos já existam no perfil
   atualizarStatusArquivo('modeloId', 'lbl-modelo-status', 'btn-excluir-modelo', "<b>Modelo salvo na pasta Modelos!</b>");
   atualizarStatusArquivo('legislacaoId', 'lbl-legis-status', 'btn-excluir-legis', "✔ Documento salvo na pasta Modelos!");
   atualizarStatusArquivo('modeloEstudoId', 'lbl-estudo-status2', 'btn-excluir-estudo', "✔ Documento salvo na pasta Modelos!");
@@ -417,6 +460,7 @@ async function carregarAlunos(pastaId) {
   if (res && res.sucesso) {
     const sel = document.getElementById('global-aluno'); sel.innerHTML = '<option value="">Selecione um Estudante...</option>';
     res.lista.forEach(a => { const opt = document.createElement('option'); opt.value = a.id; opt.innerText = a.nome; sel.appendChild(opt); });
+    document.getElementById('busca-aluno').value = "";
     contador.style.display = 'flex'; contador.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">check_circle</span> ${res.lista.length} aluno(s) lidos`;
   } else {
     contador.style.display = 'flex'; contador.style.color = 'var(--danger)'; contador.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">error</span> Erro ao carregar pastas.`;
@@ -430,17 +474,43 @@ async function sincronizarAlunosManual() {
 }
 
 function verificarMudancaAluno(selectEl) {
-  const txt1 = document.getElementById('txt-plano-aula').value.trim(); const txt2 = document.getElementById('txt-diario-obs').value.trim();
-  const atalhoPasta = document.getElementById('btn-atalho-pasta');
-  if (selectEl.value) { atalhoPasta.style.display = 'flex'; atalhoPasta.href = "https://drive.google.com/drive/folders/" + selectEl.value; carregarHistoricoAlunoLocal(selectEl.value); } 
-  else { atalhoPasta.style.display = 'none'; document.getElementById('card-historico-aluno').style.display = 'none'; }
+  const txt1 = document.getElementById('txt-plano-aula').value.trim();
+  const txt2 = document.getElementById('txt-diario-obs').value.trim();
+  const novoValor = selectEl.value;
+  const opcaoNova = selectEl.options[selectEl.selectedIndex];
+  const novoTexto = opcaoNova ? opcaoNova.text : "";
+
   if (txt1 !== "" || txt2 !== "") {
-    mostrarConfirmacao("Mudar de aluno irá limpar os campos não salvos. Continuar?", () => {
-      document.getElementById('txt-plano-aula').value = ""; document.getElementById('txt-diario-obs').value = "";
-      idAlunoAnterior = selectEl.value; fecharCaixasResultado();
-    });
     selectEl.value = idAlunoAnterior;
-  } else { idAlunoAnterior = selectEl.value; fecharCaixasResultado(); }
+    const inputBusca = document.getElementById('busca-aluno');
+    const opcaoAtual = selectEl.options[selectEl.selectedIndex];
+    if (inputBusca && opcaoAtual) inputBusca.value = opcaoAtual.text;
+
+    mostrarConfirmacao("Mudar de aluno irá limpar os campos não salvos. Continuar?", () => {
+      document.getElementById('txt-plano-aula').value = "";
+      document.getElementById('txt-diario-obs').value = "";
+      selectEl.value = novoValor;
+      if (inputBusca) inputBusca.value = novoTexto;
+      idAlunoAnterior = novoValor;
+      aplicarSelecaoAluno(novoValor);
+    });
+  } else {
+    idAlunoAnterior = novoValor;
+    aplicarSelecaoAluno(novoValor);
+  }
+}
+
+function aplicarSelecaoAluno(valor) {
+  const atalhoPasta = document.getElementById('btn-atalho-pasta');
+  if (valor) {
+    atalhoPasta.style.display = 'flex';
+    atalhoPasta.href = "https://drive.google.com/drive/folders/" + valor;
+    carregarHistoricoAlunoLocal(valor);
+  } else {
+    atalhoPasta.style.display = 'none';
+    document.getElementById('card-historico-aluno').style.display = 'none';
+  }
+  fecharCaixasResultado();
 }
 
 function fecharCaixasResultado() { document.querySelectorAll('.result-box').forEach(b => b.style.display = 'none'); }
@@ -461,7 +531,6 @@ function carregarHistoricoAlunoLocal(alunoId) {
   historico.forEach(h => { lista.innerHTML += `<div class="history-item"><span><b>${h.titulo}</b> <span style="color:var(--text-sub); font-size:11px;">(${h.data})</span></span><a href="${h.url}" target="_blank" class="btn-secondary" style="padding:4px 10px; font-size:12px; text-decoration:none;">Abrir Doc</a></div>`; });
 }
 
-// === UPLOADS COM PASTAS E ATUALIZAÇÃO VISUAL (CLAUDE) ===
 async function fazerUploadModelo() {
   const fileInput = document.getElementById('file-modelo');
   if(fileInput.files.length === 0) return mostrarModal("Atenção", "Selecione um ficheiro .docx primeiro.");
@@ -530,12 +599,15 @@ async function fazerUploadDocumentoInteligente(inputId, campoUser, labelId, btnI
   } catch(e) { esconderLoading(); mostrarModal("Erro", "Erro ao enviar."); }
 }
 
-// === EXCLUSÃO E STATUS VISUAL (CLAUDE) ===
 function atualizarStatusArquivo(campoUser, labelId, btnId, textoOk) {
   const lbl = document.getElementById(labelId); const btn = document.getElementById(btnId);
   if (dadosUsuarioAtivo && dadosUsuarioAtivo[campoUser]) {
-    lbl.style.display = 'block'; lbl.innerHTML = textoOk; if (btn) btn.style.display = 'inline-flex';
-  } else { lbl.style.display = 'none'; if (btn) btn.style.display = 'none'; }
+    if(lbl) { lbl.style.display = 'block'; lbl.innerHTML = textoOk; }
+    if(btn) btn.style.display = 'inline-flex';
+  } else { 
+    if(lbl) lbl.style.display = 'none'; 
+    if(btn) btn.style.display = 'none'; 
+  }
 }
 
 async function excluirArquivoConfig(campoUser, labelId, btnId) {
@@ -549,7 +621,9 @@ async function excluirArquivoConfig(campoUser, labelId, btnId) {
       dadosUsuarioAtivo[campoUser] = "";
       const storage = sessionStorage.getItem('user_auth_dados') ? sessionStorage : localStorage;
       storage.setItem('user_auth_dados', JSON.stringify(dadosUsuarioAtivo));
-      document.getElementById(labelId).style.display = 'none'; document.getElementById(btnId).style.display = 'none';
+      const lbl = document.getElementById(labelId); const btn = document.getElementById(btnId);
+      if(lbl) lbl.style.display = 'none'; 
+      if(btn) btn.style.display = 'none';
       mostrarModal("Sucesso", "Arquivo excluído com sucesso.");
     } else { mostrarModal("Erro", res.mensagem || "Falha ao excluir."); }
   });
